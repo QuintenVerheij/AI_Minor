@@ -3,7 +3,7 @@
 # Getting started
 
 ## Required
-- Flutter 1.22.6 (Do not no of older versions will work)
+- Flutter 1.22.6 (Do not know of older versions will work)
 
 ## Firebase
 -   Ask me for access to the firebase console, I will invite you.
