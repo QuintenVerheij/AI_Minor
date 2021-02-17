@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "227258654083",
+    "project_id": "poseestimation-41bda",
+    "storage_bucket": "poseestimation-41bda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:227258654083:android:8d1bcc7d726e2a9ed82ab6",
+        "android_client_info": {
+          "package_name": "com.minorai11.hr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "227258654083-312o9heqj5vjk5p1ftuh0q204dhr41gm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHEb_J4gZLpqWtz9gXPAY6ElJBVr8MnrI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "227258654083-312o9heqj5vjk5p1ftuh0q204dhr41gm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
