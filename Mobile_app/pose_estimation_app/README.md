@@ -11,9 +11,14 @@
 -   Generate a SHA1 key following this steps: https://developers.google.com/android/guides/client-auth
 -   Add this key to firebase. Firebase console -> Project overview -> General -> Your apps ->  Add fingerprint
 
-Run following command:
+Run following command to install dependencies:
 ```bash
 flutter pub get
+```
+
+Run following command to run app on emulator or device
+```bash
+flutter run
 ```
 
 You're good to go
