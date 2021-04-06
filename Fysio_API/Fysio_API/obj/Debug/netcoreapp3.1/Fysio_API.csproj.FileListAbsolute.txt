@@ -33,8 +33,7 @@ C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Fysio
 C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Fysio_API.runtimeconfig.dev.json
 C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Fysio_API.dll
 C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Fysio_API.pdb
-C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\obj\Debug\netcoreapp3.1\Fysio_API.csproj.CoreCompileInputs.cache
-C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\obj\Debug\netcoreapp3.1\Fysio_API.MvcApplicationPartsAssemblyInfo.cache
 C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\obj\Debug\netcoreapp3.1\Fysio_API.dll
 C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\obj\Debug\netcoreapp3.1\Fysio_API.pdb
 C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\obj\Debug\netcoreapp3.1\Fysio_API.genruntimeconfig.cache
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\AutoMapper.dll

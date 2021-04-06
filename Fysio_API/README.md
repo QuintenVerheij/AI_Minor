@@ -8,6 +8,7 @@
 - Microsoft.EntityFrameworkCore.Tools
 - Npgsql
 - Npgsql.EntityFrameworkCore.PostgreSQL
+- AutoMapper.Extensions.Microsoft.DependencyInjection
 
 
 ## Installeer PostgreSQL and PgAdmin
