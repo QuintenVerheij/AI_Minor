@@ -26,3 +26,15 @@ C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Syste
 C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\System.ComponentModel.Annotations.dll
 C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
 C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\obj\Debug\netcoreapp3.1\Fysio_API.csproj.CopyComplete
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Humanizer.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Fysio_API.deps.json
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Fysio_API.runtimeconfig.json
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Fysio_API.runtimeconfig.dev.json
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Fysio_API.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Fysio_API.pdb
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\obj\Debug\netcoreapp3.1\Fysio_API.csproj.CoreCompileInputs.cache
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\obj\Debug\netcoreapp3.1\Fysio_API.MvcApplicationPartsAssemblyInfo.cache
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\obj\Debug\netcoreapp3.1\Fysio_API.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\obj\Debug\netcoreapp3.1\Fysio_API.pdb
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\obj\Debug\netcoreapp3.1\Fysio_API.genruntimeconfig.cache
