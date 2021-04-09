@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Fysio_API.Models
 {
-    public class Excercise
+    public class Exercise
     {
         [Key]
-        public int ExcerciseId { get; set; }
+        public int ExerciseId { get; set; }
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
-        public ICollection<ClientExcercise> ClientExcercises { get; set; }
+        public ICollection<ClientExercise> ClientExercises { get; set; }
         [Required]
         [ForeignKey("Therapist")]
         public int CreatedByTherapist_Id { get; set; }

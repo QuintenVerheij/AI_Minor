@@ -10,13 +10,12 @@ namespace Fysio_API.Models
     {
         [Key]
         public int ClientId { get; set; }
-        [Required]
         public int TherapistId { get; set; }
         public Therapist Therapist { get; set; }
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
-        public ICollection<ClientExcercise> ClientExcercises { get; set; }
+        public ICollection<ClientExercise> ClientExercises { get; set; }
         [StringLength(10)]
         public string PhoneNumber { get; set; }
         [Required]
