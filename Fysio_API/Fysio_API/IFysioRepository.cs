@@ -13,7 +13,6 @@ namespace Fysio_API
         void AddClient(Client client);
         Client GetClient(int clientId);
         IEnumerable<Client> GetClientsTherapist(int therapistId);
-
         void AddTherapist(Therapist therapist);
         Therapist GetTherapist(int therapistId);
         void AttachClientToTherapist(int clientId, int therapistId);

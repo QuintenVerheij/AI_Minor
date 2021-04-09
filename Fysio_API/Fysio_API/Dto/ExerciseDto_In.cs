@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Fysio_API.Dto
 {
-    public class Exercise_In
+    public class ExerciseDto_In
     {
         public string Name { get; set; }
         public int CreatedByTherapist_Id { get; set; }
