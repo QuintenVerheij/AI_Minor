@@ -3,10 +3,11 @@
     <b-navbar toggleable="lg" type="dark" variant="info">
       <b-navbar-brand href="#">MinorAI</b-navbar-brand>
     </b-navbar>
-    <div id="video_box" class="center">
-      <div class="rounded video_overlay">
+    <div id="video_box" class="center" > 
+      <div class="rounded video_overlay" v-if="this.$store.getters.getLoaded">
         <p class="video_overlay_text">AI MINOR FYSIO APP</p>
         <p class="video_overlay_text">v {{ version }}</p>
+        <p class="video_overlay_text"> Count = {{this.$store.state.count}}</p>
         <br/>
         <p class="video_overlay_text">Logged in as {{ user !== undefined ? user : 'ERROR' }}</p>
         <p class="video_overlay_text">Current Exercise {{ exercise !== undefined ? exercise : 'ERROR' }}</p>
@@ -18,6 +19,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import vueCamera from "@/components/vue-camera.vue";
 
