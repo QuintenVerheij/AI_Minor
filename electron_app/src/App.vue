@@ -1,8 +1,29 @@
 <template>
   <div id="app">
+    <navigation-drawer v-show="authenticated"></navigation-drawer>
     <router-view/>
   </div>
 </template>
+<script>
+import NavigationDrawer from './components/NavigationDrawer.vue'
+export default {
+  components: {
+    NavigationDrawer
+  },
+  computed: {
+    authenticated() {
+      return this.$store.getters['authentication/get_authenticated'];
+    }
+  },
+  watch: {
+    authenticated(){
+      if(!this.authenticated){
+        this.$router.replace({name: 'Auth'});
+      }
+    }
+  }
+}
+</script>
 
 
 
