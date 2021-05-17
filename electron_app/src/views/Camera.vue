@@ -7,6 +7,12 @@
       <div class="rounded video_overlay">
         <p class="video_overlay_text">AI MINOR FYSIO APP</p>
         <p class="video_overlay_text">v {{ version }}</p>
+        <br/>
+        <p class="video_overlay_text">Logged in as {{ user !== undefined ? user : 'ERROR' }}</p>
+        <p class="video_overlay_text">Current Exercise {{ exercise !== undefined ? exercise : 'ERROR' }}</p>
+        <img src='@/assets/calendar.png' class="video_overlay_icon"/>
+        <img src='@/assets/stopwatch.png' class="video_overlay_icon"/>
+        <img src='@/assets/phone.png' class="video_overlay_icon"/>
       </div>
       <vueCamera> </vueCamera>
     </div>
@@ -14,10 +20,13 @@
 </template>
 <script>
 import vueCamera from "@/components/vue-camera.vue";
+
 export default {
   components: { vueCamera },
   props: {
     version: String,
+    user: String,
+    exercise: String
   },
 };
 </script>
@@ -67,5 +76,19 @@ a {
 .video_overlay_text {
   font-size: 30px;
   z-index: 101;
+}
+
+.video_overlay_icon{
+    display: inline;
+    max-width: 80px;
+    max-height: 80px;
+    min-width:50px;
+    min-height: 50px;
+    padding: 10px;
+}
+
+.video_overlay_icon:hover {
+    background-color: rgba(220, 220, 220, 0.3);
+    border-radius: 25%;
 }
 </style>

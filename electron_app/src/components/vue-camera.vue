@@ -8,6 +8,9 @@
 
 <script>
 export default {
+    state: {
+        loaded: false
+    },
     data()
     {
         return {};
@@ -57,6 +60,7 @@ export default {
                 }
                 //info.innerHTML+= "<pre>DONE</pre>";
                 console.log("DONE");
+                this.state.loaded = true
                 })
                 .catch( err =>
                 {
