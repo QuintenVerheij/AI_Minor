@@ -95,6 +95,7 @@ export default {
   name: "HelloWorld",
   props: {
     msg: String,
+    version: String
   },
   methods: {
         camera(){

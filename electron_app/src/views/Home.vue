@@ -2,7 +2,7 @@
   <div class="home">
     <nav-bar />
     <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <HelloWorld msg="Welcome to Your Vue.js App" :version='version' />
   </div>
 </template>
 
@@ -15,8 +15,8 @@ export default {
   name: 'Home',
   components: {
     HelloWorld,
-    NavBar,
-    
-  }
+    NavBar, 
+  },
+  version: '0.1.13'
 }
 </script>

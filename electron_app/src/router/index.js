@@ -20,7 +20,10 @@ const routes = [
   {
     path: '/camera',
     name: 'Camera',
-    component: Camera
+    component: Camera,
+    props: {
+      version: Home.version
+    }
   },
   {
     path: '/about',
