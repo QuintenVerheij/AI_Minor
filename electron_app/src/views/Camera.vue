@@ -8,10 +8,10 @@
         <p class="video_overlay_text">AI MINOR FYSIO APP</p>
         <br />
         <p class="video_overlay_text">
-          Logged in as {{ user !== undefined ? user : "ERROR" }}
+          Logged in as {{ user !== undefined ? user : "none" }}
         </p>
         <p class="video_overlay_text">
-          Current Exercise {{ exercise !== undefined ? exercise : "ERROR" }}
+          Current Exercise {{ exercise !== undefined ? exercise : "none" }}
         </p>
         <img src="@/assets/calendar.png" class="video_overlay_icon" />
         <img src="@/assets/stopwatch.png" class="video_overlay_icon" />
@@ -73,6 +73,7 @@ export default {
     },
     // A function to draw ellipses over the detected keypoints
     drawKeypoints: function () {
+      this.ctx.lineWidth = 1;
       // Loop through all the poses detected
       for (let i = 0; i < this.poses.length; i += 1) {
         // For each pose detected, loop through all the keypoints
@@ -88,7 +89,8 @@ export default {
               0,
               2 * Math.PI
             );
-            this.ctx.fill();
+            this.ctx.fillStyle = '#FF3333';
+            this.ctx.fill(); 
             this.ctx.stroke();
           }
         }
@@ -96,6 +98,7 @@ export default {
     },
     // A function to draw the skeletons
     drawSkeleton: function () {
+      this.ctx.lineWidth = 10;
       // Loop through all the skeletons detected
       for (let i = 0; i < this.poses.length; i += 1) {
         // For every skeleton, loop through all body connections
