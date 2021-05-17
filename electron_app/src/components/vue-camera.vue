@@ -1,19 +1,5 @@
-<!-- FROM: https://github.com/smn3/vue-camera -->
 
-<template>
-  <video autoplay></video>
-</template>
-
-<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-
-<script>
-export default {
-  data() {
-    return {
-      
-    };
-  },
-  mounted() {
+function mounted() {
     console.log(this.$el);
     navigator.mediaDevices
       .enumerateDevices()
@@ -53,7 +39,7 @@ export default {
             }
             //info.innerHTML+= "<pre>DONE</pre>";
             console.log("DONE");
-            console.log(this.$store)
+            this.$store.commit('attachStream', this.$el)
             this.$store.commit('setLoaded', true);
           })
           .catch((err) => {
