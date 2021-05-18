@@ -114,5 +114,17 @@ C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\AutoM
 C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
 C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Logging.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll
+C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll
 C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\obj\Debug\netcoreapp3.1\Fysio_API.csproj.CoreCompileInputs.cache
 C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API\obj\Debug\netcoreapp3.1\Fysio_API.MvcApplicationPartsAssemblyInfo.cache

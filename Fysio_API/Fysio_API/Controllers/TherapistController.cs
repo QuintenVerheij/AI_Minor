@@ -10,20 +10,13 @@ namespace Fysio_API.Controllers
     [ApiController]
     public class TherapistController : ControllerBase
     {
-        private readonly IFysioRepository _fysioRepository;
-        private readonly IMapper _mapper;
-        public TherapistController(IFysioRepository fysioRepository, IMapper mapper)
+        
+        public TherapistController()
         {
-            _fysioRepository = fysioRepository;
-            _mapper = mapper;
+         
         }
 
-        [HttpPost]
-        public void AddTherapist([FromBody]TherapistDto_In TherapistIn)
-        {
-            Therapist Therapist = _mapper.Map<Therapist>(TherapistIn);
-            _fysioRepository.AddTherapist(Therapist);
-        }
+        
 
         [HttpGet("{therapistId}")]
         public IActionResult GetTherapist(int therapistId)
@@ -47,6 +40,6 @@ namespace Fysio_API.Controllers
             _fysioRepository.AssignExerciseToClient(_mapper.Map<ClientExercise>(clientExerciseDto_In));
         }
 
-        
+
     }
 }

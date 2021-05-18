@@ -3,15 +3,17 @@ using System;
 using Fysio_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Fysio_API.Migrations
 {
     [DbContext(typeof(FysioDbContext))]
-    partial class FysioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210517134719_auth_migration2")]
+    partial class auth_migration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,8 +28,10 @@ namespace Fysio_API.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("ClientId")
-                        .IsRequired()
+                    b.Property<int>("ClientId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ClientId1")
                         .HasColumnType("text");
 
                     b.Property<int>("ExerciseId")
@@ -47,7 +51,7 @@ namespace Fysio_API.Migrations
 
                     b.HasKey("ClientExerciseId");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId1");
 
                     b.HasIndex("ExerciseId");
 
@@ -62,8 +66,10 @@ namespace Fysio_API.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedByTherapistId")
-                        .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("CreatedByTherapist_Id")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -291,9 +297,7 @@ namespace Fysio_API.Migrations
                 {
                     b.HasOne("Fysio_API.Auth.ApplicationUser", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClientId1");
 
                     b.HasOne("Fysio_API.Models.Exercise", "Exercise")
                         .WithMany("ClientExercises")
@@ -310,9 +314,7 @@ namespace Fysio_API.Migrations
                 {
                     b.HasOne("Fysio_API.Auth.ApplicationUser", "CreatedByTherapist")
                         .WithMany()
-                        .HasForeignKey("CreatedByTherapistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatedByTherapistId");
 
                     b.Navigation("CreatedByTherapist");
                 });

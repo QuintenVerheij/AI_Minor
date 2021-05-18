@@ -19,15 +19,7 @@ namespace Fysio_API
 
 
         # region Clients
-        public void AddClient(Client client)
-        {
-            if (client == null)
-                throw new ArgumentNullException(nameof(client));
-
-            _fysioDbContext.Add(client);
-            Save();
-        }
-
+        
         public Client GetClient(int clientId)
         {
             return _fysioDbContext.Clients.FirstOrDefault(c => c.ClientId == clientId);
@@ -47,7 +39,7 @@ namespace Fysio_API
 
         public void AttachClientToTherapist(int clientId, int therapistId)
         {
-            
+
         }
 
         public IEnumerable<Client> GetClientsTherapist(int therapistId)
@@ -62,7 +54,7 @@ namespace Fysio_API
 
         public void AssignExerciseToClient(ClientExercise clientExercise)
         {
-            Client client = _fysioDbContext.Clients.Where(c => c.ClientId == clientExercise.ClientId).Include(c => c.ClientExercises).FirstOrDefault();
+            Client client = _fysioDbContext.ApplicationUser.Where(u => u.Id == clientExercise.ClientId).Include(c => c.ClientExercises).FirstOrDefault();
             if (client == null)
                 throw new ArgumentException(nameof(clientExercise.ClientId));
 
@@ -98,6 +90,6 @@ namespace Fysio_API
             return _fysioDbContext.SaveChanges() > 0;
         }
 
-        
+
     }
 }

@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Fysio_API.Auth;
 using Fysio_API.Dto;
 using Fysio_API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fysio_API.Controllers
@@ -14,29 +17,21 @@ namespace Fysio_API.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
-        private readonly IFysioRepository _fysioRepository;
-        private readonly IMapper _mapper;
-        public ClientController(IFysioRepository fysioRepository, IMapper mapper)
+        private UserManager<ApplicationUser> _userManager;
+        
+        public ClientController(UserManager<ApplicationUser> userManager)
         {
-            _fysioRepository = fysioRepository;
-            _mapper = mapper;
+            _userManager = userManager;
         }
 
-        [HttpPost]
-        public void AddClient([FromBody]ClientDto_In clientIn)
+        [HttpGet("ForClient")]
+        [Authorize(Roles = Role.Client)]
+        public string GetForClient()
         {
-            Client client = _mapper.Map<Client>(clientIn);
-            _fysioRepository.AddClient(client);
+            return "Web method for Client";
         }
 
-        [HttpGet("{clientId}")]
-        public IActionResult GetClient(int clientId)
-        {
-            Client resClient = _fysioRepository.GetClient(clientId);
-            if (resClient == null)
-                return NotFound();
-            else
-                return new JsonResult(resClient);
-        }
+                     
+                
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Fysio_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Fysio_API.Migrations
 {
     [DbContext(typeof(FysioDbContext))]
-    partial class FysioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210517133938_auth_migration")]
+    partial class auth_migration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,9 +28,8 @@ namespace Fysio_API.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("ClientId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("ExerciseId")
                         .HasColumnType("integer");
@@ -61,9 +62,11 @@ namespace Fysio_API.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("CreatedByTherapistId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int?>("CreatedByTherapistUserId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CreatedByTherapist_Id")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -75,9 +78,39 @@ namespace Fysio_API.Migrations
 
                     b.HasKey("ExerciseId");
 
-                    b.HasIndex("CreatedByTherapistId");
+                    b.HasIndex("CreatedByTherapistUserId");
 
                     b.ToTable("Exercises");
+                });
+
+            modelBuilder.Entity("Fysio_API.Models.User", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -289,7 +322,7 @@ namespace Fysio_API.Migrations
 
             modelBuilder.Entity("Fysio_API.Models.ClientExercise", b =>
                 {
-                    b.HasOne("Fysio_API.Auth.ApplicationUser", "Client")
+                    b.HasOne("Fysio_API.Models.User", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -308,11 +341,9 @@ namespace Fysio_API.Migrations
 
             modelBuilder.Entity("Fysio_API.Models.Exercise", b =>
                 {
-                    b.HasOne("Fysio_API.Auth.ApplicationUser", "CreatedByTherapist")
+                    b.HasOne("Fysio_API.Models.User", "CreatedByTherapist")
                         .WithMany()
-                        .HasForeignKey("CreatedByTherapistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatedByTherapistUserId");
 
                     b.Navigation("CreatedByTherapist");
                 });
