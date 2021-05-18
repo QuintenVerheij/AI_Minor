@@ -3,6 +3,7 @@ using System.Text;
 using Fysio_API.Auth;
 using Fysio_API.Helpers;
 using Fysio_API.Models;
+using Fysio_API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -65,6 +66,7 @@ namespace Fysio_API
 
             //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IFysioRepository, FysioRepository>();
+            services.AddTransient<IDataService, DataService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
