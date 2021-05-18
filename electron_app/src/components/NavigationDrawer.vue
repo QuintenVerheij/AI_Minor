@@ -2,7 +2,7 @@
   <div>
     <nav-bar>
         <template v-slot:menuActivator>
-             <b-button v-b-toggle.sidebar-1>Toggle Sidebar</b-button>
+             <b-button v-b-toggle.sidebar-1><img src="@/assets/hamburger.png" class="hamburger_icon" /></b-button>
         </template>
     </nav-bar>
    
@@ -53,3 +53,13 @@ export default {
   }
 };
 </script>
+<style>
+.hamburger_icon {
+  display: inline;
+  max-width: 40px;
+  max-height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 10px;
+}
+</style>
