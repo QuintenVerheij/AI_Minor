@@ -7,9 +7,7 @@ namespace Fysio_API.Auth
 {
     public class ApplicationUser : IdentityUser
     {
-        [ForeignKey("ApplicationUser")]
-        public string TherapistId { get; set; }
-        public ApplicationUser Therapist { get; set; }
         public List<ClientExercise> clientExercises { get; set; }
+        public List<TherapistClient> therapistClients { get; set; }
     }
 }
