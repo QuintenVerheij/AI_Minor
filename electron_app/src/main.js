@@ -7,6 +7,8 @@ import axios from 'axios'
 import router from './router'
 import CreateStore from './store/index'
 
+import './assets/scss/custom.scss';
+
 Vue.prototype.$http = axios
 Vue.use(Vuex)
 Vue.config.productionTip = false
