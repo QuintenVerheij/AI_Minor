@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Auth from "@/views/Auth.vue";
 import Home from "@/views/Home.vue";
 import Camera from "@/views/Camera.vue";
 
@@ -8,14 +7,22 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
-    name: "Auth",
-    component: Auth,
-  },
-  {
     path: "/home",
     name: "Home",
     component: Home,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/",
+    name: "Auth",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Auth-login.vue"),
+
     meta: {
       requiresAuth: true,
     },
@@ -28,6 +35,19 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Exercises.vue"),
+
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/register',
+    name: 'Auth-register',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Auth-register.vue"),
 
     meta: {
       requiresAuth: true,

@@ -18,7 +18,7 @@ export default {
   watch: {
     authenticated(){
       if(!this.authenticated){
-        this.$router.replace({name: 'Auth'});
+        this.$router.replace({name: 'Auth-login'});
       }
     }
   }
