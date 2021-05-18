@@ -18,17 +18,19 @@ namespace Fysio_API.Controllers
     public class ClientController : ControllerBase
     {
         private UserManager<ApplicationUser> _userManager;
-        
-        public ClientController(UserManager<ApplicationUser> userManager)
+        private readonly IFysioRepository _repo;
+
+        public ClientController(UserManager<ApplicationUser> userManager, IFysioRepository repo)
         {
+            _repo = repo;
             _userManager = userManager;
         }
 
-        [HttpGet("ForClient")]
+        [HttpGet("{id}")]
         [Authorize(Roles = Role.Client)]
-        public string GetForClient()
+        public string GetClient(string id)
         {
-            return "Web method for Client";
+            return null; //_userManager.GetUserId(id);
         }
 
                      

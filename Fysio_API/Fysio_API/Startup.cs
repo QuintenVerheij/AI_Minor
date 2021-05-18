@@ -64,7 +64,7 @@ namespace Fysio_API
             });
 
             //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            //services.AddScoped<IFysioRepository, FysioRepository>();
+            services.AddScoped<IFysioRepository, FysioRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
