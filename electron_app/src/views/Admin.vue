@@ -87,7 +87,7 @@ export default {
   methods: {
     takePicture(){
         console.log('hello');
-        this.pose = [...this.poses[0]];
+        this.pose = [...this.poses];
 
         //copy canvas by DataUrl
         let sourceImageData = this.canvas.toDataURL("image/png");
