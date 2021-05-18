@@ -33,13 +33,15 @@ export default {
 components: {NavBar},
     methods: {
         login(){
-          this.$router.replace('/home')
+          if(this.$store.dispatch('authentication/debugLogin')) {
+            this.$router.push({name: 'Home'});
+          }
         },
     }
 }
 </script>
-<style>
-		body {
+<style scoped>
+body {
     margin: 0;
     padding: 0;
     font-family: montserrat;

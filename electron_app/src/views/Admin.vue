@@ -26,7 +26,9 @@
                 <p>{{this.pose}}</p>
             </b-col>
         </b-row>
-        <b-btn @click="showPicture=false">New picture</b-btn>
+        <b-form-checkbox v-model="target" name="check-button" switch>
+            Switch target <b>(pose is goed: {{ target }})</b>
+        </b-form-checkbox>
     </div>
   </div>
 </template>
@@ -56,6 +58,7 @@ export default {
       // LOCAL STATE GOES HERE
       showPicture: false,
       image: null,
+      target: false,
       pose: [],
       posenet: {},
       poses: [],
@@ -67,7 +70,7 @@ export default {
       ctx: {},
     };
   },
-  mounted: function () {
+  mounted() {
     this.picture = null;
     this.video = document.getElementById("video");
     this.buildCapture()
