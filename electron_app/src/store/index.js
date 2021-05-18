@@ -1,5 +1,5 @@
 import Vuex from "vuex";
-import vueCameraModule from './modules/vue-camera'
+import Camera from './modules/camera'
 import Authentication from './modules/authentication'
 import Exercises from './modules/exercises'
 // import example from "./modules/example_module";
@@ -8,7 +8,7 @@ import Exercises from './modules/exercises'
 const createStore = () => {
   return new Vuex.Store({
     modules: {
-      camera: vueCameraModule,
+      camera: Camera,
       authentication: Authentication,
       exercises: Exercises
     },
