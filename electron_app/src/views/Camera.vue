@@ -51,6 +51,9 @@ export default {
     this.poseNet.on("pose", this.gotPoses);
     this.drawCameraIntoCanvas();
   },
+  beforeDestroy(){
+    this.video = null;
+  },
   methods: {
     onModelLoaded: function () {
       console.log("PoseNet Model has Loaded");
