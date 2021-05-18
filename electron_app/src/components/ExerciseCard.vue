@@ -8,11 +8,9 @@
     style="max-width: 20rem;"
     class="mb-2"
     >
-    <b-card-text>
-      {{exercise.text}}
-    </b-card-text>
-
-    <b-button @click=goToExercise variant="primary">Go somewhere</b-button>
+    <div class="d-flex flex-row-reverse">
+        <b-button @click=goToExercise variant="primary">Oefenen</b-button>
+    </div>
   </b-card>
 </template>
 <script>

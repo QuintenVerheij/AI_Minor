@@ -1,8 +1,15 @@
 <template>
   <div>Exercise template
       <h1>{{exercise.title}}</h1>
-      <p>{{exercise.text}}</p>
-      <b-btn @click="camera">Start camera</b-btn>
+      <b-row>
+        <b-col>
+          <b-img :src="exercise.image_url"></b-img>
+        </b-col>
+        <b-col>
+          <p>{{exercise.text}}</p>
+        </b-col>
+      </b-row>
+      <b-btn @click="camera">Start</b-btn>
   </div>
 </template>
 <script>
