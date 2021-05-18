@@ -14,6 +14,21 @@ namespace Fysio_API.Models
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TherapistClient>()
+                        .HasOne(t => t.Therapist)
+                        .WithMany(c => c.Clients)
+                        .HasForeignKey(f => f.TherapistId);
+
+            modelBuilder.Entity<TherapistClient>()
+                        .HasOne(c => c.Client)
+                        .WithMany(t => t.Therapists)
+                        .HasForeignKey(f => f.ClientId);
+
+            base.OnModelCreating(modelBuilder);
+        }
+
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
         //public DbSet<Client> Clients { get; set; }
