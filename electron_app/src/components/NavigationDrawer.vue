@@ -2,14 +2,14 @@
   <div>
     <nav-bar bg-blue>
         <template v-slot:menuActivator>
-             <b-button v-b-toggle.sidebar-1><img src="@/assets/hamburger.png" class="hamburger_icon" /></b-button>
+             <b-button v-b-toggle.sidebar-1 variant="transparent"><img src="@/assets/hamburger.png" class="hamburger_icon" /></b-button>
         </template>
     </nav-bar>
    
     <b-sidebar bg-variant="dark" id="sidebar-1" title="Sidebar" shadow>
-      <b-nav vertical class="w-25">
+      <b-nav vertical>
         <b-nav-item
-         
+          bg-variant='light'
           v-for="(item, index) in navItems"
           v-bind:key="index"
           :active="checkActive(item)"
