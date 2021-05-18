@@ -8,6 +8,8 @@ using Fysio_API.Services;
 
 namespace Fysio_API.Controllers
 {
+    [ApiController]
+    [Route("data")]
     public class DataController : Controller
     {
         private readonly IDataService _dataService;
