@@ -8,6 +8,7 @@ namespace Fysio_API.Models
 {
     public class Data
     {
+        public int DataId { get; set; }
         public string Pose { get; set; }
         public bool Target { get; set; }
         public int NoseX { get; set; }
