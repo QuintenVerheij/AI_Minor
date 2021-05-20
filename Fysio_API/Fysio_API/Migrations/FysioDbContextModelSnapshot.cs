@@ -54,6 +54,120 @@ namespace Fysio_API.Migrations
                     b.ToTable("ClientExercises");
                 });
 
+            modelBuilder.Entity("Fysio_API.Models.Data", b =>
+                {
+                    b.Property<int>("DataId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("LeftAnkleX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftAnkleY")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftEarX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftEarY")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftElbowX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftElbowY")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftEyeX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftEyeY")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftHipX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftHipY")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftKneeX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftKneeY")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftShoulderX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftShoulderY")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftWristX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LeftWristY")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("NoseX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("NoseY")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Pose")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("RightAnkleX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RightAnkleY")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RightElbowX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RightElbowY")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RightEyeX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RightEyeY")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RightHipX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RightHipY")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RightKneeX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RightKneeY")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RightShoulderX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RightShoulderY")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RightWristX")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RightWristY")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("Target")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("DataId");
+
+                    b.ToTable("Datas");
+                });
+
             modelBuilder.Entity("Fysio_API.Models.Exercise", b =>
                 {
                     b.Property<int>("ExerciseId")
