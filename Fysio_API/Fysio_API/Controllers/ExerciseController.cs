@@ -12,12 +12,10 @@ namespace Fysio_API.Controllers
     [ApiController]
     public class ExerciseController : ControllerBase
     {
-        private readonly IFysioRepository _fysioRepository;
-        private readonly IMapper _mapper;
-        public ExerciseController(IFysioRepository fysioRepository, IMapper mapper)
+        
+        public ExerciseController()
         {
-            _fysioRepository = fysioRepository;
-            _mapper = mapper;
+            
         }
 
         [HttpPost("/add")]
@@ -26,10 +24,10 @@ namespace Fysio_API.Controllers
 
         }
 
-        [HttpGet("{exerciseId}")]
-        public IActionResult GetExercise(int exerciseId)
-        {
-            return new JsonResult(_fysioRepository.GetExercise(exerciseId));
-        }
+        //[HttpGet("{exerciseId}")]
+        //public IActionResult GetExercise(int exerciseId)
+        //{
+        //    return new JsonResult(_fysioRepository.GetExercise(exerciseId));
+        //}
     }
 }

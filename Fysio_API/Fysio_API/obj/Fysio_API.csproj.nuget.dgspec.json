@@ -1,36 +1,37 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Programming\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj": {}
+    "C:\\Users\\karss\\Documents\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj": {}
   },
   "projects": {
-    "C:\\Programming\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj": {
+    "C:\\Users\\karss\\Documents\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Programming\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj",
+        "projectUniqueName": "C:\\Users\\karss\\Documents\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj",
         "projectName": "Fysio_API",
-        "projectPath": "C:\\Programming\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj",
-        "packagesPath": "C:\\Users\\maxva_dv8oke8\\.nuget\\packages\\",
-        "outputPath": "C:\\Programming\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\obj\\",
+        "projectPath": "C:\\Users\\karss\\Documents\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj",
+        "packagesPath": "C:\\Users\\karss\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\karss\\Documents\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\maxva_dv8oke8\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\karss\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.matchwornshirt.com/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -42,6 +43,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "AutoMapper": {
               "target": "Package",
@@ -50,6 +52,18 @@
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
               "version": "[8.1.1, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[3.1.15, )"
+            },
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.15, )"
             },
             "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
               "target": "Package",
@@ -71,6 +85,14 @@
               "target": "Package",
               "version": "[5.0.4, )"
             },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[6.11.0, )"
+            },
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.10.13, )"
+            },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[3.1.5, )"
@@ -86,6 +108,18 @@
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[5.0.2, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.1.4, )"
+            },
+            "Swashbuckle.AspNetCore.Swagger": {
+              "target": "Package",
+              "version": "[6.1.4, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[5.6.0, )"
             }
           },
           "imports": [
@@ -106,7 +140,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

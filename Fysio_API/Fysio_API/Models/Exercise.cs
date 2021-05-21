@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Fysio_API.Auth;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Fysio_API.Models
 {
@@ -16,9 +14,9 @@ namespace Fysio_API.Models
         public string Name { get; set; }
         public ICollection<ClientExercise> ClientExercises { get; set; }
         [Required]
-        [ForeignKey("Therapist")]
-        public int CreatedByTherapist_Id { get; set; }
-        public Therapist CreatedByTherapist { get; set; }
+        [ForeignKey("ApplicationUser")]
+        public string CreatedByTherapistId { get; set; }
+        public ApplicationUser CreatedByTherapist { get; set; }
         public string VideoLink { get; set; }
     }
 }
