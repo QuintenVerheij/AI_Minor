@@ -1,24 +1,36 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" type="dark" variant="info">
-      <b-navbar-brand href="#">MinorAI</b-navbar-brand>
-    </b-navbar>
     <div id="video_box" class="center">
       <div class="rounded video_overlay">
-        <p class="video_overlay_text">AI MINOR FYSIO APP</p>
+        <div>
+          <img
+            src="@/assets/left.png"
+            class="video_overlay_icon"
+            @click="$router.go(-1)"
+          />
+          <p class="video_overlay_title">AI MINOR FYSIO APP</p>
+        </div>
         <br />
         <p class="video_overlay_text">
           Logged in as {{ user !== undefined ? user : "none" }}
         </p>
+        <br />
         <p class="video_overlay_text">
           Current Exercise {{ exercise !== undefined ? exercise : "none" }}
         </p>
+        <br />
         <img src="@/assets/calendar.png" class="video_overlay_icon" />
         <img src="@/assets/stopwatch.png" class="video_overlay_icon" />
         <img src="@/assets/phone.png" class="video_overlay_icon" />
       </div>
       <canvas id="canvas" width="1280px" height="720px"></canvas>
-      <video id="video" width="1280px" height="720px" autoplay style="display:none"></video>
+      <video
+        id="video"
+        width="1280px"
+        height="720px"
+        autoplay
+        style="display: none"
+      ></video>
     </div>
   </div>
 </template>
@@ -44,12 +56,37 @@ export default {
   },
   mounted: function () {
     this.video = document.getElementById("video");
-    this.buildCapture()
+    this.buildCapture();
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
-    this.poseNet = ml5.poseNet(this.video, this.onModelLoaded);
+    // translate context to center of canvas
+    this.ctx.translate(this.canvas.width, 0);
+
+      // flip context horizontally
+    this.ctx.scale(-1, 1);
+    const opt = {
+      architecture: "MobileNetV1",
+      imageScaleFactor: 0.3,
+      outputStride: 16,
+      flipHorizontal: false,
+      minConfidence: 0.5,
+      maxPoseDetections: 5,
+      scoreThreshold: 0.5,
+      nmsRadius: 20,
+      detectionType: "multiple",
+      inputResolution: 513,
+      multiplier: 0.75,
+      quantBytes: 2,
+    };
+    this.poseNet = ml5.poseNet(this.video, opt, this.onModelLoaded);
     this.poseNet.on("pose", this.gotPoses);
     this.drawCameraIntoCanvas();
+  },
+  beforeDestroy() {
+    this.video.srcObject.getTracks().forEach(function (track) {
+      track.stop();
+      this.video = null;
+    });
   },
   methods: {
     onModelLoaded: function () {
@@ -89,8 +126,8 @@ export default {
               0,
               2 * Math.PI
             );
-            this.ctx.fillStyle = '#FF3333';
-            this.ctx.fill(); 
+            this.ctx.fillStyle = "#FF3333";
+            this.ctx.fill();
             this.ctx.stroke();
           }
         }
@@ -141,7 +178,7 @@ export default {
               height: { ideal: window.innerHeight },
             },
           };
-          console.log(constraints)
+          console.log(constraints);
           navigator.mediaDevices
             .getUserMedia(constraints)
             .then((stream) => {
@@ -152,8 +189,8 @@ export default {
               }
               //info.innerHTML+= "<pre>DONE</pre>";
               console.log("DONE");
-              this.$store.commit("attachStream", this.$el);
-              this.$store.commit("setLoaded", true);
+              // this.$store.commit("camera/ATTACH_STREAM", this.$el);
+              this.$store.commit("camera/SET_LOADED", true);
             })
             .catch((err) => {
               console.log(err.name + ": " + err.message);
@@ -184,7 +221,6 @@ a {
   color: #42b983;
 }
 
-
 #video_box {
   float: center;
   text-align: center;
@@ -207,22 +243,33 @@ a {
   margin: auto;
   width: 80%;
   padding-top: 5px;
-
 }
 .rounded {
   border-radius: 25px;
 }
 .video_overlay_text {
+  display: inline;
   font-size: 30px;
   z-index: 101;
 }
 
+.video_overlay_title {
+  display: inline;
+  vertical-align: middle;
+  font-size: 35px;
+  height: 70px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.video_overlay_title:hover {
+  background-color: rgba(220, 220, 220, 0.3);
+}
+
 .video_overlay_icon {
   display: inline;
-  max-width: 80px;
-  max-height: 80px;
-  min-width: 50px;
-  min-height: 50px;
+  width: 70px;
+  height: 70px;
   padding: 10px;
 }
 
@@ -230,5 +277,4 @@ a {
   background-color: rgba(220, 220, 220, 0.3);
   border-radius: 25%;
 }
-
 </style>

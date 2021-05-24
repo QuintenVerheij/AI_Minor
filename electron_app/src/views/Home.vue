@@ -1,21 +1,28 @@
 <template>
   <div class="home">
-    <nav-bar />
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h2>Oefeningen voor vandaag</h2>
+    <b-row>
+      <b-col md=4 v-for="exercise in exercises" v-bind:key="exercise.id">
+        <exercise-card :exercise="exercise"/>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
 <script>
+import ExerciseCard from '../components/ExerciseCard.vue';
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-import NavBar from '@/components/NavBar.vue'
 
 export default {
+  components: { ExerciseCard },
   name: 'Home',
-  components: {
-    HelloWorld,
-    NavBar, 
+  created(){
+    this.$store.dispatch('exercises/getExercises');
+  },
+  computed: {
+    exercises(){
+      return this.$store.getters['exercises/get_exercises'];
+    }
   }
 }
 </script>
