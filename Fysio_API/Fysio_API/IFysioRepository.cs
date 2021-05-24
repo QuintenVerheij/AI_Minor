@@ -14,8 +14,7 @@ namespace Fysio_API
         ApplicationUser GetClient(string clientId);
         IEnumerable<ApplicationUser> GetClientsTherapist(string therapistId);
         ApplicationUser GetTherapist(string therapistId);
-        void AttachClientToTherapist(int clientId, int therapistId);
-        void AssignExerciseToClient(ClientExercise clientExercise);
+        void AssignExerciseToClient(ClientExerciseDto_In clientExerciseDto_In);
         Exercise GetExercise(int exerciseId);
     }
 }

@@ -1,0 +1,69 @@
+services:
+  fysio_api:
+    build:
+      context: C:\Programming\GitHub\AI_Minor\Fysio_API
+      dockerfile: Fysio_API/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: Fysio_API
+      target: base
+    container_name: Fysio_API
+    depends_on:
+      postgresql_database:
+        condition: service_started
+    entrypoint: tail -f /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      ASPNETCORE_URLS: https://+:443;http://+:80
+      DOTNET_USE_POLLING_FILE_WATCHER: '1'
+      NUGET_FALLBACK_PACKAGES: /root/.nuget/fallbackpackages;/root/.nuget/fallbackpackages2
+    image: fysioapi:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages
+        --additionalProbingPath /root/.nuget/fallbackpackages --additionalProbingPath
+        /root/.nuget/fallbackpackages2  "/app/bin/Debug/netcoreapp3.1/Fysio_API.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    ports:
+    - target: 80
+    - target: 443
+    tty: true
+    volumes:
+    - C:\Programming\GitHub\AI_Minor\Fysio_API\Fysio_API:/app:rw
+    - C:\Users\maxva_dv8oke8\vsdbg\vs2017u5:/remote_debugger:rw
+    - C:\Users\maxva_dv8oke8\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\maxva_dv8oke8\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+    - C:\Microsoft\Xamarin\NuGet:/root/.nuget/fallbackpackages:ro
+    - C:\Program Files\dotnet\sdk\NuGetFallbackFolder:/root/.nuget/fallbackpackages2:ro
+    - C:\Users\maxva_dv8oke8\.nuget\packages:/root/.nuget/packages:ro
+    - C:\Programming\GitHub\AI_Minor\Fysio_API:/src:rw
+  pgadmin:
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    image: dpage/pgadmin4
+    ports:
+    - published: 5050
+      target: 80
+    restart: unless-stopped
+    volumes:
+    - pgadmin:/root/.pgadmin:rw
+  postgresql_database:
+    environment:
+      POSTGRES_DB: FysioDb
+      POSTGRES_PASSWORD: adminadmin
+      POSTGRES_USER: admin
+    image: postgres:latest
+    ports:
+    - published: 5432
+      target: 5432
+    restart: unless-stopped
+    volumes:
+    - database-data:/var/lib/postgresql/data:rw
+version: '3.4'
+volumes:
+  database-data: {}
+  pgadmin: {}

@@ -20,14 +20,15 @@ namespace Fysio_API.Controllers
     public class UsersController : ControllerBase
     {
         private UserManager<ApplicationUser> _userManager;
-        private SignInManager<ApplicationUser> _signInManager;
         private readonly AppSettings _appSettings;
-
-        public UsersController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<AppSettings> appSettings)
+        private PairingCodesHelper _pairingCodesHelper;
+        private readonly FysioDbContext _fysioDbContext;
+        public UsersController(UserManager<ApplicationUser> userManager, IOptions<AppSettings> appSettings, FysioDbContext fysioDbContext)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _appSettings = appSettings.Value;
+            _fysioDbContext = fysioDbContext;
+            _pairingCodesHelper = new PairingCodesHelper(fysioDbContext);
         }
 
         [HttpPost("register")]
@@ -39,19 +40,21 @@ namespace Fysio_API.Controllers
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber
             };
+            
+            var result = await _userManager.CreateAsync(appUser, model.Password);
 
-            try
+            if (result.Succeeded)
             {
-                var result = await _userManager.CreateAsync(appUser, model.Password);
                 await _userManager.AddToRoleAsync(appUser, model.Role);
 
+                if (model.Role == Role.Therapist)
+                {
+                    _pairingCodesHelper.New(appUser.Id);
+                }
                 return Ok(result);
             }
-            catch (Exception ex)
-            {
 
-                throw ex;
-            }
+            return StatusCode(500, result);
         }
 
         [HttpPost("login")]

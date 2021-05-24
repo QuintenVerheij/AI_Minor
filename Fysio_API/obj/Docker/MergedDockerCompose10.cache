@@ -1,0 +1,45 @@
+services:
+  fysio_api:
+    build:
+      context: C:\Programming\GitHub\AI_Minor\Fysio_API
+      dockerfile: Fysio_API/Dockerfile
+    depends_on:
+      postgresql_database:
+        condition: service_started
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://+:443;http://+:80
+    image: fysioapi
+    ports:
+    - target: 80
+    - target: 443
+    volumes:
+    - C:\Users\maxva_dv8oke8\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\maxva_dv8oke8\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+  pgadmin:
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    image: dpage/pgadmin4
+    ports:
+    - published: 5050
+      target: 80
+    restart: unless-stopped
+    volumes:
+    - pgadmin:/root/.pgadmin:rw
+  postgresql_database:
+    environment:
+      POSTGRES_DB: FysioDb
+      POSTGRES_PASSWORD: adminadmin
+      POSTGRES_USER: admin
+    image: postgres:latest
+    ports:
+    - published: 5432
+      target: 5432
+    restart: unless-stopped
+    volumes:
+    - database-data:/var/lib/postgresql/data:rw
+version: '3.4'
+volumes:
+  database-data: {}
+  pgadmin: {}
