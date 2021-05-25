@@ -3,6 +3,12 @@ import { HTTP } from '@/plugins/axios'
 const debugLogin = ({commit, dispatch}) => {
     localStorage.token='token';
     commit('SET_AUTHENTICATED', true);
+    commit('SET_USER', {
+      first_name: "Eduard",
+      last_name: "Terlouw",
+      gender: "male",
+      age: 21
+  });
     dispatch('exercises/getExercises',  {root:true});
 }   
 

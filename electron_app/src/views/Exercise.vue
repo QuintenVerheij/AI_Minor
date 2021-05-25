@@ -1,5 +1,5 @@
 <template>
-  <div>Exercise template
+  <div>
       <h1>{{exercise.title}}</h1>
       <b-row>
         <b-col>
@@ -14,11 +14,14 @@
 </template>
 <script>
 export default {
-    computed: {
-        exercise() {
-            return this.$store.getters['exercises/get_exercise'](this.$route.params.id);
-        }
-    },
+  created(){
+    this.$store.dispatch('exercises/getExercise', this.$route.params.id)
+  },
+  computed: {
+      exercise() {
+          return this.$store.getters['exercises/get_exercise'];
+      }
+  },
   methods: {
     camera() {
       this.$router.replace("/camera");

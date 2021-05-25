@@ -2,8 +2,8 @@ const get_exercises = (state) => {
     return state.exercises;
 }
 
-const get_exercise = (state) => (id) => {
-    return state.exercises.find((exercise) => exercise.id === id);
+const get_exercise = (state) => {
+    return state.exercise;
 }
 
 
