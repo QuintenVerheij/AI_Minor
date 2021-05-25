@@ -20,14 +20,17 @@ namespace Fysio_API.Controllers
     public class UsersController : ControllerBase
     {
         private UserManager<ApplicationUser> _userManager;
-        private SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         private readonly AppSettings _appSettings;
-
-        public UsersController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<AppSettings> appSettings)
+        private PairingCodesHelper _pairingCodesHelper;
+        private readonly FysioDbContext _fysioDbContext;
+        public UsersController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleMgr, IOptions<AppSettings> appSettings, FysioDbContext fysioDbContext)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
+            roleManager = roleMgr;
             _appSettings = appSettings.Value;
+            _fysioDbContext = fysioDbContext;
+            _pairingCodesHelper = new PairingCodesHelper(fysioDbContext);
         }
 
         [HttpPost("register")]
@@ -40,18 +43,32 @@ namespace Fysio_API.Controllers
                 PhoneNumber = model.PhoneNumber
             };
 
-            try
+            await AssureRoles();
+            var result = await _userManager.CreateAsync(appUser, model.Password);
+
+            if (result.Succeeded)
             {
-                var result = await _userManager.CreateAsync(appUser, model.Password);
                 await _userManager.AddToRoleAsync(appUser, model.Role);
 
+                if (model.Role == Role.Therapist)
+                {
+                    _pairingCodesHelper.New(appUser.Id);
+                }
                 return Ok(result);
             }
-            catch (Exception ex)
-            {
 
-                throw ex;
-            }
+            return StatusCode(500, result);
+        }
+
+        private async Task AssureRoles()
+        {
+            var alreadyExistClient = await roleManager.RoleExistsAsync(Role.Client);
+            var alreadyExistTherapist = await roleManager.RoleExistsAsync(Role.Therapist);
+
+            if (!alreadyExistClient)
+                await roleManager.CreateAsync(new IdentityRole(Role.Client));
+            if (!alreadyExistTherapist)
+                await roleManager.CreateAsync(new IdentityRole(Role.Therapist));
         }
 
         [HttpPost("login")]
