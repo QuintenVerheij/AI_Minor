@@ -53,6 +53,15 @@ export default {
       }
     });
   },
+  watch: {
+    '$route' (to, from){
+        console.log('doing', to, from);
+        this.video.srcObject.getTracks().forEach(function (track) {
+          track.stop();
+          this.video = null;
+        })
+    },
+  },
   data() {
     return {
       // LOCAL STATE GOES HERE
@@ -86,6 +95,13 @@ export default {
   },
   beforeDestroy(){
     this.video = null;
+  },
+   beforeRouteUpdate () {
+     console.log('doing');
+    this.video.srcObject.getTracks().forEach(function (track) {
+      track.stop();
+      this.video = null;
+    });
   },
   methods: {
     takePicture(){

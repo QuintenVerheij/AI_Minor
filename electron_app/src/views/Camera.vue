@@ -81,7 +81,7 @@ export default {
     this.poseNet.on("pose", this.gotPoses);
     this.drawCameraIntoCanvas();
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.video.srcObject.getTracks().forEach(function (track) {
       track.stop();
       this.video = null;

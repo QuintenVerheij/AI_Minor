@@ -1,10 +1,11 @@
 <template>
      <b-card
+     width="400"
     :img-src="exercise.image_url"
     img-alt="Image"
     img-top
     tag="article"
-    style="max-width: 20rem;"
+    style="min-width: 18rem; width: 18rem"
     class="mb-2"
     >
     <b-card-title>
