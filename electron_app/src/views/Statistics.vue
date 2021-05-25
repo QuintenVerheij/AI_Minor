@@ -1,7 +1,6 @@
 <template>
   <div>
-    
-     <chart :data="chartData" :options="chartOptions"></chart>
+     <Chart :data="chartData"></Chart>
   </div>
 </template>
 <script>
@@ -10,25 +9,14 @@ export default {
   components: {
     Chart
   },
-  data() {
-    return {
-      chartOptions: {
-        hoverBorderWidth: 20
-      },
-      chartData: {
-        hoverBackgroundColor: "red",
-        hoverBorderWidth: 10,
-        labels: ["Green", "Red", "Blue"],
-        datasets: [
-          {
-            label: "Data One",
-            backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
-            data: [1, 10, 5]
-          }
-        ]
-      }
-    };
-  }
+   created() {
+    this.$store.dispatch('chart/getChartDataSets')
+  },
+  computed:{
+    chartData(){
+      return this.$store.getters['chart/get_chartdatasets']
+    }
+}
 };
 </script>
 
