@@ -18,7 +18,7 @@ export default {
   watch: {
     authenticated(){
       if(!this.authenticated){
-        this.$router.replace({name: 'Auth-login'});
+        this.$router.replace({name: 'Auth'});
       }
     }
   }
@@ -27,7 +27,8 @@ export default {
 
 
 
-<style>
+<style lang="scss">
+// @import './assets/scss/custom.css';
 /* @import '../node_modules/bootstrap/dist/css/bootstrap.css';
 @import '../node_modules/bootstrap-vue/dist/bootstrap-vue.css'; */
 #app {

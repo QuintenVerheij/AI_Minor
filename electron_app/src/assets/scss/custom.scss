@@ -1,4 +1,5 @@
-$blue: #0e34a0;
+$blue: #081F5E;
+
 $pink: #e43f6f;
 $purple: #662c91;
 $white: #fafafa;
@@ -31,7 +32,8 @@ $theme-colors: map-merge(
     'warning': $warning,
     'danger': $danger,
     'light': $light,
-    'dark': $dark
+    'dark': $dark,
+    'dark-2': #1E336D
   ),
   $theme-colors
 );

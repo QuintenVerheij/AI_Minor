@@ -7,14 +7,6 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/home",
-    name: "Home",
-    component: Home,
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
     path: "/",
     name: "Auth",
     // route level code-splitting
@@ -23,9 +15,16 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Auth-login.vue"),
 
+    
+  },
+  {
+    path: "/home",
+    name: "Home",
+    component: Home,
     meta: {
       requiresAuth: true,
     },
+    children: []
   },
   {
     path: "/exercises",
@@ -106,7 +105,7 @@ const routes = [
     },
   },
   {
-    path: "/camera",
+    path: "/camera/:id",
     name: "Camera",
     component: Camera,
     props: {
@@ -155,7 +154,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (localStorage.getItem("token") == null) {
       next({
-        path: "/auth",
+        name: "Auth",
         params: { nextUrl: to.fullPath },
       });
     } else {

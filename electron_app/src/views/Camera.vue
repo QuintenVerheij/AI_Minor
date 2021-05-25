@@ -39,9 +39,8 @@
 import ml5 from "ml5";
 
 export default {
-  props: {
-    user: String,
-    exercise: String,
+  created(){
+    this.$store.dispatch('getExercise', this.$route.params.id)
   },
   data() {
     return {

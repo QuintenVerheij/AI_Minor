@@ -6,19 +6,40 @@
         </template>
     </nav-bar>
    
-    <b-sidebar bg-variant="dark" id="sidebar-1" title="Sidebar" shadow>
+    <b-sidebar bg-variant="dark" id="sidebar-1" title="Sidebar" position="fixed" shadow>
+      <template v-slot:header-close>
+        <b-icon-x variant="white"></b-icon-x>
+      </template>
+
+      <b-nav vertical>
+          <b-nav-item
+           class="text-left bg-custom text-custom mb-3"
+          >
+          <div class="d-flex flex-row">
+          <b-avatar variant="primary" text="ET" size="1.5em" class="mr-1"></b-avatar> {{user.first_name}} {{user.last_name}}
+          </div>
+          </b-nav-item>
+        </b-nav>
       <b-nav vertical>
         <b-nav-item
-          bg-variant='light'
+          class="text-left bg-custom text-custom"
           v-for="(item, index) in navItems"
           v-bind:key="index"
           :active="checkActive(item)"
           :disabled="checkActive(item)"
           @click="$router.push({ name: item.route })"
-          >{{item.text}}</b-nav-item
+          
+          >
+          <div class="ml-4">
+            {{item.text}}
+          </div>
+          </b-nav-item
         >
       </b-nav>
-      <b-btn @click="signOut">Uitloggen</b-btn>
+      <template v-slot:footer >
+         <b-btn variant="text text-white" @click="signOut">Uitloggen</b-btn>
+      </template>
+     
     </b-sidebar>
   </div>
 </template>
@@ -27,8 +48,8 @@ import NavBar from './NavBar.vue';
 export default {
   components: { NavBar },
   computed: {
-    role(){
-     return this.$store.getters['authentiction/get_user'].role;
+    user() {
+      return this.$store.getters['authentication/get_user']
     }
   },
   data() {
@@ -81,7 +102,7 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss" scoped>
 .hamburger_icon {
   display: inline;
   max-width: 40px;
@@ -89,5 +110,20 @@ export default {
   min-width: 40px;
   min-height: 40px;
   padding: 10px;
+}
+
+.bg-custom {
+  background-color: var(--dark-2);
+}
+
+.bg-custom:hover {
+  background-color: var(--blue);
+}
+.text-custom a{
+  color: white;
+}
+
+.nav-link.disabled {
+  color: var(--pink) !important
 }
 </style>
