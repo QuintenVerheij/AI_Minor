@@ -1,7 +1,7 @@
 <template>
   <b-container fluid class="home text-left">
     <h2 class="font-weight-bold mt-3 " >Oefeningen voor vandaag</h2>
-    <home-exercise-list/>
+    <home-exercise-list class="mt-2"/>
   </b-container>
 </template>
 

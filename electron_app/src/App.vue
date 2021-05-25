@@ -28,6 +28,7 @@ export default {
 
 
 <style lang="scss">
+
 // @import './assets/scss/custom.css';
 /* @import '../node_modules/bootstrap/dist/css/bootstrap.css';
 @import '../node_modules/bootstrap-vue/dist/bootstrap-vue.css'; */
@@ -37,5 +38,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+body {
+  background-color: var(--white);
 }
 </style>

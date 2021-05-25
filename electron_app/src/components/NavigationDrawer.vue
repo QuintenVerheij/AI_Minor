@@ -13,7 +13,7 @@
       </template>
 
       <b-nav vertical>
-          <b-nav-item
+          <b-nav-item @click="$router.push({ name: 'Account'})"
            class="text-left bg-custom text-custom mb-3"
           >
           <div class="d-flex flex-row">

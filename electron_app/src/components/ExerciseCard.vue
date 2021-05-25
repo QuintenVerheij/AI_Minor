@@ -4,12 +4,13 @@
     :img-src="exercise.image_url"
     img-alt="Image"
     img-top
+    :shadow="true"
     tag="article"
     style="min-width: 18rem; width: 18rem"
-    class="mb-2"
+    class="mb-2 custom-background border-0"
     >
     <b-card-title>
-          <div class="d-flex flex-row">
+          <div class="d-flex flex-row font-weight-semi-bold">
         {{exercise.title}}
          </div>
     </b-card-title>
@@ -32,3 +33,10 @@ export default {
     }
 }
 </script>
+<style scoped>
+.card-body {
+    background-color: white;
+    border: 1px solid #f4f4f4;
+    border-radius: 5px;
+}
+</style>
