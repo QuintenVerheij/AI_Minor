@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   fysio_api:
-    image: fysioregister.azurecr.io/fysioapi:dev
+    image: fysioapi:dev
     container_name: Fysio_API
     build:
       target: base
