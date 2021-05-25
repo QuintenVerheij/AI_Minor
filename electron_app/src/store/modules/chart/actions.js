@@ -1,6 +1,6 @@
 
 const getChartDataSets = ({commit}) => {
-    let datasets = [
+    let datasets = 
       {
       chartdata: {
         labels: ['Voltooid', 'Niet Voltooid'],
@@ -13,7 +13,7 @@ const getChartDataSets = ({commit}) => {
         ]
       }
       }
-    ]
+    
     commit('SET_CHARTDATA', datasets);
 }   
 export default {

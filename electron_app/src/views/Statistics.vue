@@ -1,19 +1,34 @@
 <template>
-    <div>Statistics template
-         <Chart :chart="chart" />
-    </div>
+  <div>
+    
+     <chart :data="chartData" :options="chartOptions"></chart>
+  </div>
 </template>
 <script>
-import Chart from '../components/Chart.vue'
+import Chart from "../components/Chart.js";
 export default {
-  components: { Chart },
-   created() {
-    this.$store.dispatch('chart/getChartDataSets')
+  components: {
+    Chart
   },
-  computed:{
-    chart(){
-      return this.$store.getters['chart/get_chartdatasets']
-    }
-}
-}
+  data() {
+    return {
+      chartOptions: {
+        hoverBorderWidth: 20
+      },
+      chartData: {
+        hoverBackgroundColor: "red",
+        hoverBorderWidth: 10,
+        labels: ["Green", "Red", "Blue"],
+        datasets: [
+          {
+            label: "Data One",
+            backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
+            data: [1, 10, 5]
+          }
+        ]
+      }
+    };
+  }
+};
 </script>
+
