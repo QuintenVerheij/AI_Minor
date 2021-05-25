@@ -16,5 +16,6 @@ namespace Fysio_API
         ApplicationUser GetTherapist(string therapistId);
         void AssignExerciseToClient(ClientExerciseDto_In clientExerciseDto_In);
         Exercise GetExercise(int exerciseId);
+        void PairClientTherapist_WithCode(string clientId, string code);
     }
 }

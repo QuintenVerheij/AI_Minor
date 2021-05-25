@@ -34,5 +34,7 @@ namespace Fysio_API.Models
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<Data> Datas { get; set; }
         public DbSet<PairingCodes> PairingCodes { get; set; }
+        public DbSet<ClientExerciseLog> ClientExerciseLogs { get; set; }
+
     }
 }

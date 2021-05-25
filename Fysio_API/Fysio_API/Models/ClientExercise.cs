@@ -1,5 +1,6 @@
 ﻿using Fysio_API.Auth;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,5 +25,6 @@ namespace Fysio_API.Models
         public float Score { get; set; }
         [Required]
         public DateTime FinishingDate { get; set; }
+        public List<ClientExerciseLog> ClientExerciseLogs { get; set; }
     }
 }

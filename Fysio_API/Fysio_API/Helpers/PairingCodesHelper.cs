@@ -34,6 +34,7 @@ namespace Fysio_API.Helpers
                     break;
                 }
             }
+            _fysioDbContext.SaveChanges();
         }
     }
 }

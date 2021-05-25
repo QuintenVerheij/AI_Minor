@@ -3,15 +3,17 @@ using System;
 using Fysio_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Fysio_API.Migrations
 {
     [DbContext(typeof(FysioDbContext))]
-    partial class FysioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210525081630_AddedPairingCodesTable")]
+    partial class AddedPairingCodesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,26 +54,6 @@ namespace Fysio_API.Migrations
                     b.HasIndex("ExerciseId");
 
                     b.ToTable("ClientExercises");
-                });
-
-            modelBuilder.Entity("Fysio_API.Models.ClientExerciseLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("ClientExerciseId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientExerciseId");
-
-                    b.ToTable("ClientExerciseLogs");
                 });
 
             modelBuilder.Entity("Fysio_API.Models.Data", b =>
@@ -196,15 +178,13 @@ namespace Fysio_API.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedByTherapistId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
-
-                    b.Property<string>("PhotoLink")
-                        .HasColumnType("text");
 
                     b.Property<string>("VideoLink")
                         .HasColumnType("text");
@@ -487,22 +467,13 @@ namespace Fysio_API.Migrations
                     b.Navigation("Exercise");
                 });
 
-            modelBuilder.Entity("Fysio_API.Models.ClientExerciseLog", b =>
-                {
-                    b.HasOne("Fysio_API.Models.ClientExercise", "clientExercise")
-                        .WithMany("ClientExerciseLogs")
-                        .HasForeignKey("ClientExerciseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("clientExercise");
-                });
-
             modelBuilder.Entity("Fysio_API.Models.Exercise", b =>
                 {
                     b.HasOne("Fysio_API.Auth.ApplicationUser", "CreatedByTherapist")
                         .WithMany()
-                        .HasForeignKey("CreatedByTherapistId");
+                        .HasForeignKey("CreatedByTherapistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CreatedByTherapist");
                 });
@@ -582,11 +553,6 @@ namespace Fysio_API.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Fysio_API.Models.ClientExercise", b =>
-                {
-                    b.Navigation("ClientExerciseLogs");
                 });
 
             modelBuilder.Entity("Fysio_API.Models.Exercise", b =>
