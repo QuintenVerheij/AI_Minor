@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   fysio_api:
-    image: ${DOCKER_REGISTRY-}fysioapi
+    image: fysioregister.azurecr.io/fysioapi:latest
     build:
       context: .
       dockerfile: Fysio_API/Dockerfile
