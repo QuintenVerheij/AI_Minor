@@ -33,7 +33,13 @@ namespace Fysio_API.Controllers
             return null; //_userManager.GetUserId(id);
         }
 
-                     
-                
+        [HttpPost("{id}/pair")]
+        [Authorize(Roles = Role.Client)]
+        public void PairClient(string id, [FromBody] PairCodeDto_In pairCodeDto_In)
+        {
+            _repo.PairClientTherapist_WithCode(id, pairCodeDto_In.Code);
+        }
+
+
     }
 }
