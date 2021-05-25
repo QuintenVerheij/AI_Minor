@@ -26,24 +26,33 @@
 import NavBar from './NavBar.vue';
 export default {
   components: { NavBar },
+  computed: {
+    role(){
+     return this.$store.getters['authentiction/get_user'].role;
+    }
+  },
   data() {
     return {
       navItems: [
         {
           text: "Overzicht",
           route: "Home",
+          role: 'all'
         },
         {
           text: "Oefeningen",
           route: "Exercises",
+          role: 'all'
         },
         {
           text: "Statistieken",
           route: "Statistics",
+          role: 'all'
         },
         {
           text: "Admin",
           route: "Admin",
+          role: 'admin'
         },
       ],
     };
@@ -54,6 +63,20 @@ export default {
       },
       signOut(){
           this.$store.dispatch('authentication/signOut');
+      },
+      checkRole(role){
+        if(role === 'all'){
+          return true;
+        }
+        if(this.role === 'admin' || this.role === role){
+          return true;
+        }
+        if(this.role === 'therapist'){
+          if(role === 'therapist') {
+            return true
+          }
+        }
+        return false;
       }
   }
 };

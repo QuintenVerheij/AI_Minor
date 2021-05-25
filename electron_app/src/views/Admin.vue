@@ -3,7 +3,7 @@
     <div id="video_box" class="center" >
       <div class="rounded video_overlay">
         <p class="video_overlay_text">AI MINOR FYSIO APP</p>
-        <br />
+        <br/>
         <p class="video_overlay_text">
           Logged in as {{ user !== undefined ? user : "none" }}
         </p>
