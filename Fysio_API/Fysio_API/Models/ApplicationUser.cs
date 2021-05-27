@@ -8,8 +8,8 @@ namespace Fysio_API.Auth
     public class ApplicationUser : IdentityUser
     {
         public List<ClientExercise> clientExercises { get; set; }
-        public List<TherapistClient> Clients { get; set; }
-        public List<TherapistClient> Therapists { get; set; }
+        public List<TherapistClient> TherapistClients { get; set; }
+        public List<TherapistClient> ClientTherapists { get; set; }
 
     }
 }

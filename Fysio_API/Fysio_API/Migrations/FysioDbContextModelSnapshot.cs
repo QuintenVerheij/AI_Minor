@@ -54,6 +54,26 @@ namespace Fysio_API.Migrations
                     b.ToTable("ClientExercises");
                 });
 
+            modelBuilder.Entity("Fysio_API.Models.ClientExerciseLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("ClientExerciseId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientExerciseId");
+
+                    b.ToTable("ClientExerciseLogs");
+                });
+
             modelBuilder.Entity("Fysio_API.Models.Data", b =>
                 {
                     b.Property<int>("DataId")
@@ -176,13 +196,15 @@ namespace Fysio_API.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedByTherapistId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
+
+                    b.Property<string>("PhotoLink")
+                        .HasColumnType("text");
 
                     b.Property<string>("VideoLink")
                         .HasColumnType("text");
@@ -194,9 +216,32 @@ namespace Fysio_API.Migrations
                     b.ToTable("Exercises");
                 });
 
+            modelBuilder.Entity("Fysio_API.Models.PairingCodes", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("character varying(5)");
+
+                    b.Property<string>("TherapistId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TherapistId");
+
+                    b.ToTable("PairingCodes");
+                });
+
             modelBuilder.Entity("Fysio_API.Models.TherapistClient", b =>
                 {
-                    b.Property<int>("TherapistClientId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -207,7 +252,7 @@ namespace Fysio_API.Migrations
                     b.Property<string>("TherapistId")
                         .HasColumnType("text");
 
-                    b.HasKey("TherapistClientId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
@@ -442,25 +487,45 @@ namespace Fysio_API.Migrations
                     b.Navigation("Exercise");
                 });
 
+            modelBuilder.Entity("Fysio_API.Models.ClientExerciseLog", b =>
+                {
+                    b.HasOne("Fysio_API.Models.ClientExercise", "clientExercise")
+                        .WithMany("ClientExerciseLogs")
+                        .HasForeignKey("ClientExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("clientExercise");
+                });
+
             modelBuilder.Entity("Fysio_API.Models.Exercise", b =>
                 {
                     b.HasOne("Fysio_API.Auth.ApplicationUser", "CreatedByTherapist")
                         .WithMany()
-                        .HasForeignKey("CreatedByTherapistId")
+                        .HasForeignKey("CreatedByTherapistId");
+
+                    b.Navigation("CreatedByTherapist");
+                });
+
+            modelBuilder.Entity("Fysio_API.Models.PairingCodes", b =>
+                {
+                    b.HasOne("Fysio_API.Auth.ApplicationUser", "Therapist")
+                        .WithMany()
+                        .HasForeignKey("TherapistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreatedByTherapist");
+                    b.Navigation("Therapist");
                 });
 
             modelBuilder.Entity("Fysio_API.Models.TherapistClient", b =>
                 {
                     b.HasOne("Fysio_API.Auth.ApplicationUser", "Client")
-                        .WithMany("Therapists")
+                        .WithMany("ClientTherapists")
                         .HasForeignKey("ClientId");
 
                     b.HasOne("Fysio_API.Auth.ApplicationUser", "Therapist")
-                        .WithMany("Clients")
+                        .WithMany("TherapistClients")
                         .HasForeignKey("TherapistId");
 
                     b.Navigation("Client");
@@ -519,6 +584,11 @@ namespace Fysio_API.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Fysio_API.Models.ClientExercise", b =>
+                {
+                    b.Navigation("ClientExerciseLogs");
+                });
+
             modelBuilder.Entity("Fysio_API.Models.Exercise", b =>
                 {
                     b.Navigation("ClientExercises");
@@ -528,9 +598,9 @@ namespace Fysio_API.Migrations
                 {
                     b.Navigation("clientExercises");
 
-                    b.Navigation("Clients");
+                    b.Navigation("ClientTherapists");
 
-                    b.Navigation("Therapists");
+                    b.Navigation("TherapistClients");
                 });
 #pragma warning restore 612, 618
         }
