@@ -39,19 +39,20 @@ const routes = [
       requiresAuth: true,
     },
   },
-  {
-    path: '/register',
-    name: 'Auth-register',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Auth-register.vue"),
+  // DEPRECATED: Register now separated between client and therapist
+  // {
+  //   path: '/register',
+  //   name: 'Auth-register',
+  //   // route level code-splitting
+  //   // this generates a separate chunk (about.[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () =>
+  //     import(/* webpackChunkName: "about" */ "../views/Auth-register.vue"),
 
-    meta: {
-      // requiresAuth: true,
-    },
-  },
+  //   meta: {
+  //     // requiresAuth: true,
+  //   },
+  // },
   {
     path: '/register-client',
     name: 'Auth-register-client',
@@ -61,9 +62,9 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Auth-register-client.vue"),
 
-    meta: {
-      requiresAuth: true,
-    },
+    // meta: {
+    //   requiresAuth: true,
+    // },
   },
   {
     path: '/register-therapist',
@@ -74,9 +75,9 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Auth-register-therapist.vue"),
 
-    meta: {
-      requiresAuth: true,
-    },
+    // meta: {
+    //   requiresAuth: true,
+    // },
   },
   {
     path: "/exercise/:id",

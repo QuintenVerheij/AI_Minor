@@ -1,47 +1,103 @@
 <template>
   <body>
     <div>
-      <h1 class="title">Fysio App AI Minor</h1>
       <div class="box-center">
-        <h1 class="box-title">Signup Client</h1>
-        <form method="POST" class="box-form">
+        <h1 class="box-title">Signup Form</h1>
+        <div class="box-form">
           <div class="form-field">
-            <input type="text" required />
+            <input v-model="register_data.username" type="text" required />
             <span></span>
             <label>Username</label>
           </div>
           <div class="form-field">
-            <input type="text" required />
+            <input v-model="register_data.email" type="text" required />
             <span></span>
             <label>Email</label>
           </div>
           <div class="form-field">
-            <input type="text" required />
+            <input v-model="register_data.phoneNumber" type="text" required />
             <span></span>
             <label>Phonenumber</label>
           </div>
           <div class="form-field">
-            <input type="password" required />
+            <input v-model="register_data.password" type="password" required />
             <span></span>
             <label>Password</label>
           </div>
+          <div class="form-field">
+            <input v-model="password_confirm" type="password" required />
+            <span></span>
+            <label>Confirm Password</label>
+          </div>
+          <div v-if="show_error_message">
+            <pre class="error-message">{{ this.error_message }}</pre>
+          </div>
           <div class="field-login">
-            <button type="submit" class="button-login">Signup</button>
+            <button v-on:click="register" class="button-login">Sign up</button>
           </div>
           <div class="field-signup">
-            Already have account? <a href="/">Login</a>
+            Already have account? <a href="login">Login</a>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </body>
 </template>
 <script>
 export default {
+  created() {
+    console.log(this.$store.getters["api/GET_REGISTER_ENDPOINT"]);
+  },
+  data() {
+    return {
+      // LOCAL STATE GOES HERE
+      register_data: {
+        username: "",
+        email: "",
+        phoneNumber: "",
+        password: "",
+        role: "Client",
+      },
+      password_confirm: "",
+      show_error_message: false,
+      error_message: "",
+      register_response: {
+        succeeded: true,
+        errors: [],
+      },
+    };
+  },
   methods: {
-    login() {
-      this.$router.replace("/home");
+    register: async function () {
+      this.show_error_message = false;
+      if (this.register_data.password != this.password_confirm) {
+        this.show_error_message = true;
+        this.error_message = "Passwords do not match";
+      } else {
+        const API_INFO = this.$store.getters["api/GET_REGISTER_ENDPOINT"];
+        fetch(API_INFO.url, {
+          method: API_INFO.method,
+          headers: API_INFO.headers,
+          body: JSON.stringify(this.register_data),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data)
+            if (data.succeeded) {
+              this.$router.push({name: 'Auth'});
+            } else {
+              if (data.errors !== undefined) {
+                console.log(data.errors);
+                this.show_errors(data.errors);
+              }
+            }
+          });
+      }
     },
+    show_errors: function(errors) {
+        this.error_message = errors.reduce((acc, curr) => acc + "\n" + curr.description, "")
+        this.show_error_message = true;
+    }
   },
 };
 </script>
@@ -65,7 +121,8 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 420px;
+  min-width: 420px;
+  width: fit-content;
   background: white;
   border-radius: 12px;
 }
@@ -168,5 +225,9 @@ body {
 
 .field-signup a:hover {
   text-decoration: underline;
+}
+
+.error-message {
+    color: red;
 }
 </style>
