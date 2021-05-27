@@ -88,22 +88,20 @@ export default {
           .then((data) => {
             console.log(data)
             if (data.succeeded) {
-              this.$router.replace("/");
+              this.$router.push({name: 'Auth'});
             } else {
               if (data.errors !== undefined) {
                 console.log(data.errors);
-                const reducer = (acc, curr) => acc + "\n" + curr.description
-                this.error_message = data.errors.reduce(reducer, "")
-                this.show_error_message = true;
+                this.show_errors(data.errors);
               }
             }
           });
       }
     },
-    show_register_error: function (error) {
-      this.show_error_message = true;
-      this.error_message = error;
-    },
+    show_errors: function(errors) {
+        this.error_message = errors.reduce((acc, curr) => acc + "\n" + curr.description, "")
+        this.show_error_message = true;
+    }
   },
 };
 </script>
