@@ -49,7 +49,7 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/Auth-register.vue"),
 
     meta: {
-      requiresAuth: true,
+      // requiresAuth: true,
     },
   },
   {

@@ -4,6 +4,7 @@ import Authentication from './modules/authentication'
 import Exercises from './modules/exercises'
 import therapist from './modules/therapist'
 import chart from './modules/chart'
+import API from './modules/api'
 // import example from "./modules/example_module";
 
 
@@ -14,10 +15,13 @@ const createStore = () => {
       authentication: Authentication,
       exercises: Exercises,
       therapist: therapist,
-      chart: chart
+      chart: chart,
+      api: API
     },
     state: {
-      version: '0.1.13'
+      version: '0.1.15',
+      dev: true,
+      use_ssl: false
     }
   });
 };
