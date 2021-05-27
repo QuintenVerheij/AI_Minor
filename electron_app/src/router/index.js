@@ -53,6 +53,32 @@ const routes = [
     },
   },
   {
+    path: '/register-client',
+    name: 'Auth-register-client',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Auth-register-client.vue"),
+
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/register-therapist',
+    name: 'Auth-register-therapist',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Auth-register-therapist.vue"),
+
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: "/exercise/:id",
     name: "Exercise",
     // route level code-splitting

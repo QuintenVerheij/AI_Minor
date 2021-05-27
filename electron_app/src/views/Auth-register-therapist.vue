@@ -3,7 +3,7 @@
     <div>
       <h1 class="title">Fysio App AI Minor</h1>
       <div class="box-center">
-        <h1 class="box-title">Login</h1>
+        <h1 class="box-title">Signup Therapist</h1>
         <form method="POST" class="box-form">
           <div class="form-field">
             <input type="text" required />
@@ -11,27 +11,25 @@
             <label>Username</label>
           </div>
           <div class="form-field">
+            <input type="text" required />
+            <span></span>
+            <label>Email</label>
+          </div>
+          <div class="form-field">
+            <input type="text" required />
+            <span></span>
+            <label>Phonenumber</label>
+          </div>
+          <div class="form-field">
             <input type="password" required />
             <span></span>
             <label>Password</label>
           </div>
           <div class="field-login">
-            <button
-              type="submit"
-              class="button-login my-auto mx-auto"
-              @click="login"
-            >
-              Login
-            </button>
+            <button type="submit" class="button-login">Signup</button>
           </div>
           <div class="field-signup">
-            Not a member? <br>
-            <a href="register-client">
-                <button type="button" class="button-client my-auto mx-auto">Signup as Client</button>
-            </a>
-            <a href="register-therapist">
-                <button type="button" class="button-therapist my-auto mx-auto">Signup as Therapist</button>
-            </a>
+            Already have account? <a href="/">Login</a>
           </div>
         </form>
       </div>
@@ -42,14 +40,12 @@
 export default {
   methods: {
     login() {
-      if (this.$store.dispatch("authentication/debugLogin")) {
-        this.$router.push({ name: "Home" });
-      }
+      this.$router.replace("/home");
     },
   },
 };
 </script>
-<style scoped>
+<style>
 body {
   margin: 0;
   padding: 0;
@@ -76,7 +72,6 @@ body {
 
 .box-title {
   text-align: center;
-  color: #081f5e;
   padding: 0 0 20px 0;
   border-bottom: 1px solid #081f5e;
 }
@@ -152,21 +147,6 @@ body {
   outline: none;
   cursor: pointer;
 }
-
-.button-client, .button-therapist{
-  width: 40%;
-  height: 40px;
-  border: 1px solid;
-  background: #e43f6f;
-  border-radius: 25px;
-  font-size: 22px;
-  color: antiquewhite;
-  font-weight: 700;
-  outline: none;
-  cursor: pointer;
-  font-size: 14px;
-}
-
 
 .button-login:hover {
   border-color: black;
