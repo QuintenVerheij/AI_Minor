@@ -25,6 +25,8 @@ function mapData(data) {
     rightShoulderY: Math.floor(pose.rightShoulder.y),
     leftElbowX: Math.floor(pose.leftElbow.x),
     leftElbowY: Math.floor(pose.leftElbow.y),
+    rightElbowX: Math.floor(pose.rightElbow.x),
+    rightElbowY: Math.floor(pose.rightElbow.y),
     leftWristX: Math.floor(pose.leftWrist.x),
     leftWristY: Math.floor(pose.leftWrist.y),
     rightWristX: Math.floor(pose.rightWrist.x),
