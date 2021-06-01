@@ -24,6 +24,10 @@ const GET_REGISTER_ENDPOINT = (state, getters, rootState, rootGetters) => {
         }
 }
 
+const GET_LOGIN_EXTENSION = (state) => {
+        return state.endpoints.auth.login.extension
+}
+
 export default {
-    GET_API_URL, GET_LOGIN_ENDPOINT, GET_REGISTER_ENDPOINT
+    GET_API_URL, GET_LOGIN_ENDPOINT, GET_REGISTER_ENDPOINT, GET_LOGIN_EXTENSION
 }

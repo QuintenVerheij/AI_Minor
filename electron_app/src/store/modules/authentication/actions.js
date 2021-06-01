@@ -12,16 +12,16 @@ const debugLogin = ({commit}) => {
    
 }   
 
-const login = ({commit}, payload) => {
-    return HTTP.post('/auth/login', payload).then((response)=>{
+const login = (context, payload) => {
+    return HTTP.post(context.rootGetters["api/GET_LOGIN_EXTENSION"], payload).then((response)=>{
       console.log(response);
-      // localStorage.token=response.data.access;
-      // localStorage.refresh=response.data.refresh;
-      commit('SET_AUTHENTICATED', true);
+      localStorage.token=response.data.token;
+      localStorage.userId = response.data.userId;
+      context.commit('SET_AUTHENTICATED', true);
       return true;
     }
   ).catch(()=>{
-    commit('SET_AUTHENTICATED', false);
+    context.commit('SET_AUTHENTICATED', false);
     return false;
   })
 }
