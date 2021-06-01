@@ -1,7 +1,6 @@
 <template>
   <body> 
     <div>
-      <b-overlay :show="show" rounded="sm">
       <div class="box-center">
         <h1 class="box-title">Login Form</h1>
         <div class="box-form">
@@ -34,7 +33,6 @@
           </div>
       </div>
     </div>
-    </b-overlay>
     </div>
   </body>
 </template>
