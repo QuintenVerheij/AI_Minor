@@ -81,7 +81,7 @@ export default {
     this.poseNet.on("pose", this.gotPoses);
     this.drawCameraIntoCanvas();
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.video.srcObject.getTracks().forEach(function (track) {
       track.stop();
       this.video = null;
@@ -89,7 +89,6 @@ export default {
   },
   methods: {
     onModelLoaded: function () {
-      console.log("PoseNet Model has Loaded");
       this.isModelLoaded = true;
     },
     gotPoses: function (results) {

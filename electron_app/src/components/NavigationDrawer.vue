@@ -2,17 +2,18 @@
   <div>
     <nav-bar bg-blue>
         <template v-slot:menuActivator>
-             <b-button v-b-toggle.sidebar-1 variant="transparent"><img src="@/assets/hamburger.png" class="hamburger_icon" /></b-button>
+          <p class="h3"><b-icon-list  v-b-toggle.sidebar-1/></p>
+             <!-- <img v-b-toggle.sidebar-1 src="@/assets/hamburger.png" class="hamburger_icon" /> -->
         </template>
     </nav-bar>
    
-    <b-sidebar bg-variant="dark" id="sidebar-1" title="Sidebar" position="fixed" shadow>
+    <b-sidebar bg-variant="dark" id="sidebar-1" :backdrop="true" backdrop-variant="dark" title="Sidebar" position="fixed">
       <template v-slot:header-close>
         <b-icon-x variant="white"></b-icon-x>
       </template>
 
       <b-nav vertical>
-          <b-nav-item
+          <b-nav-item @click="$router.push({ name: 'Account'})"
            class="text-left bg-custom text-custom mb-3"
           >
           <div class="d-flex flex-row">
@@ -37,7 +38,9 @@
         >
       </b-nav>
       <template v-slot:footer >
+        <b-container class="text-left">
          <b-btn variant="text text-white" @click="signOut">Uitloggen</b-btn>
+        </b-container>
       </template>
      
     </b-sidebar>

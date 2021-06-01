@@ -2,10 +2,10 @@
   <div>
       <h1>{{exercise.title}}</h1>
       <b-row>
-        <b-col>
+        <b-col md=6>
           <b-img :src="exercise.image_url"></b-img>
         </b-col>
-        <b-col>
+        <b-col md=6>
           <p>{{exercise.text}}</p>
         </b-col>
       </b-row>
