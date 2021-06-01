@@ -3,7 +3,7 @@ import { uploadMedia } from '@/plugins/firebase'
 
 const saveData = ({ commit }, payload) => {// eslint-disable-line
   let data = mapData(payload);
-  (data.pose = "test"),
+  // (data.pose = "test"),
 
   HTTP.post("data", data).then((response) => console.log(response));
 };
@@ -12,6 +12,7 @@ function mapData(data) {
   console.log(data[0].pose);
   let pose = data[0].pose;
   return {
+    pose: data.pose,
     target: data.target,
     noseX: Math.floor(pose.nose.x),
     noseY: Math.floor(pose.nose.y),

@@ -32,6 +32,7 @@
           <p>{{ this.pose }}</p>
         </b-col>
       </b-row>
+      <b-textarea v-model="name"></b-textarea>
       <b-form-checkbox v-model="target" name="check-button" switch>
         Switch target <b>(pose is goed: {{ target }})</b>
       </b-form-checkbox>
@@ -75,6 +76,7 @@ export default {
       image_canvas: null,
       image_ctx: {},
       ctx: {},
+      name: ""
     };
   },
   mounted() {
@@ -118,6 +120,7 @@ export default {
     },
     saveData() {
       this.pose.target = this.target;
+      this.pose.pose = this.name;
       this.$store.dispatch("therapist/saveData", this.pose);
     },
     onModelLoaded() {
