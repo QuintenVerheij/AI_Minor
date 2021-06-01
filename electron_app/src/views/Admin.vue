@@ -1,19 +1,7 @@
 <template>
   <div>
     <div id="video_box" class="center">
-      <div class="rounded video_overlay">
-        <p class="video_overlay_text">AI MINOR FYSIO APP</p>
-        <br />
-        <p class="video_overlay_text">
-          Logged in as {{ user !== undefined ? user : "none" }}
-        </p>
-        <p class="video_overlay_text">
-          Current Exercise {{ exercise !== undefined ? exercise : "none" }}
-        </p>
-        <img src="@/assets/calendar.png" class="video_overlay_icon" />
-        <img src="@/assets/stopwatch.png" class="video_overlay_icon" />
-        <img src="@/assets/phone.png" class="video_overlay_icon" />
-      </div>
+    
       <canvas id="canvas" width="1280px" height="720px"></canvas>
       <video
         id="video"
@@ -23,16 +11,10 @@
         style="display:none"
       ></video>
     </div>
-    <div>
-      <b-row>
-        <b-col>
-          <canvas id="imageCanvas" width="1280px" height="720px"></canvas>
-        </b-col>
-        <b-col>
-          <p>{{ this.pose }}</p>
-        </b-col>
-      </b-row>
-      <b-textarea v-model="name"></b-textarea>
+    <div class="d-flex flex-row align-items-center fixed-bottom bg-light py-2 px-4" >
+      <b-form-input :disabled="!editing" type="text" class="w-50" placeholder="Oefening naam" v-model="name"></b-form-input>
+      <b-btn class="mx-2" v-show="!editing" @click="()=>{editing = true;}" variant="dark"><b-icon-pencil></b-icon-pencil></b-btn>
+      <b-btn class="mx-2" v-show="editing" @click="()=>{editing = false;}" variant="dark"><b-icon-check></b-icon-check></b-btn>
       <b-form-checkbox v-model="target" name="check-button" switch>
         Switch target <b>(pose is goed: {{ target }})</b>
       </b-form-checkbox>
@@ -49,13 +31,9 @@ export default {
     exercise: String,
   },
   created() {
-    window.addEventListener("keydown", (e) => {
+    this.event_listener = window.addEventListener("keydown", (e) => {
       if (e.key == "p") {
         this.takePicture();
-      }
-    });
-    window.addEventListener("keydown", (e) => {
-      if (e.key == "s") {
         this.saveData();
       }
     });
@@ -63,6 +41,8 @@ export default {
   
   data() {
     return {
+      event_listener: null,
+      editing: false,
       // LOCAL STATE GOES HERE
       showPicture: false,
       image: null,
@@ -85,9 +65,9 @@ export default {
     this.buildCapture();
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
-    this.image_canvas = document.getElementById("imageCanvas");
-    this.image_ctx = this.image_canvas.getContext("2d");
-    console.log(this.image_canvas);
+    // this.image_canvas = document.getElementById("imageCanvas");
+    // this.image_ctx = this.image_canvas.getContext("2d");
+    // console.log(this.image_canvas);
 
     this.poseNet = ml5.poseNet(this.video, this.onModelLoaded);
     this.poseNet.on("pose", this.gotPoses);
@@ -106,17 +86,7 @@ export default {
  
   methods: {
     takePicture() {
-      console.log("hello");
       this.pose = [...this.poses];
-
-      //copy canvas by DataUrl
-      let sourceImageData = this.canvas.toDataURL("image/png");
-      let destinationContext = this.image_canvas.getContext("2d");
-      let destinationImage = new Image();
-      destinationImage.onload = function() {
-        destinationContext.drawImage(destinationImage, 0, 0);
-      };
-      destinationImage.src = sourceImageData;
     },
     saveData() {
       this.pose.target = this.target;
