@@ -89,7 +89,6 @@ export default {
   },
   methods: {
     onModelLoaded: function () {
-      console.log("PoseNet Model has Loaded");
       this.isModelLoaded = true;
     },
     gotPoses: function (results) {

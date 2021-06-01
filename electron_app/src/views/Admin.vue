@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div id="video_box" class="center" >
+    <div id="video_box" class="center">
       <div class="rounded video_overlay">
         <p class="video_overlay_text">AI MINOR FYSIO APP</p>
-        <br/>
+        <br />
         <p class="video_overlay_text">
           Logged in as {{ user !== undefined ? user : "none" }}
         </p>
@@ -15,20 +15,26 @@
         <img src="@/assets/phone.png" class="video_overlay_icon" />
       </div>
       <canvas id="canvas" width="1280px" height="720px"></canvas>
-      <video id="video" width="1280px" height="720px" autoplay style="display:none"></video>
+      <video
+        id="video"
+        width="1280px"
+        height="720px"
+        autoplay
+        style="display:none"
+      ></video>
     </div>
     <div>
-        <b-row>
-            <b-col>
-                <canvas id="imageCanvas" width="1280px" height="720px"></canvas>
-            </b-col>
-            <b-col>
-                <p>{{this.pose}}</p>
-            </b-col>
-        </b-row>
-        <b-form-checkbox v-model="target" name="check-button" switch>
-            Switch target <b>(pose is goed: {{ target }})</b>
-        </b-form-checkbox>
+      <b-row>
+        <b-col>
+          <canvas id="imageCanvas" width="1280px" height="720px"></canvas>
+        </b-col>
+        <b-col>
+          <p>{{ this.pose }}</p>
+        </b-col>
+      </b-row>
+      <b-form-checkbox v-model="target" name="check-button" switch>
+        Switch target <b>(pose is goed: {{ target }})</b>
+      </b-form-checkbox>
     </div>
   </div>
 </template>
@@ -42,26 +48,18 @@ export default {
     exercise: String,
   },
   created() {
-   window.addEventListener('keydown', (e) => {
-      if (e.key == 'p') {
+    window.addEventListener("keydown", (e) => {
+      if (e.key == "p") {
         this.takePicture();
       }
     });
-     window.addEventListener('keydown', (e) => {
-      if (e.key == 's') {
+    window.addEventListener("keydown", (e) => {
+      if (e.key == "s") {
         this.saveData();
       }
     });
   },
-  watch: {
-    '$route' (to, from){
-        console.log('doing', to, from);
-        this.video.srcObject.getTracks().forEach(function (track) {
-          track.stop();
-          this.video = null;
-        })
-    },
-  },
+  
   data() {
     return {
       // LOCAL STATE GOES HERE
@@ -82,45 +80,46 @@ export default {
   mounted() {
     this.picture = null;
     this.video = document.getElementById("video");
-    this.buildCapture()
+    this.buildCapture();
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
     this.image_canvas = document.getElementById("imageCanvas");
     this.image_ctx = this.image_canvas.getContext("2d");
     console.log(this.image_canvas);
-    
+
     this.poseNet = ml5.poseNet(this.video, this.onModelLoaded);
     this.poseNet.on("pose", this.gotPoses);
     this.drawCameraIntoCanvas();
   },
-  beforeDestroy(){
-    this.video = null;
-  },
-   beforeRouteUpdate () {
-     console.log('doing');
-    this.video.srcObject.getTracks().forEach(function (track) {
+  beforeDestroy() {
+    navigator.mediaDevices.getUserMedia({audio: false, video: true})
+  .then(mediaStream => {
+    let tracks=  mediaStream.getTracks()
+    tracks.forEach((track)=>{
       track.stop();
-      this.video = null;
-    });
-  },
-  methods: {
-    takePicture(){
-        console.log('hello');
-        this.pose = [...this.poses];
+    })
 
-        //copy canvas by DataUrl
-        let sourceImageData = this.canvas.toDataURL("image/png");
-        let destinationContext = this.image_canvas.getContext('2d');
-        let destinationImage = new Image;
-        destinationImage.onload = function(){
-        destinationContext.drawImage(destinationImage,0,0);
-        };
-        destinationImage.src = sourceImageData;
+})
+  },
+ 
+  methods: {
+    takePicture() {
+      console.log("hello");
+      this.pose = [...this.poses];
+
+      //copy canvas by DataUrl
+      let sourceImageData = this.canvas.toDataURL("image/png");
+      let destinationContext = this.image_canvas.getContext("2d");
+      let destinationImage = new Image();
+      destinationImage.onload = function() {
+        destinationContext.drawImage(destinationImage, 0, 0);
+      };
+      destinationImage.src = sourceImageData;
     },
-    saveData(){
-        this.$store.dispatch('therapist/saveData', this.pose);
+    saveData() {
+      this.$store.dispatch("therapist/saveData", this.pose);
     },
-    onModelLoaded(){
+    onModelLoaded() {
       console.log("PoseNet Model has Loaded");
       this.isModelLoaded = true;
     },
@@ -131,7 +130,7 @@ export default {
     // This function is independent of the result of posenet
     // This way the video will not seem slow if poseNet
     // is not detecting a position
-    drawCameraIntoCanvas: function () {
+    drawCameraIntoCanvas: function() {
       // Draw the video element into the canvas
       this.ctx.drawImage(this.video, 0, 0, 1280, 720);
       // We can call both functions to draw all keypoints and the skeletons
@@ -140,7 +139,7 @@ export default {
       window.requestAnimationFrame(this.drawCameraIntoCanvas);
     },
     // A function to draw ellipses over the detected keypoints
-    drawKeypoints: function () {
+    drawKeypoints: function() {
       this.ctx.lineWidth = 1;
       // Loop through all the poses detected
       for (let i = 0; i < this.poses.length; i += 1) {
@@ -157,15 +156,15 @@ export default {
               0,
               2 * Math.PI
             );
-            this.ctx.fillStyle = '#FF3333';
-            this.ctx.fill(); 
+            this.ctx.fillStyle = "#FF3333";
+            this.ctx.fill();
             this.ctx.stroke();
           }
         }
       }
     },
     // A function to draw the skeletons
-    drawSkeleton: function () {
+    drawSkeleton: function() {
       this.ctx.lineWidth = 10;
       // Loop through all the skeletons detected
       for (let i = 0; i < this.poses.length; i += 1) {
@@ -180,8 +179,7 @@ export default {
         }
       }
     },
-    buildCapture: function () {
-      console.log(this.video);
+    buildCapture: function() {
       navigator.mediaDevices
         .enumerateDevices()
         .then((devices) => {
@@ -209,7 +207,6 @@ export default {
               height: { ideal: window.innerHeight },
             },
           };
-          console.log(constraints)
           navigator.mediaDevices
             .getUserMedia(constraints)
             .then((stream) => {
@@ -252,7 +249,6 @@ a {
   color: #42b983;
 }
 
-
 #video_box {
   float: center;
   text-align: center;
@@ -275,7 +271,6 @@ a {
   margin: auto;
   width: 80%;
   padding-top: 5px;
-
 }
 .rounded {
   border-radius: 25px;
@@ -298,5 +293,4 @@ a {
   background-color: rgba(220, 220, 220, 0.3);
   border-radius: 25%;
 }
-
 </style>

@@ -10,6 +10,9 @@ export default {
   components: {
     NavigationDrawer
   },
+  created(){
+    this.$store.dispatch('authentication/checkAuthenticated');
+  },
   computed: {
     authenticated() {
       return this.$store.getters['authentication/get_authenticated'];
