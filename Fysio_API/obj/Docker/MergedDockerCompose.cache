@@ -1,0 +1,16 @@
+services:
+  fysio_api:
+    build:
+      context: C:\Users\Quinten\Documents\Github\AI_Minor\Fysio_API
+      dockerfile: Fysio_API/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://+:443;http://+:80
+    image: fysioapi:latest
+    ports:
+    - target: 80
+    - target: 443
+    volumes:
+    - C:\Users\Quinten\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\Quinten\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+version: '3.4'

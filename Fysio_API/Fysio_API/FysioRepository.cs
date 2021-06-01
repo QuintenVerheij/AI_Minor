@@ -1,4 +1,5 @@
-﻿using Fysio_API.Dto;
+﻿using Fysio_API.Auth;
+using Fysio_API.Dto;
 using Fysio_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,68 +19,92 @@ namespace Fysio_API
         }
 
 
-        # region Clients
-        public void AddClient(Client client)
+        #region Clients
+
+        public ApplicationUser GetClient(string clientId)
         {
+            return _fysioDbContext.ApplicationUser.FirstOrDefault(c => c.Id == clientId);
+        }
+
+        public void PairClientTherapist_WithCode(string clientId, string code)
+        {
+            var client = _fysioDbContext.ApplicationUser.Find(clientId);
             if (client == null)
-                throw new ArgumentNullException(nameof(client));
+                throw new ArgumentException(nameof(clientId));
 
-            _fysioDbContext.Add(client);
-            Save();
+            var therapistLink = _fysioDbContext.PairingCodes.FirstOrDefault(pc => pc.Code == code);
+            if (therapistLink == null)
+                throw new ArgumentException(nameof(code));
+
+            client.ClientTherapists = new List<TherapistClient>() {
+                new TherapistClient()
+                {
+                    TherapistId = therapistLink.TherapistId
+                }
+            };
+
+            _fysioDbContext.SaveChanges();
         }
 
-        public Client GetClient(int clientId)
+        public void FinishClientExercise(int clientExerciseId)
         {
-            return _fysioDbContext.Clients.FirstOrDefault(c => c.ClientId == clientId);
+            var clientExercise = _fysioDbContext.ClientExercises.Find(clientExerciseId);
+            if (clientExercise == null)
+                throw new ArgumentException(nameof(clientExerciseId));
+
+            clientExercise.WeeklyRepetitionsCompleted += 1;
+
+            if (clientExercise.ClientExerciseLogs == null)
+                clientExercise.ClientExerciseLogs = new List<ClientExerciseLog>();
+
+            clientExercise.ClientExerciseLogs.Add(
+                new ClientExerciseLog { 
+                    DateTime = DateTime.Now
+            });
         }
+
 
         #endregion
 
 
         #region Therapist
-        public void AddTherapist(Therapist therapist)
-        {
-            if (therapist == null)
-                throw new ArgumentNullException(nameof(therapist));
 
-            _fysioDbContext.Add(therapist);
+        public IEnumerable<ApplicationUser> GetClientsTherapist(string therapistId)
+        {
+            return _fysioDbContext.ApplicationUser
+                                    .Include(u => u.TherapistClients)
+                                        .ThenInclude(c => c.Client)
+                                    .Where(c => c.Id == therapistId);
         }
 
-        public void AttachClientToTherapist(int clientId, int therapistId)
+        public ApplicationUser GetTherapist(string therapistId)
         {
-            
+            return _fysioDbContext.ApplicationUser.Find(therapistId);              
         }
 
-        public IEnumerable<Client> GetClientsTherapist(int therapistId)
+        public void AssignExerciseToClient(ClientExerciseDto_In clientExerciseDto_In)
         {
-            return _fysioDbContext.Clients.Where(c => c.TherapistId == therapistId).ToList();
-        }
-
-        public Therapist GetTherapist(int therapistId)
-        {
-            return _fysioDbContext.Therapists.Where(t => t.TherapistId == therapistId).Include(t => t.Clients).FirstOrDefault();
-        }
-
-        public void AssignExerciseToClient(ClientExercise clientExercise)
-        {
-            Client client = _fysioDbContext.Clients.Where(c => c.ClientId == clientExercise.ClientId).Include(c => c.ClientExercises).FirstOrDefault();
+            ApplicationUser client = _fysioDbContext.ApplicationUser.Find(clientExerciseDto_In.ClientId);
             if (client == null)
-                throw new ArgumentException(nameof(clientExercise.ClientId));
+                throw new ArgumentException(nameof(clientExerciseDto_In.ClientId));
 
-            Exercise exercise = _fysioDbContext.Exercises.Where(e => e.ExerciseId == clientExercise.ExerciseId).FirstOrDefault();
+            Exercise exercise = _fysioDbContext.Exercises.Find(clientExerciseDto_In.ExerciseId);
             if (exercise == null)
-                throw new ArgumentException(nameof(clientExercise.ExerciseId));
+                throw new ArgumentException(nameof(clientExerciseDto_In.ExerciseId));
 
-            client.ClientExercises.Add(
+            if (client.clientExercises == null)
+                client.clientExercises = new List<ClientExercise>();
+
+            client.clientExercises.Add(
                 new ClientExercise()
                 {
                     Exercise = exercise,
-                    WeeklyRepetitions = clientExercise.WeeklyRepetitions,
-                    FinishingDate = clientExercise.FinishingDate
+                    WeeklyRepetitions = clientExerciseDto_In.WeeklyRepetitions,
+                    FinishingDate = clientExerciseDto_In.FinishingDate
                 }
-                );
+            );
 
-            Save();
+            _fysioDbContext.SaveChanges();
         }
 
         #endregion
@@ -93,11 +118,8 @@ namespace Fysio_API
 
         #endregion
 
-        private bool Save()
-        {
-            return _fysioDbContext.SaveChanges() > 0;
-        }
-
         
+
+
     }
 }

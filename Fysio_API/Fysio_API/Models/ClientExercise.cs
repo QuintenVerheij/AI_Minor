@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Fysio_API.Auth;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Fysio_API.Models
 {
@@ -11,8 +11,9 @@ namespace Fysio_API.Models
         [Key]
         public int ClientExerciseId { get; set; }
         [Required]
-        public int ClientId { get; set; }
-        public Client Client { get; set; }
+        [ForeignKey("ApplicationUser")]
+        public string ClientId { get; set; }
+        public ApplicationUser Client { get; set; }
         [Required]
         public int ExerciseId { get; set; }
         public Exercise Exercise { get; set; }
@@ -24,5 +25,6 @@ namespace Fysio_API.Models
         public float Score { get; set; }
         [Required]
         public DateTime FinishingDate { get; set; }
+        public List<ClientExerciseLog> ClientExerciseLogs { get; set; }
     }
 }

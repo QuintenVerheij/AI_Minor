@@ -10,20 +10,35 @@
 - Npgsql.EntityFrameworkCore.PostgreSQL
 - AutoMapper.Extensions.Microsoft.DependencyInjection
 
+## docker
+installeer docker desktop en maak een account enz. 
+1. https://www.docker.com/products/docker-desktop
 
-## Installeer PostgreSQL and PgAdmin
+visualstudio:
+2. rechterklik docker-compose -> set as startup project.
+next bovenaan start het project met docker-compose.
 
-Voor een makkelijke database connectie is het handig om ieder hetzelfde account op te zetten in PostgreSQL. 
-1. Ga in PgAdmin naar de standaard PostgreSQL server 
-2. Via Login/Group Roles maak een nieuwe user
-3. Name: 'FysioAppRole'   -   Password: 'RoleAppFysio'
-4. Zorg dat bij privileges alles op Yes staat en klik op save.
+visual studio code:
+2. in de terminal:
+docker-compose up
 
-## Gebruik
+3. als het goed is start swagger nu in je browser.
 
-Het project maakt gebruik van een Code_First implementatie van Entity Framework Core. Op deze manier wordt de database geüpdate aan de hand van de modellen.
+4. ga naar localhost:5050 in een andere tab.
+5. log in met:
+email: pgadmin4@pgadmin.org
+password: admin
 
-``` bash
-Add-Migration 'migration_name'
-Update-Database
-```
+je bent nu in een pgadmin die in een dockercontainer runt.
+6. Via Login/Group Roles maak een nieuwe user
+7. Name: 'FysioAppRole'   -   Password: 'RoleAppFysio'
+8. Zorg dat bij privileges alles op Yes staat en klik op save.
+
+migrations worden automatisch op je db toegepast als je het project runt met docker-compose.
+9. voeg aan de tabel aspNetRoles toe:
+1 CLIENT CLIENT null
+2 THERAPIST THERAPIST null
+
+10. je kunt nu een account registreren via de swagger pagina.
+
+

@@ -12,13 +12,8 @@ namespace Fysio_API.Controllers
     [ApiController]
     public class ExerciseController : ControllerBase
     {
-        private readonly IFysioRepository _fysioRepository;
-        private readonly IMapper _mapper;
-        public ExerciseController(IFysioRepository fysioRepository, IMapper mapper)
-        {
-            _fysioRepository = fysioRepository;
-            _mapper = mapper;
-        }
+        
+        public ExerciseController() { }
 
         [HttpPost("/add")]
         public void AddExercise()
@@ -26,10 +21,17 @@ namespace Fysio_API.Controllers
 
         }
 
-        [HttpGet("{exerciseId}")]
-        public IActionResult GetExercise(int exerciseId)
-        {
-            return new JsonResult(_fysioRepository.GetExercise(exerciseId));
-        }
+        //[HttpGet("{exerciseId}")]
+        //public IActionResult GetExercise(int exerciseId)
+        //{
+        //    return new JsonResult(_fysioRepository.GetExercise(exerciseId));
+        //}
+
+        //[HttpPost("{id}/")]
+        //[Authorize(Roles = Role.Client)]
+        //public void PairClient(string id, [FromBody] PairCodeDto_In pairCodeDto_In)
+        //{
+        //    _repo.PairClientTherapist_WithCode(id, pairCodeDto_In.Code);
+        //}
     }
 }

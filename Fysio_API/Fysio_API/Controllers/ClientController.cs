@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Fysio_API.Auth;
 using Fysio_API.Dto;
 using Fysio_API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fysio_API.Controllers
@@ -14,29 +17,29 @@ namespace Fysio_API.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
-        private readonly IFysioRepository _fysioRepository;
-        private readonly IMapper _mapper;
-        public ClientController(IFysioRepository fysioRepository, IMapper mapper)
+        private UserManager<ApplicationUser> _userManager;
+        private readonly IFysioRepository _repo;
+
+        public ClientController(UserManager<ApplicationUser> userManager, IFysioRepository repo)
         {
-            _fysioRepository = fysioRepository;
-            _mapper = mapper;
+            _repo = repo;
+            _userManager = userManager;
         }
 
-        [HttpPost]
-        public void AddClient([FromBody]ClientDto_In clientIn)
+        [HttpGet("{id}")]
+        [Authorize(Roles = Role.Client)]
+        public string GetClient(string id)
         {
-            Client client = _mapper.Map<Client>(clientIn);
-            _fysioRepository.AddClient(client);
+            return null; //_userManager.GetUserId(id);
         }
 
-        [HttpGet("{clientId}")]
-        public IActionResult GetClient(int clientId)
+        [HttpPost("{id}/pair")]
+        [Authorize(Roles = Role.Client)]
+        public void PairClient(string id, [FromBody] PairCodeDto_In pairCodeDto_In)
         {
-            Client resClient = _fysioRepository.GetClient(clientId);
-            if (resClient == null)
-                return NotFound();
-            else
-                return new JsonResult(resClient);
+            _repo.PairClientTherapist_WithCode(id, pairCodeDto_In.Code);
         }
+
+
     }
 }
