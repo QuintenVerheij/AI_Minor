@@ -53,6 +53,7 @@ export default {
   },
   methods: {
     login() {
+      console.log(process.env.NODE_ENV)
       this.loading = true;
       this.$store.dispatch('authentication/login',
         this.login_data
