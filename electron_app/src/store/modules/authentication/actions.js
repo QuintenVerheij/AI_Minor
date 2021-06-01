@@ -13,9 +13,10 @@ const debugLogin = ({commit}) => {
 }   
 
 const login = ({commit}, payload) => {
-    return HTTP.post('/api/token/', payload).then((response)=>{
-      localStorage.token=response.data.access;
-      localStorage.refresh=response.data.refresh;
+    return HTTP.post('/auth/login', payload).then((response)=>{
+      console.log(response);
+      // localStorage.token=response.data.access;
+      // localStorage.refresh=response.data.refresh;
       commit('SET_AUTHENTICATED', true);
       return true;
     }

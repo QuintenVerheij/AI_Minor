@@ -1,6 +1,7 @@
 <template>
   <body> 
     <div>
+      <b-overlay :show="show" rounded="sm">
       <div class="box-center">
         <h1 class="box-title">Login Form</h1>
         <div class="box-form">
@@ -33,6 +34,7 @@
           </div>
       </div>
     </div>
+    </b-overlay>
     </div>
   </body>
 </template>
@@ -40,6 +42,7 @@
 export default {
   data() {
     return {
+      loading: false,
       login_data: {
         username: "",
         password: "",
@@ -49,31 +52,41 @@ export default {
     };
   },
   methods: {
-    login: async function () {
-      //   if(this.$store.dispatch('authentication/debugLogin')) {
-      //     this.$router.push({name: 'Home'});
-      this.show_error_message = false;
-      const API_INFO = this.$store.getters["api/GET_LOGIN_ENDPOINT"];
-      fetch(API_INFO.url, {
-        method: API_INFO.method,
-        headers: API_INFO.headers,
-        body: JSON.stringify(this.login_data),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          if (data.token !== undefined) {
-            this.$store.commit("authentication/SET_AUTHENTICATED", true);
-            localStorage.token = data.token;
-            this.$router.push({ name: "Home" });
-          } else {
-            // if (data.errors !== undefined) {
-            console.log(data.message);
-            this.show_errors(data.message);
-            // }
-          }
-        });
+    login() {
+      this.loading = true;
+      this.$store.dispatch('authentication/login',
+        this.login_data
+      ).then(()=>{
+        this.loading = false;
+      }).catch(()=> {
+        this.loading = false;
+      });
     },
+    // login: async function () {
+    //   //   if(this.$store.dispatch('authentication/debugLogin')) {
+    //   //     this.$router.push({name: 'Home'});
+    //   this.show_error_message = false;
+    //   const API_INFO = this.$store.getters["api/GET_LOGIN_ENDPOINT"];
+    //   fetch(API_INFO.url, {
+    //     method: API_INFO.method,
+    //     headers: API_INFO.headers,
+    //     body: JSON.stringify(this.login_data),
+    //   })
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       console.log(data);
+    //       if (data.token !== undefined) {
+    //         this.$store.commit("authentication/SET_AUTHENTICATED", true);
+    //         localStorage.token = data.token;
+    //         this.$router.push({ name: "Home" });
+    //       } else {
+    //         // if (data.errors !== undefined) {
+    //         console.log(data.message);
+    //         this.show_errors(data.message);
+    //         // }
+    //       }
+    //     });
+    // },
     show_errors: function (errors) {
       if (typeof errors == "string") {
         this.error_message = errors;
