@@ -117,6 +117,7 @@ export default {
       destinationImage.src = sourceImageData;
     },
     saveData() {
+      this.pose.target = this.target;
       this.$store.dispatch("therapist/saveData", this.pose);
     },
     onModelLoaded() {

@@ -3,41 +3,44 @@ import { uploadMedia } from '@/plugins/firebase'
 
 const saveData = ({ commit }, payload) => {// eslint-disable-line
   let data = mapData(payload);
-  (data.pose = "test"), (data.target = 1);
+  (data.pose = "test"),
+
   HTTP.post("data", data).then((response) => console.log(response));
 };
 
 function mapData(data) {
+  console.log(data[0].pose);
   let pose = data[0].pose;
   return {
-    noseX: pose.nose.x,
-    noseY: pose.nose.y,
-    leftEyeX: pose.leftEye.x,
-    leftEyeY: pose.leftEye.y,
-    rightEyeX: pose.rightEye.x,
-    rightEyeY: pose.rightEye.y,
-    leftShoulderX: pose.leftShoulder.x,
-    leftShoulderY: pose.leftShoulder.y,
-    rightShoulderX: pose.rightShoulder.x,
-    rightShoulderY: pose.rightShoulder.y,
-    leftElbowX: pose.leftElbow.x,
-    leftElbowY: pose.leftElbow.y,
-    leftWristX: pose.leftWrist.x,
-    leftWristY: pose.leftWrist.y,
-    rightWristX: pose.rightWrist.x,
-    rightWristY: pose.rightWrist.y,
-    leftHipX: pose.leftHip.x,
-    leftHipY: pose.leftHip.y,
-    rightHipX: pose.rightHip.x,
-    rightHipY: pose.rightHip.y,
-    leftKneeX: pose.leftKnee.x,
-    leftKneeY: pose.leftKnee.y,
-    rightKneeX: pose.rightKnee.x,
-    rightKneeY: pose.rightKnee.y,
-    leftAnkleX: pose.leftAnkle.x,
-    leftAnkleY: pose.leftAnkle.y,
-    rightAnkleX: pose.rightAnkle.x,
-    rightAnkleY: pose.rightAnkle.y,
+    target: data.target,
+    noseX: Math.floor(pose.nose.x),
+    noseY: Math.floor(pose.nose.y),
+    leftEyeX: Math.floor(pose.leftEye.x),
+    leftEyeY: Math.floor(pose.leftEye.y),
+    rightEyeX: Math.floor(pose.rightEye.x),
+    rightEyeY: Math.floor(pose.rightEye.y),
+    leftShoulderX: Math.floor(pose.leftShoulder.x),
+    leftShoulderY: Math.floor(pose.leftShoulder.y),
+    rightShoulderX: Math.floor(pose.rightShoulder.x),
+    rightShoulderY: Math.floor(pose.rightShoulder.y),
+    leftElbowX: Math.floor(pose.leftElbow.x),
+    leftElbowY: Math.floor(pose.leftElbow.y),
+    leftWristX: Math.floor(pose.leftWrist.x),
+    leftWristY: Math.floor(pose.leftWrist.y),
+    rightWristX: Math.floor(pose.rightWrist.x),
+    rightWristY: Math.floor(pose.rightWrist.y),
+    leftHipX: Math.floor(pose.leftHip.x),
+    leftHipY: Math.floor(pose.leftHip.y),
+    rightHipX: Math.floor(pose.rightHip.x),
+    rightHipY: Math.floor(pose.rightHip.y),
+    leftKneeX: Math.floor(pose.leftKnee.x),
+    leftKneeY: Math.floor(pose.leftKnee.y),
+    rightKneeX: Math.floor(pose.rightKnee.x),
+    rightKneeY: Math.floor(pose.rightKnee.y),
+    leftAnkleX: Math.floor(pose.leftAnkle.x),
+    leftAnkleY: Math.floor(pose.leftAnkle.y),
+    rightAnkleX: Math.floor(pose.rightAnkle.x),
+    rightAnkleY: Math.floor(pose.rightAnkle.y),
   };
 }
 
