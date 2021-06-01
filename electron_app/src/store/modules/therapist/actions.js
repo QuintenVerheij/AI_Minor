@@ -1,4 +1,5 @@
 import { HTTP } from "@/plugins/axios";
+import { uploadMedia } from '@/plugins/firebase'
 
 const saveData = ({ commit }, payload) => {// eslint-disable-line
   let data = mapData(payload);
@@ -38,6 +39,29 @@ function mapData(data) {
     rightAnkleX: pose.rightAnkle.x,
     rightAnkleY: pose.rightAnkle.y,
   };
+}
+
+const createMedia = async ({commit}, payload) => { // eslint-disable-line no-unused-vars
+  let file = payload.file;
+  let extension = file.name.split('.').pop();
+  let type = payload.type;
+  let url = await uploadMedia({
+    media: file,
+    extension: extension,
+    type: type
+  });
+
+  let data = {
+    type: payload.type,
+    title: payload.title,
+    url: url
+  }
+  let result = await HTTP.post('admin/media/', data, {
+    headers: {
+      'Authorization' : `Bearer ${localStorage.token}`
+    }});
+
+  return result;
 }
 
 export default {
