@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="video_box" class="center">
-    
+      
       <canvas id="canvas" width="1280px" height="720px"></canvas>
       <video
         id="video"
@@ -85,13 +85,26 @@ export default {
   },
  
   methods: {
+    makeToast(text,title,variant) {
+        this.$bvToast.toast(`${text}`, {
+          title: `${title}`,
+          variant: variant,
+          solid: true
+        })
+      },
     takePicture() {
       this.pose = [...this.poses];
     },
     saveData() {
       this.pose.target = this.target;
       this.pose.pose = this.name;
-      this.$store.dispatch("therapist/saveData", this.pose);
+      this.$store.dispatch("therapist/saveData", this.pose).then((response)=>{
+        console.log(response);
+        if(response.status==200){
+          
+          this.makeToast(`Data voor ${this.name} is opgeslagen`,'Opgeslagen', 'success');
+        }
+      });
     },
     onModelLoaded() {
       console.log("PoseNet Model has Loaded");

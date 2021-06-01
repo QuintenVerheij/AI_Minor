@@ -5,7 +5,9 @@ const saveData = ({ commit }, payload) => {// eslint-disable-line
   let data = mapData(payload);
   // (data.pose = "test"),
 
-  HTTP.post("data", data).then((response) => console.log(response));
+  return HTTP.post("data", data).then((response) =>{
+    console.log(response);
+    return response}).catch((response) => response);
 };
 
 function mapData(data) {
