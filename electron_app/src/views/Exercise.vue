@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     camera() {
-      this.$router.replace("/camera");
+      this.$router.replace({name:"Camera", params:{id:this.exercise.id}});
     },
   },
 };

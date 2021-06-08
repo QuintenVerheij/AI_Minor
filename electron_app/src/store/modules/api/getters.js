@@ -1,5 +1,6 @@
-const GET_API_URL = (state, getters, rootState) => {
-        return rootState.dev ? (rootState.use_ssl ? state.API_URL_DEV_HTTPS : state.API_URL_DEV) : state.API_URL
+const GET_API_URL = (state) => {
+        // rootState.dev ? (rootState.use_ssl ? state.API_URL_DEV_HTTPS : state.API_URL_DEV) :
+        return  state.API_URL
 }
 
 const GET_LOGIN_ENDPOINT = (state, getters, rootState, rootGetters) => {

@@ -13,10 +13,12 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@tensorflow/tfjs": "^3.7.0",
     "axios": "^0.21.1",
     "bootstrap-vue": "^2.21.2",
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
+    "electron-builder": "^22.10.5",
     "es6-promise": "^4.2.8",
     "firebase": "^8.6.3",
     "ml5": "^0.6.1",
@@ -25,6 +27,7 @@
     "vue": "^2.6.11",
     "vue-chart.js": "^0.2.0",
     "vue-chartjs": "^3.5.1",
+    "vue-cli": "^2.9.6",
     "vue-router": "^3.2.0",
     "vuex": "^3.6.2",
     "yarn": "^1.22.10"

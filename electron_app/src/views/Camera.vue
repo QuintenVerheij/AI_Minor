@@ -37,23 +37,36 @@
 
 <script>
 import ml5 from "ml5";
+import * as tf from "@tensorflow/tfjs";
+import * as tfn from "@tensorflow/tfjs-node"
+const MODEL_URL = "@/assets/model/model.json";
 
 export default {
-  created(){
-    this.$store.dispatch('getExercise', this.$route.params.id)
+  created() {
+    this.$store.dispatch("getExercise", this.$route.params.id);
+  },
+  computed: {
+    user() {
+      return this.$store.getters["authentication/get_user"];
+    },
+    exercise() {
+      return this.$route.params.id;
+    },
   },
   data() {
     return {
       // LOCAL STATE GOES HERE
       posenet: {},
       poses: [],
+      ourModel: {},
+      ourModelOutPut: [],
       isModelLoaded: false,
       video: {},
       canvas: {},
       ctx: {},
     };
   },
-  mounted: function () {
+  mounted: async function () {
     this.video = document.getElementById("video");
     this.buildCapture();
     this.canvas = document.getElementById("canvas");
@@ -61,7 +74,7 @@ export default {
     // translate context to center of canvas
     this.ctx.translate(this.canvas.width, 0);
 
-      // flip context horizontally
+    // flip context horizontally
     this.ctx.scale(-1, 1);
     const opt = {
       architecture: "MobileNetV1",
@@ -79,6 +92,8 @@ export default {
     };
     this.poseNet = ml5.poseNet(this.video, opt, this.onModelLoaded);
     this.poseNet.on("pose", this.gotPoses);
+    this.ourModel = await tf.loadLayersModel(tfn.io.fileSystem(MODEL_URL));
+    console.log(this.ourModel);
     this.drawCameraIntoCanvas();
   },
   beforeUnmount() {
