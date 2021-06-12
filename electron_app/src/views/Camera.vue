@@ -38,8 +38,7 @@
 <script>
 import ml5 from "ml5";
 import * as tf from "@tensorflow/tfjs";
-import * as tfn from "@tensorflow/tfjs-node"
-const MODEL_URL = "@/assets/model/model.json";
+
 
 export default {
   created() {
@@ -92,8 +91,9 @@ export default {
     };
     this.poseNet = ml5.poseNet(this.video, opt, this.onModelLoaded);
     this.poseNet.on("pose", this.gotPoses);
-    this.ourModel = await tf.loadLayersModel(tfn.io.fileSystem(MODEL_URL));
+    this.ourModel = await tf.loadLayersModel("http://localhost:49154/File/model");
     console.log(this.ourModel);
+    
     this.drawCameraIntoCanvas();
   },
   beforeUnmount() {
@@ -201,7 +201,7 @@ export default {
                 this.video.srcObject = URL.createObjectURL(stream);
               }
               //info.innerHTML+= "<pre>DONE</pre>";
-              console.log("DONE");
+              console.log("CAMERA LOADED; STREAM ATTACHED");
               // this.$store.commit("camera/ATTACH_STREAM", this.$el);
               this.$store.commit("camera/SET_LOADED", true);
             })
