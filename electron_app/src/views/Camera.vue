@@ -16,7 +16,11 @@
         </p>
         <br />
         <p class="video_overlay_text">
-          Current Exercise {{ exercise !== undefined ? exercise : "none" }}
+          Current Exercise: {{ exercise !== undefined ? exercise : "none" }}
+        </p>
+        <br />
+        <p class="video_overlay_text">
+          Current Pose: {{ this.ourModelOutPut !== undefined ? this.ourModelOutPut : "none" }}
         </p>
         <br />
         <img src="@/assets/calendar.png" class="video_overlay_icon" />
@@ -42,7 +46,7 @@ import * as tf from "@tensorflow/tfjs";
 
 export default {
   created() {
-    this.$store.dispatch("getExercise", this.$route.params.id);
+    this.$store.dispatch("exercises/getExercise", this.$route.params.id);
   },
   computed: {
     user() {
@@ -58,7 +62,7 @@ export default {
       posenet: {},
       poses: [],
       ourModel: {},
-      ourModelOutPut: [],
+      ourModelOutPut: "",
       isModelLoaded: false,
       video: {},
       canvas: {},
@@ -91,7 +95,8 @@ export default {
     };
     this.poseNet = ml5.poseNet(this.video, opt, this.onModelLoaded);
     this.poseNet.on("pose", this.gotPoses);
-    this.ourModel = await tf.loadLayersModel("http://localhost:49154/File/model");
+    // console.log("Fetching model from " + this.$store.getters["api/GET_MODEL_URL"])
+    this.ourModel = await tf.loadLayersModel("http://localhost:49154/File/Model");
     console.log(this.ourModel);
     
     this.drawCameraIntoCanvas();
@@ -108,6 +113,8 @@ export default {
     },
     gotPoses: function (results) {
       this.poses = results;
+      console.log(this.poses)
+      // this.ourModelOutPut = this.ourModel.predict(tf.tensor(this.poses))
     },
     // A function to draw the video and poses into the canvas.
     // This function is independent of the result of posenet
@@ -240,6 +247,7 @@ a {
   width: fit-content;
   object-fit: cover;
 }
+
 .video_overlay {
   position: absolute;
   float: left;
@@ -248,7 +256,7 @@ a {
   padding: 5px;
   margin: 5px;
   border: solid black 1px;
-  box-shadow: 2px 4px rgba(60, 60, 60, 0.9);
+  box-shadow: 1px 2px rgba(60, 60, 60, 0.9);
   z-index: 100;
   background-color: rgba(192, 192, 192, 0.3);
 }
@@ -263,11 +271,15 @@ a {
 .video_overlay_text {
   display: inline;
   font-size: 30px;
+  color: black;
+  -webkit-text-stroke: 0.3px white;
   z-index: 101;
 }
 
 .video_overlay_title {
   display: inline;
+  color: black;
+  -webkit-text-stroke: 0.7px white;
   vertical-align: middle;
   font-size: 35px;
   height: 70px;
@@ -281,13 +293,18 @@ a {
 
 .video_overlay_icon {
   display: inline;
+  background-color: rgba(220, 220, 220, 0.3);
+  border-radius: 25%;
+  box-shadow: 1px 2px rgba(60, 60, 60, 0.9);
   width: 70px;
   height: 70px;
   padding: 10px;
+  margin: 0px 4px;
 }
 
 .video_overlay_icon:hover {
-  background-color: rgba(220, 220, 220, 0.3);
-  border-radius: 25%;
+  background-color: rgba(240, 240, 240, 0.3);
 }
+
+
 </style>

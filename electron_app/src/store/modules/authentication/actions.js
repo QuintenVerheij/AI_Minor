@@ -14,6 +14,7 @@ const debugLogin = ({commit}) => {
 
 const login = (context, payload) => {
     return HTTP.post(context.rootGetters["api/GET_LOGIN_EXTENSION"], payload).then((response)=>{
+      //TODO: Remove this log in production
       console.log(response);
       localStorage.token=response.data.token;
       localStorage.userId = response.data.userId;
