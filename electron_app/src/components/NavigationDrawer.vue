@@ -74,6 +74,11 @@ export default {
           role: 'all'
         },
         {
+          text: "Instellingen",
+          route: "Settings",
+          role: 'all'
+        },
+        {
           text: "Admin",
           route: "Admin",
           role: 'admin'

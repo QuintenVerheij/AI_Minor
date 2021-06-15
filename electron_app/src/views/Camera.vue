@@ -20,7 +20,8 @@
         </p>
         <br />
         <p class="video_overlay_text">
-          Current Pose: {{ this.ourModelOutPut !== undefined ? this.ourModelOutPut : "none" }}
+          Current Pose:
+          {{ this.ourModelOutPut !== undefined ? this.ourModelOutPut : "none" }}
         </p>
         <br />
         <img src="@/assets/calendar.png" class="video_overlay_icon" />
@@ -28,21 +29,22 @@
         <img src="@/assets/phone.png" class="video_overlay_icon" />
       </div>
       <canvas id="canvas" width="1280px" height="720px"></canvas>
-      <video
-        id="video"
-        width="1280px"
-        height="720px"
-        autoplay
-        style="display: none"
-      ></video>
+    <video
+      id="video"
+      width="1280px"
+      height="720px"
+      autoplay
+      style="display: none"
+    ></video>
     </div>
   </div>
 </template>
 
 <script>
-import ml5 from "ml5";
-import * as tf from "@tensorflow/tfjs";
-
+import * as poseDetection from "@tensorflow-models/pose-detection";
+// Register one of the TF.js backends.
+import "@tensorflow/tfjs-backend-webgl";
+import * as tensor from "@tensorflow/tfjs";
 
 export default {
   created() {
@@ -64,14 +66,26 @@ export default {
       ourModel: {},
       ourModelOutPut: "",
       isModelLoaded: false,
+      updateLoop: {},
+      loaded: false,
       video: {},
       canvas: {},
       ctx: {},
+      interval: {},
+      framecount: 0,
     };
   },
   mounted: async function () {
+    const detectorConfig = {
+      modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING,
+    };
     this.video = document.getElementById("video");
-    this.buildCapture();
+    await this.buildCapture();
+    this.detector = await poseDetection.createDetector(
+      poseDetection.SupportedModels.MoveNet,
+      detectorConfig
+    );
+    this.loaded = true;
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
     // translate context to center of canvas
@@ -79,42 +93,66 @@ export default {
 
     // flip context horizontally
     this.ctx.scale(-1, 1);
-    const opt = {
-      architecture: "MobileNetV1",
-      imageScaleFactor: 0.3,
-      outputStride: 16,
-      flipHorizontal: false,
-      minConfidence: 0.5,
-      maxPoseDetections: 5,
-      scoreThreshold: 0.5,
-      nmsRadius: 20,
-      detectionType: "multiple",
-      inputResolution: 513,
-      multiplier: 0.75,
-      quantBytes: 2,
-    };
-    this.poseNet = ml5.poseNet(this.video, opt, this.onModelLoaded);
-    this.poseNet.on("pose", this.gotPoses);
-    // console.log("Fetching model from " + this.$store.getters["api/GET_MODEL_URL"])
-    this.ourModel = await tf.loadLayersModel("http://localhost:49154/File/Model");
-    console.log(this.ourModel);
-    
+    this.updateLoop = setInterval(
+      function() {
+        this.getPoses();
+      }.bind(this),
+      50
+    );
+    // DEPRECATED ML5 POSENET IMPLEMENTATION
+    // const opt = {
+    //   architecture: "MobileNetV1",
+    //   imageScaleFactor: 0.3,
+    //   outputStride: 16,
+    //   flipHorizontal: false,
+    //   minConfidence: 0.5,
+    //   maxPoseDetections: 5,
+    //   scoreThreshold: 0.5,
+    //   nmsRadius: 20,
+    //   detectionType: "multiple",
+    //   inputResolution: 513,
+    //   multiplier: 0.75,
+    //   quantBytes: 2,
+    // };
+    // this.poseNet = ml5.poseNet(this.video, opt, this.onModelLoaded);
+    // this.poseNet.on("pose", await this.gotPoses);
+    console.log(
+      "Fetching model from " +
+        "https://fysiomodelstorage.z6.web.core.windows.net/model.json"
+    );
+    this.ourModel = await tensor.loadLayersModel(
+      "https://fysiomodelstorage.z6.web.core.windows.net/model.json"
+    );
+    this.interval = setInterval(
+      this.recognizePose, 2000
+    );
+    console.log(this.ourModel.summary());
     this.drawCameraIntoCanvas();
   },
   beforeUnmount() {
     this.video.srcObject.getTracks().forEach(function (track) {
       track.stop();
       this.video = null;
+      clearInterval(this.interval)
     });
   },
   methods: {
     onModelLoaded: function () {
       this.isModelLoaded = true;
     },
-    gotPoses: function (results) {
-      this.poses = results;
-      console.log(this.poses)
-      // this.ourModelOutPut = this.ourModel.predict(tf.tensor(this.poses))
+    getPoses: async function () {
+      this.poses = await this.detector.estimatePoses(this.video);
+      this.drawCameraIntoCanvas();
+    },
+    recognizePose: async function () {
+      const prepped_data = await this.$store.dispatch(
+          "therapist/prepareData",
+          this.poses
+        );
+        console.log("data", prepped_data);
+
+        const output = this.ourModel.predict(tensor.tensor(prepped_data, [1,31]));
+        this.ourModelOutPut = output.dataSync();
     },
     // A function to draw the video and poses into the canvas.
     // This function is independent of the result of posenet
@@ -129,19 +167,20 @@ export default {
       window.requestAnimationFrame(this.drawCameraIntoCanvas);
     },
     // A function to draw ellipses over the detected keypoints
-    drawKeypoints: function () {
+    drawKeypoints() {
+      // console.log(this.poses)
       this.ctx.lineWidth = 1;
       // Loop through all the poses detected
       for (let i = 0; i < this.poses.length; i += 1) {
         // For each pose detected, loop through all the keypoints
-        for (let j = 0; j < this.poses[i].pose.keypoints.length; j += 1) {
-          let keypoint = this.poses[i].pose.keypoints[j];
+        for (let j = 0; j < this.poses[i].keypoints.length; j += 1) {
+          let keypoint = this.poses[i].keypoints[j];
           // Only draw an ellipse is the pose probability is bigger than 0.2
           if (keypoint.score > 0.2) {
             this.ctx.beginPath();
             this.ctx.arc(
-              keypoint.position.x,
-              keypoint.position.y,
+              keypoint.x,
+              keypoint.y,
               10,
               0,
               2 * Math.PI
@@ -149,25 +188,103 @@ export default {
             this.ctx.fillStyle = "#FF3333";
             this.ctx.fill();
             this.ctx.stroke();
+            this.ctx.closePath();
           }
         }
       }
     },
     // A function to draw the skeletons
-    drawSkeleton: function () {
+    drawSkeleton() {
+      const lines = [
+        {
+          partA: "nose",
+          partB: "left_eye",
+        },
+        {
+          partA: "nose",
+          partB: "right_eye",
+        },
+        {
+          partA: "left_ear",
+          partB: "left_eye",
+        },
+        {
+          partA: "right_ear",
+          partB: "right_eye",
+        },
+        {
+          partA: "right_ear",
+          partB: "right_eye",
+        },
+        {
+          partA: "left_shoulder",
+          partB: "left_elbow",
+        },
+        {
+          partA: "left_elbow",
+          partB: "left_wrist",
+        },
+        {
+          partA: "right_shoulder",
+          partB: "right_elbow",
+        },
+        {
+          partA: "right_wrist",
+          partB: "right_elbow",
+        },
+        {
+          partA: "right_shoulder",
+          partB: "left_shoulder",
+        },
+        {
+          partA: "right_shoulder",
+          partB: "right_hip",
+        },
+        {
+          partA: "left_shoulder",
+          partB: "left_hip",
+        },
+        {
+          partA: "right_hip",
+          partB: "left_hip",
+        },
+        {
+          partA: "right_hip",
+          partB: "right_knee",
+        },
+        {
+          partA: "right_knee",
+          partB: "right_ankle",
+        },
+        {
+          partA: "left_hip",
+          partB: "left_knee",
+        },
+         {
+          partA: "left_hip",
+          partB: "left_ankle",
+        },
+      ]
+      // console.log(lines);
       this.ctx.lineWidth = 10;
+      
       // Loop through all the skeletons detected
-      for (let i = 0; i < this.poses.length; i += 1) {
-        // For every skeleton, loop through all body connections
-        for (let j = 0; j < this.poses[i].skeleton.length; j += 1) {
-          let partA = this.poses[i].skeleton[j][0];
-          let partB = this.poses[i].skeleton[j][1];
-          this.ctx.beginPath();
-          this.ctx.moveTo(partA.position.x, partA.position.y);
-          this.ctx.lineTo(partB.position.x, partB.position.y);
-          this.ctx.stroke();
-        }
-      }
+      this.poses.forEach((pose)=>{
+        const keypoints = pose.keypoints;
+        lines.forEach((line)=>{
+
+          const partA = keypoints.find((kp)=>kp.name == line.partA);
+          const partB = keypoints.find((kp)=>kp.name == line.partB);
+          
+          if(partA.score > 0.5 && partB.score > 0.5 ){
+            this.ctx.beginPath();
+            this.ctx.moveTo(partA.x, partA.y);
+            this.ctx.lineTo(partB.x, partB.y);
+            this.ctx.stroke();
+            this.ctx.closePath();
+          }
+        })
+      })
     },
     buildCapture: function () {
       console.log(this.video);
@@ -305,6 +422,4 @@ a {
 .video_overlay_icon:hover {
   background-color: rgba(240, 240, 240, 0.3);
 }
-
-
 </style>

@@ -10,43 +10,64 @@ const saveData = ({ commit }, payload) => {// eslint-disable-line
     return response}).catch((response) => response);
 };
 
-function mapData(data) {
-  console.log(data[0].pose);
-  let pose = data[0].pose;
+function mapData(poses) {
+  let data = poses[0].keypoints;
+  const nose = data.find((e)=>e.name=="nose");
+  const leftEye = data.find((e)=>e.name=="left_eye");
+  const rightEye = data.find((e)=>e.name=="right_eye");
+  const leftShoulder = data.find((e)=>e.name=="left_shoulder");
+  const rightShoulder = data.find((e)=>e.name=="right_shoulder");
+  const leftElbow = data.find((e)=>e.name=="left_elbow");
+  const rightElbow = data.find((e)=>e.name=="right_elbow");
+  const leftWrist = data.find((e)=>e.name=="left_wrist");
+  const rightWrist = data.find((e)=>e.name=="right_wrist");
+  const leftHip = data.find((e)=>e.name=="left_hip");
+  const rightHip = data.find((e)=>e.name=="right_hip");
+  const leftKnee = data.find((e)=>e.name=="left_knee");
+  const rightKnee = data.find((e)=>e.name=="right_knee");
+  const leftAnkle = data.find((e)=>e.name=="left_ankle");
+  const rightAnkle = data.find((e)=>e.name=="right_ankle");
+
   return {
     pose: data.pose,
-    target: data.target,
-    noseX: Math.floor(pose.nose.x),
-    noseY: Math.floor(pose.nose.y),
-    leftEyeX: Math.floor(pose.leftEye.x),
-    leftEyeY: Math.floor(pose.leftEye.y),
-    rightEyeX: Math.floor(pose.rightEye.x),
-    rightEyeY: Math.floor(pose.rightEye.y),
-    leftShoulderX: Math.floor(pose.leftShoulder.x),
-    leftShoulderY: Math.floor(pose.leftShoulder.y),
-    rightShoulderX: Math.floor(pose.rightShoulder.x),
-    rightShoulderY: Math.floor(pose.rightShoulder.y),
-    leftElbowX: Math.floor(pose.leftElbow.x),
-    leftElbowY: Math.floor(pose.leftElbow.y),
-    rightElbowX: Math.floor(pose.rightElbow.x),
-    rightElbowY: Math.floor(pose.rightElbow.y),
-    leftWristX: Math.floor(pose.leftWrist.x),
-    leftWristY: Math.floor(pose.leftWrist.y),
-    rightWristX: Math.floor(pose.rightWrist.x),
-    rightWristY: Math.floor(pose.rightWrist.y),
-    leftHipX: Math.floor(pose.leftHip.x),
-    leftHipY: Math.floor(pose.leftHip.y),
-    rightHipX: Math.floor(pose.rightHip.x),
-    rightHipY: Math.floor(pose.rightHip.y),
-    leftKneeX: Math.floor(pose.leftKnee.x),
-    leftKneeY: Math.floor(pose.leftKnee.y),
-    rightKneeX: Math.floor(pose.rightKnee.x),
-    rightKneeY: Math.floor(pose.rightKnee.y),
-    leftAnkleX: Math.floor(pose.leftAnkle.x),
-    leftAnkleY: Math.floor(pose.leftAnkle.y),
-    rightAnkleX: Math.floor(pose.rightAnkle.x),
-    rightAnkleY: Math.floor(pose.rightAnkle.y),
+    noseX: nose.x,
+    noseY: nose.y,
+    leftEyeX: leftEye.x,
+    leftEyeY: leftEye.y,
+    rightEyeX: rightEye.x,
+    rightEyeY: rightEye.y,
+    leftShoulderX: leftShoulder.x,
+    leftShoulderY: leftShoulder.y,
+    rightShoulderX: rightShoulder.x,
+    rightShoulderY: rightShoulder.y,
+    leftElbowX: leftElbow.x,
+    leftElbowY: leftElbow.y,
+    rightElbowX: rightElbow.x,
+    rightElbowY: rightElbow.y,
+    leftWristX: leftWrist.x,
+    leftWristY: leftWrist.y,
+    rightWristX: rightWrist.x,
+    rightWristY: rightWrist.y,
+    leftHipX: leftHip.x,
+    leftHipY: leftHip.y,
+    rightHipX: rightHip.x,
+    rightHipY: rightHip.y,
+    leftKneeX: leftKnee.x,
+    leftKneeY: leftKnee.y,
+    rightKneeX: rightKnee.x,
+    rightKneeY: rightKnee.y,
+    leftAnkleX: leftAnkle.x,
+    leftAnkleY: leftAnkle.y,
+    rightAnkleX: rightAnkle.x,
+    rightAnkleY: rightAnkle.y,
   };
+}
+
+function prepareData(context// eslint-disable-line
+  ,data){
+    const d = mapData(data)
+    delete(d.target)
+  return Object.values(d)
 }
 
 const createMedia = async ({commit}, payload) => { // eslint-disable-line no-unused-vars
@@ -73,5 +94,5 @@ const createMedia = async ({commit}, payload) => { // eslint-disable-line no-unu
 }
 
 export default {
-  saveData,
+  saveData, prepareData
 };

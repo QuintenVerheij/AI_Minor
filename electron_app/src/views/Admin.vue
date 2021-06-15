@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="video_box" class="center">
+    <!-- <div id="video_box" class="center">
       
       <canvas id="canvas" width="1280px" height="720px"></canvas>
       <video
@@ -18,205 +18,205 @@
       <b-form-checkbox v-model="target" name="check-button" switch>
         Switch target <b>(pose is goed: {{ target }})</b>
       </b-form-checkbox>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
-import ml5 from "ml5";
+// import ml5 from "ml5";
 
-export default {
-  props: {
-    user: String,
-    exercise: String,
-  },
-  created() {
-    this.event_listener = window.addEventListener("keydown", (e) => {
-      if (e.key == "p") {
-        this.takePicture();
-        this.saveData();
-      }
-    });
-  },
+// export default {
+//   props: {
+//     user: String,
+//     exercise: String,
+//   },
+//   created() {
+//     this.event_listener = window.addEventListener("keydown", (e) => {
+//       if (e.key == "p") {
+//         this.takePicture();
+//         this.saveData();
+//       }
+//     });
+//   },
   
-  data() {
-    return {
-      event_listener: null,
-      editing: false,
-      // LOCAL STATE GOES HERE
-      showPicture: false,
-      image: null,
-      target: false,
-      pose: [],
-      posenet: {},
-      poses: [],
-      isModelLoaded: false,
-      video: {},
-      canvas: {},
-      image_canvas: null,
-      image_ctx: {},
-      ctx: {},
-      name: ""
-    };
-  },
-  mounted() {
-    this.picture = null;
-    this.video = document.getElementById("video");
-    this.buildCapture();
-    this.canvas = document.getElementById("canvas");
-    this.ctx = this.canvas.getContext("2d");
-    // this.image_canvas = document.getElementById("imageCanvas");
-    // this.image_ctx = this.image_canvas.getContext("2d");
-    // console.log(this.image_canvas);
+//   data() {
+//     return {
+//       event_listener: null,
+//       editing: false,
+//       // LOCAL STATE GOES HERE
+//       showPicture: false,
+//       image: null,
+//       target: false,
+//       pose: [],
+//       posenet: {},
+//       poses: [],
+//       isModelLoaded: false,
+//       video: {},
+//       canvas: {},
+//       image_canvas: null,
+//       image_ctx: {},
+//       ctx: {},
+//       name: ""
+//     };
+//   },
+//   mounted() {
+//     this.picture = null;
+//     this.video = document.getElementById("video");
+//     this.buildCapture();
+//     this.canvas = document.getElementById("canvas");
+//     this.ctx = this.canvas.getContext("2d");
+//     // this.image_canvas = document.getElementById("imageCanvas");
+//     // this.image_ctx = this.image_canvas.getContext("2d");
+//     // console.log(this.image_canvas);
 
-    this.poseNet = ml5.poseNet(this.video, this.onModelLoaded);
-    this.poseNet.on("pose", this.gotPoses);
-    this.drawCameraIntoCanvas();
-  },
-  beforeDestroy() {
-    navigator.mediaDevices.getUserMedia({audio: false, video: true})
-  .then(mediaStream => {
-    let tracks=  mediaStream.getTracks()
-    tracks.forEach((track)=>{
-      track.stop();
-    })
+//     this.poseNet = ml5.poseNet(this.video, this.onModelLoaded);
+//     this.poseNet.on("pose", this.gotPoses);
+//     this.drawCameraIntoCanvas();
+//   },
+//   beforeDestroy() {
+//     navigator.mediaDevices.getUserMedia({audio: false, video: true})
+//   .then(mediaStream => {
+//     let tracks=  mediaStream.getTracks()
+//     tracks.forEach((track)=>{
+//       track.stop();
+//     })
 
-})
-  },
+// })
+//   },
  
-  methods: {
-    makeToast(text,title,variant) {
-        this.$bvToast.toast(`${text}`, {
-          title: `${title}`,
-          variant: variant,
-          solid: true
-        })
-      },
-    takePicture() {
-      this.pose = [...this.poses];
-    },
-    saveData() {
-      this.pose.target = this.target;
-      this.pose.pose = this.name;
-      this.$store.dispatch("therapist/saveData", this.pose).then((response)=>{
-        console.log(response);
-        if(response.status==200){
+//   methods: {
+//     makeToast(text,title,variant) {
+//         this.$bvToast.toast(`${text}`, {
+//           title: `${title}`,
+//           variant: variant,
+//           solid: true
+//         })
+//       },
+//     takePicture() {
+//       this.pose = [...this.poses];
+//     },
+//     saveData() {
+//       this.pose.target = this.target;
+//       this.pose.pose = this.name;
+//       this.$store.dispatch("therapist/saveData", this.pose).then((response)=>{
+//         console.log(response);
+//         if(response.status==200){
           
-          this.makeToast(`Data voor ${this.name} is opgeslagen`,'Opgeslagen', 'success');
-        }
-      });
-    },
-    onModelLoaded() {
-      console.log("PoseNet Model has Loaded");
-      this.isModelLoaded = true;
-    },
-    gotPoses(results) {
-      this.poses = results;
-    },
-    // A function to draw the video and poses into the canvas.
-    // This function is independent of the result of posenet
-    // This way the video will not seem slow if poseNet
-    // is not detecting a position
-    drawCameraIntoCanvas: function() {
-      // Draw the video element into the canvas
-      this.ctx.drawImage(this.video, 0, 0, 1280, 720);
-      // We can call both functions to draw all keypoints and the skeletons
-      this.drawKeypoints();
-      this.drawSkeleton();
-      window.requestAnimationFrame(this.drawCameraIntoCanvas);
-    },
-    // A function to draw ellipses over the detected keypoints
-    drawKeypoints: function() {
-      this.ctx.lineWidth = 1;
-      // Loop through all the poses detected
-      for (let i = 0; i < this.poses.length; i += 1) {
-        // For each pose detected, loop through all the keypoints
-        for (let j = 0; j < this.poses[i].pose.keypoints.length; j += 1) {
-          let keypoint = this.poses[i].pose.keypoints[j];
-          // Only draw an ellipse is the pose probability is bigger than 0.2
-          if (keypoint.score > 0.2) {
-            this.ctx.beginPath();
-            this.ctx.arc(
-              keypoint.position.x,
-              keypoint.position.y,
-              10,
-              0,
-              2 * Math.PI
-            );
-            this.ctx.fillStyle = "#FF3333";
-            this.ctx.fill();
-            this.ctx.stroke();
-          }
-        }
-      }
-    },
-    // A function to draw the skeletons
-    drawSkeleton: function() {
-      this.ctx.lineWidth = 10;
-      // Loop through all the skeletons detected
-      for (let i = 0; i < this.poses.length; i += 1) {
-        // For every skeleton, loop through all body connections
-        for (let j = 0; j < this.poses[i].skeleton.length; j += 1) {
-          let partA = this.poses[i].skeleton[j][0];
-          let partB = this.poses[i].skeleton[j][1];
-          this.ctx.beginPath();
-          this.ctx.moveTo(partA.position.x, partA.position.y);
-          this.ctx.lineTo(partB.position.x, partB.position.y);
-          this.ctx.stroke();
-        }
-      }
-    },
-    buildCapture: function() {
-      navigator.mediaDevices
-        .enumerateDevices()
-        .then((devices) => {
-          devices = devices.filter((v) => v.kind == "videoinput");
-          console.log("Found " + devices.length + " video devices");
-          let lastDevice = devices[devices.length - 1];
-          // devices= devices.filter( v => (v.label.indexOf("back")>0));
-          let device = null;
-          if (devices.length > 0) {
-            console.log("Taking a 'back' camera");
-            device = devices[0];
-          } else {
-            console.log("Taking last camera");
-            device = lastDevice;
-          }
-          if (!device) {
-            console.log("No devices!");
-            return;
-          }
-          let constraints = {
-            audio: false,
-            video: {
-              deviceId: { ideal: device.deviceId },
-              width: { ideal: window.innerWidth },
-              height: { ideal: window.innerHeight },
-            },
-          };
-          navigator.mediaDevices
-            .getUserMedia(constraints)
-            .then((stream) => {
-              try {
-                this.video.srcObject = stream;
-              } catch (error) {
-                this.video.srcObject = URL.createObjectURL(stream);
-              }
-              //info.innerHTML+= "<pre>DONE</pre>";
-              console.log("DONE");
-              this.$store.commit("attachStream", this.$el);
-              this.$store.commit("setLoaded", true);
-            })
-            .catch((err) => {
-              console.log(err.name + ": " + err.message);
-            });
-        })
-        .catch((err) => {
-          console.log(err.name + ": " + err.message);
-        });
-    },
-  },
-};
+//           this.makeToast(`Data voor ${this.name} is opgeslagen`,'Opgeslagen', 'success');
+//         }
+//       });
+//     },
+//     onModelLoaded() {
+//       console.log("PoseNet Model has Loaded");
+//       this.isModelLoaded = true;
+//     },
+//     gotPoses(results) {
+//       this.poses = results;
+//     },
+//     // A function to draw the video and poses into the canvas.
+//     // This function is independent of the result of posenet
+//     // This way the video will not seem slow if poseNet
+//     // is not detecting a position
+//     drawCameraIntoCanvas: function() {
+//       // Draw the video element into the canvas
+//       this.ctx.drawImage(this.video, 0, 0, 1280, 720);
+//       // We can call both functions to draw all keypoints and the skeletons
+//       this.drawKeypoints();
+//       this.drawSkeleton();
+//       window.requestAnimationFrame(this.drawCameraIntoCanvas);
+//     },
+//     // A function to draw ellipses over the detected keypoints
+//     drawKeypoints: function() {
+//       this.ctx.lineWidth = 1;
+//       // Loop through all the poses detected
+//       for (let i = 0; i < this.poses.length; i += 1) {
+//         // For each pose detected, loop through all the keypoints
+//         for (let j = 0; j < this.poses[i].pose.keypoints.length; j += 1) {
+//           let keypoint = this.poses[i].pose.keypoints[j];
+//           // Only draw an ellipse is the pose probability is bigger than 0.2
+//           if (keypoint.score > 0.2) {
+//             this.ctx.beginPath();
+//             this.ctx.arc(
+//               keypoint.position.x,
+//               keypoint.position.y,
+//               10,
+//               0,
+//               2 * Math.PI
+//             );
+//             this.ctx.fillStyle = "#FF3333";
+//             this.ctx.fill();
+//             this.ctx.stroke();
+//           }
+//         }
+//       }
+//     },
+//     // A function to draw the skeletons
+//     drawSkeleton: function() {
+//       this.ctx.lineWidth = 10;
+//       // Loop through all the skeletons detected
+//       for (let i = 0; i < this.poses.length; i += 1) {
+//         // For every skeleton, loop through all body connections
+//         for (let j = 0; j < this.poses[i].skeleton.length; j += 1) {
+//           let partA = this.poses[i].skeleton[j][0];
+//           let partB = this.poses[i].skeleton[j][1];
+//           this.ctx.beginPath();
+//           this.ctx.moveTo(partA.position.x, partA.position.y);
+//           this.ctx.lineTo(partB.position.x, partB.position.y);
+//           this.ctx.stroke();
+//         }
+//       }
+//     },
+//     buildCapture: function() {
+//       navigator.mediaDevices
+//         .enumerateDevices()
+//         .then((devices) => {
+//           devices = devices.filter((v) => v.kind == "videoinput");
+//           console.log("Found " + devices.length + " video devices");
+//           let lastDevice = devices[devices.length - 1];
+//           // devices= devices.filter( v => (v.label.indexOf("back")>0));
+//           let device = null;
+//           if (devices.length > 0) {
+//             console.log("Taking a 'back' camera");
+//             device = devices[0];
+//           } else {
+//             console.log("Taking last camera");
+//             device = lastDevice;
+//           }
+//           if (!device) {
+//             console.log("No devices!");
+//             return;
+//           }
+//           let constraints = {
+//             audio: false,
+//             video: {
+//               deviceId: { ideal: device.deviceId },
+//               width: { ideal: window.innerWidth },
+//               height: { ideal: window.innerHeight },
+//             },
+//           };
+//           navigator.mediaDevices
+//             .getUserMedia(constraints)
+//             .then((stream) => {
+//               try {
+//                 this.video.srcObject = stream;
+//               } catch (error) {
+//                 this.video.srcObject = URL.createObjectURL(stream);
+//               }
+//               //info.innerHTML+= "<pre>DONE</pre>";
+//               console.log("DONE");
+//               this.$store.commit("attachStream", this.$el);
+//               this.$store.commit("setLoaded", true);
+//             })
+//             .catch((err) => {
+//               console.log(err.name + ": " + err.message);
+//             });
+//         })
+//         .catch((err) => {
+//           console.log(err.name + ": " + err.message);
+//         });
+//     },
+//   },
+// };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
