@@ -13,8 +13,8 @@
   },
   "main": "background.js",
   "dependencies": {
-    "@tensorflow-models/pose-detection": "^0.0.3",
-    "@tensorflow/tfjs-node": "^3.7.0",
+    "@tensorflow-models/pose-detection": "0.0.3",
+    "@tensorflow/tfjs": "^3.7.0",
     "aws-sdk": "^2.928.0",
     "axios": "^0.21.1",
     "bootstrap-vue": "^2.21.2",
