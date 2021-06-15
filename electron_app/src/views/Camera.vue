@@ -86,9 +86,6 @@ export default {
       detectorConfig
     );
     this.loaded = true;
-    this.interval = setInterval(
-      this.recognizePose, 2000
-    );
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
     // translate context to center of canvas
@@ -102,6 +99,7 @@ export default {
       }.bind(this),
       50
     );
+    // DEPRECATED ML5 POSENET IMPLEMENTATION
     // const opt = {
     //   architecture: "MobileNetV1",
     //   imageScaleFactor: 0.3,
@@ -125,6 +123,9 @@ export default {
     this.ourModel = await tensor.loadLayersModel(
       "https://fysiomodelstorage.z6.web.core.windows.net/model.json"
     );
+    this.interval = setInterval(
+      this.recognizePose, 2000
+    );
     console.log(this.ourModel.summary());
     this.drawCameraIntoCanvas();
   },
@@ -140,12 +141,8 @@ export default {
       this.isModelLoaded = true;
     },
     getPoses: async function () {
-      const poses = await this.detector.estimatePoses(this.video);
-      // console.log('poses: ',this.poses);
-      // console.log(this.detector);
-      this.poses = poses;
+      this.poses = await this.detector.estimatePoses(this.video);
       this.drawCameraIntoCanvas();
-    //   console.log(this.poses[0]);
     },
     recognizePose: async function () {
       const prepped_data = await this.$store.dispatch(
