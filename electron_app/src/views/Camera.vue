@@ -153,7 +153,9 @@ export default {
           this.poses
         );
         console.log("data", prepped_data);
-        this.ourModelOutPut = this.ourModel.predict(tensor.tensor(prepped_data, [1,31])).print();
+
+        const output = this.ourModel.predict(tensor.tensor(prepped_data, [1,31]));
+        this.ourModelOutPut = output.dataSync();
     },
     // A function to draw the video and poses into the canvas.
     // This function is independent of the result of posenet
