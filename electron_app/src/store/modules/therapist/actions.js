@@ -11,11 +11,9 @@ const saveData = ({ commit }, payload) => {// eslint-disable-line
 };
 
 function mapData(data) {
-  console.log(data[0].pose);
   let pose = data[0].pose;
   return {
     pose: data.pose,
-    target: data.target,
     noseX: Math.floor(pose.nose.x),
     noseY: Math.floor(pose.nose.y),
     leftEyeX: Math.floor(pose.leftEye.x),
@@ -49,6 +47,13 @@ function mapData(data) {
   };
 }
 
+function prepareData(context// eslint-disable-line
+  ,data){
+    const d = mapData(data)
+    delete(d.target)
+  return Object.values(d)
+}
+
 const createMedia = async ({commit}, payload) => { // eslint-disable-line no-unused-vars
   let file = payload.file;
   let extension = file.name.split('.').pop();
@@ -73,5 +78,5 @@ const createMedia = async ({commit}, payload) => { // eslint-disable-line no-unu
 }
 
 export default {
-  saveData,
+  saveData, prepareData
 };

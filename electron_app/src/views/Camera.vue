@@ -20,7 +20,8 @@
         </p>
         <br />
         <p class="video_overlay_text">
-          Current Pose: {{ this.ourModelOutPut !== undefined ? this.ourModelOutPut : "none" }}
+          Current Pose:
+          {{ this.ourModelOutPut !== undefined ? this.ourModelOutPut : "none" }}
         </p>
         <br />
         <img src="@/assets/calendar.png" class="video_overlay_icon" />
@@ -41,8 +42,7 @@
 
 <script>
 import ml5 from "ml5";
-import * as tf from "@tensorflow/tfjs";
-
+import * as tensor from "@tensorflow/tfjs";
 
 export default {
   created() {
@@ -67,9 +67,14 @@ export default {
       video: {},
       canvas: {},
       ctx: {},
+      interval: {},
+      framecount: 0,
     };
   },
   mounted: async function () {
+    this.interval = setInterval(
+      this.recognizePose, 2000
+    );
     this.video = document.getElementById("video");
     this.buildCapture();
     this.canvas = document.getElementById("canvas");
@@ -94,17 +99,23 @@ export default {
       quantBytes: 2,
     };
     this.poseNet = ml5.poseNet(this.video, opt, this.onModelLoaded);
-    this.poseNet.on("pose", this.gotPoses);
-    // console.log("Fetching model from " + this.$store.getters["api/GET_MODEL_URL"])
-    this.ourModel = await tf.loadLayersModel("http://localhost:49154/File/Model");
-    console.log(this.ourModel);
-    
+    this.poseNet.on("pose", await this.gotPoses);
+    console.log(
+      "Fetching model from " +
+        "https://fysiomodelstorage.z6.web.core.windows.net/model.json"
+    );
+    this.ourModel = await tensor.loadLayersModel(
+      "https://fysiomodelstorage.z6.web.core.windows.net/model.json"
+    );
+    console.log(this.ourModel.summary());
+
     this.drawCameraIntoCanvas();
   },
   beforeUnmount() {
     this.video.srcObject.getTracks().forEach(function (track) {
       track.stop();
       this.video = null;
+      clearInterval(this.interval)
     });
   },
   methods: {
@@ -113,8 +124,16 @@ export default {
     },
     gotPoses: function (results) {
       this.poses = results;
-      console.log(this.poses)
-      // this.ourModelOutPut = this.ourModel.predict(tf.tensor(this.poses))
+      this.framecount++;
+      // console.log(this.poses)
+    },
+    recognizePose: async function () {
+      const prepped_data = await this.$store.dispatch(
+          "therapist/prepareData",
+          this.poses
+        );
+        console.log("data", prepped_data);
+        this.ourModelOutPut = this.ourModel.predict(tensor.tensor(prepped_data, [1,31])).print();
     },
     // A function to draw the video and poses into the canvas.
     // This function is independent of the result of posenet
@@ -305,6 +324,4 @@ a {
 .video_overlay_icon:hover {
   background-color: rgba(240, 240, 240, 0.3);
 }
-
-
 </style>
