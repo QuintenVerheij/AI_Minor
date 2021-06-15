@@ -33,7 +33,7 @@
             <pre class="error-message">{{ this.error_message }}</pre>
           </div>
           <div class="field-login">
-            <button v-on:click="register" class="button-login">Sign up</button>
+            <button @click="register" class="button-login">Sign up</button>
           </div>
           <div class="field-signup">
             Already have account? <a href="login">Login</a>
@@ -68,32 +68,11 @@ export default {
     };
   },
   methods: {
-    register: async function () {
-      this.show_error_message = false;
-      if (this.register_data.password != this.password_confirm) {
-        this.show_error_message = true;
-        this.error_message = "Passwords do not match";
-      } else {
-        const API_INFO = this.$store.getters["api/GET_REGISTER_ENDPOINT"];
-        fetch(API_INFO.url, {
-          method: API_INFO.method,
-          headers: API_INFO.headers,
-          body: JSON.stringify(this.register_data),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data)
-            if (data.succeeded) {
-              this.$router.push({name: 'Auth'});
-            } else {
-              if (data.errors !== undefined) {
-                console.log(data.errors);
-                this.show_errors(data.errors);
-              }
-            }
-          });
-      }
+    register(){
+      console.log('register');
+      this.$store.dispatch('authentication/register', this.register_data).then(()=>this.$router.go(-1));
     },
+    
     show_errors: function(errors) {
         this.error_message = errors.reduce((acc, curr) => acc + "\n" + curr.description, "")
         this.show_error_message = true;

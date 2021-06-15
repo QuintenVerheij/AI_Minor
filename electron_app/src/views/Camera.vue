@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="video_box" class="center">
+    <!-- <div id="video_box" class="center">
       <div class="rounded video_overlay">
         <div>
           <img
@@ -36,7 +36,7 @@
         autoplay
         style="display: none"
       ></video>
-    </div>
+    </div> -->
   </div>
 </template>
 

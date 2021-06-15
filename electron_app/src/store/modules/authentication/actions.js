@@ -18,6 +18,9 @@ const login = (context, payload) => {
       console.log(response);
       localStorage.token=response.data.token;
       localStorage.userId = response.data.userId;
+      HTTP.defaults.headers.common = {
+        "Authorization": `Token ${response.data.token}`,
+      };
       context.commit('SET_AUTHENTICATED', true);
       return true;
     }
@@ -25,6 +28,25 @@ const login = (context, payload) => {
     context.commit('SET_AUTHENTICATED', false);
     return false;
   })
+}
+
+const getUserInfo = (context) => {
+  return HTTP.get(context.rootGetters["api/GET_LOGIN_EXTENSION"]).then((response) => {
+    context.commit('SET_USER', response.data);
+  })
+}
+
+const register = (context, payload) => {
+  console.log(
+  'endpoint', context.rootGetters["api/GET_REGISTER_ENDPOINT"]);
+  return HTTP.post(context.rootGetters["api/GET_REGISTER_ENDPOINT"], payload).then((response)=>{
+    console.log(response)
+    return true;
+  }
+).catch((e)=>{
+  console.log(e)
+  return false;
+})
 }
 
 const signOut = ({commit}) => {
@@ -41,8 +63,10 @@ const checkAuthenticated = ({commit}) => {
 }
 
 export default {
+  getUserInfo,
   debugLogin,
   login,
+  register,
   signOut,
   checkAuthenticated
 }
