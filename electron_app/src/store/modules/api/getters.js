@@ -1,6 +1,5 @@
-const GET_API_URL = (state) => {
-        // rootState.dev ? (rootState.use_ssl ? state.API_URL_DEV_HTTPS : state.API_URL_DEV) :
-        return  state.API_URL
+const GET_API_URL = () => {
+        return 'https://fysioapi2.azurewebsites.net'
 }
 
 const GET_LOGIN_ENDPOINT = (state, getters, rootState, rootGetters) => {

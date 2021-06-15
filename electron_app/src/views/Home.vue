@@ -25,6 +25,7 @@ export default {
   name: 'Home',
   created(){
     this.$store.dispatch('exercises/getExercises');
+    this.$store.dispatch('authentication/getUserInfo');
   },
   computed: {
     exercises(){
