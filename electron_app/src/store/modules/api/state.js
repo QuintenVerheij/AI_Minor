@@ -9,7 +9,9 @@ export default {
         },
         file:{
             model: {extension: "File/Model", method: "GET"}
+        },
+        statistics: {
+            exercise: {extension: "api/client", method: "GET"}
         }
-
     }
 }
