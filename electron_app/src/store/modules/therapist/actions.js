@@ -29,7 +29,6 @@ function mapData(poses) {
   const rightAnkle = data.find((e)=>e.name=="right_ankle");
 
   return {
-    pose: data.pose,
     noseX: nose.x,
     noseY: nose.y,
     leftEyeX: leftEye.x,

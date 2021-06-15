@@ -75,7 +75,7 @@ export default {
       framecount: 0,
     };
   },
-  mounted: async function () {
+  async mounted () {
     const detectorConfig = {
       modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING,
     };
@@ -97,25 +97,8 @@ export default {
       function() {
         this.getPoses();
       }.bind(this),
-      50
+      12
     );
-    // DEPRECATED ML5 POSENET IMPLEMENTATION
-    // const opt = {
-    //   architecture: "MobileNetV1",
-    //   imageScaleFactor: 0.3,
-    //   outputStride: 16,
-    //   flipHorizontal: false,
-    //   minConfidence: 0.5,
-    //   maxPoseDetections: 5,
-    //   scoreThreshold: 0.5,
-    //   nmsRadius: 20,
-    //   detectionType: "multiple",
-    //   inputResolution: 513,
-    //   multiplier: 0.75,
-    //   quantBytes: 2,
-    // };
-    // this.poseNet = ml5.poseNet(this.video, opt, this.onModelLoaded);
-    // this.poseNet.on("pose", await this.gotPoses);
     console.log(
       "Fetching model from " +
         "https://fysiomodelstorage.z6.web.core.windows.net/model.json"
@@ -137,10 +120,10 @@ export default {
     });
   },
   methods: {
-    onModelLoaded: function () {
+    onModelLoaded () {
       this.isModelLoaded = true;
     },
-    getPoses: async function () {
+    async getPoses () {
       this.poses = await this.detector.estimatePoses(this.video);
       this.drawCameraIntoCanvas();
     },
@@ -151,7 +134,7 @@ export default {
         );
         console.log("data", prepped_data);
 
-        const output = this.ourModel.predict(tensor.tensor(prepped_data, [1,31]));
+        const output = this.ourModel.predict(tensor.tensor(prepped_data, [1,30]));
         this.ourModelOutPut = output.dataSync();
     },
     // A function to draw the video and poses into the canvas.
