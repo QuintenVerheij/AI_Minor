@@ -310,7 +310,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
 h3 {
   margin: 40px 0 0;
 }
@@ -334,16 +334,9 @@ a {
 }
 
 .video_overlay {
-  position: absolute;
-  float: left;
-  min-height: 20px;
-  min-width: 40px;
-  padding: 5px;
-  margin: 5px;
-  border: solid black 1px;
-  box-shadow: 1px 2px rgba(60, 60, 60, 0.9);
-  z-index: 100;
-  background-color: rgba(192, 192, 192, 0.3);
+  
+  background-color: var(--blue);
+   opacity: 0.6;
 }
 .center {
   margin: auto;
