@@ -47,7 +47,6 @@ export default {
     return {
       // LOCAL STATE GOES HERE
       posenet: {},
-      poses: [],
       ourModel: {},
       ourModelOutPut: "",
       isModelLoaded: false,
@@ -78,12 +77,13 @@ export default {
 
     // flip context horizontally
     this.ctx.scale(-1, 1);
-    this.updateLoop = setInterval(
-      function() {
-        this.getPoses();
-      }.bind(this),
-      12
-    );
+    
+    // this.updateLoop = setInterval(
+    //   function() {
+    //     this.getPoses();
+    //   }.bind(this),
+    //   12
+    // );
     console.log(
       "Fetching model from " +
         "https://fysiomodelstorage.z6.web.core.windows.net/model.json"
@@ -95,7 +95,7 @@ export default {
       this.recognizePose, 2000
     );
     console.log(this.ourModel.summary());
-    this.drawCameraIntoCanvas();
+    this.loop();
   },
   beforeUnmount() {
     this.video.srcObject.getTracks().forEach(function (track) {
@@ -105,44 +105,44 @@ export default {
     });
   },
   methods: {
+    loop(){
+      this.render();
+      window.requestAnimationFrame(this.loop);
+    },
+    renderEstimation(poses){
+      this.drawKeypoints(poses);
+      this.drawSkeleton(poses);
+    },
+    async render() {
+      this.ctx.drawImage(this.video, 0, 0, 1280, 720);
+      this.renderEstimation(await this.getPoses()); 
+    },
     onModelLoaded () {
       this.isModelLoaded = true;
     },
     async getPoses () {
-      this.poses = await this.detector.estimatePoses(this.video);
-      this.drawCameraIntoCanvas();
+     return await this.detector.estimatePoses(this.video);
+      
     },
-    recognizePose: async function () {
+    async recognizePose() {
       const prepped_data = await this.$store.dispatch(
           "therapist/prepareData",
-          this.poses
+          await this.getPoses()
         );
         console.log("data", prepped_data);
 
         const output = this.ourModel.predict(tensor.tensor(prepped_data, [1,30]));
         this.ourModelOutPut = output.dataSync();
     },
-    // A function to draw the video and poses into the canvas.
-    // This function is independent of the result of posenet
-    // This way the video will not seem slow if poseNet
-    // is not detecting a position
-    drawCameraIntoCanvas: function () {
-      // Draw the video element into the canvas
-      this.ctx.drawImage(this.video, 0, 0, 1280, 720);
-      // We can call both functions to draw all keypoints and the skeletons
-      this.drawKeypoints();
-      this.drawSkeleton();
-      window.requestAnimationFrame(this.drawCameraIntoCanvas);
-    },
     // A function to draw ellipses over the detected keypoints
-    drawKeypoints() {
+    drawKeypoints(poses) {
       // console.log(this.poses)
       this.ctx.lineWidth = 1;
       // Loop through all the poses detected
-      for (let i = 0; i < this.poses.length; i += 1) {
+      for (let i = 0; i < poses.length; i += 1) {
         // For each pose detected, loop through all the keypoints
-        for (let j = 0; j < this.poses[i].keypoints.length; j += 1) {
-          let keypoint = this.poses[i].keypoints[j];
+        for (let j = 0; j < poses[i].keypoints.length; j += 1) {
+          let keypoint = poses[i].keypoints[j];
           // Only draw an ellipse is the pose probability is bigger than 0.2
           if (keypoint.score > 0.2) {
             this.ctx.beginPath();
@@ -162,7 +162,7 @@ export default {
       }
     },
     // A function to draw the skeletons
-    drawSkeleton() {
+    drawSkeleton(poses) {
       const lines = [
         {
           partA: "nose",
@@ -237,14 +237,14 @@ export default {
       this.ctx.lineWidth = 10;
       
       // Loop through all the skeletons detected
-      this.poses.forEach((pose)=>{
+      poses.forEach((pose)=>{
         const keypoints = pose.keypoints;
         lines.forEach((line)=>{
 
           const partA = keypoints.find((kp)=>kp.name == line.partA);
           const partB = keypoints.find((kp)=>kp.name == line.partB);
           
-          if(partA.score > 0.5 && partB.score > 0.5 ){
+          if(partA.score > 0.4 && partB.score > 0.4 ){
             this.ctx.beginPath();
             this.ctx.moveTo(partA.x, partA.y);
             this.ctx.lineTo(partB.x, partB.y);
