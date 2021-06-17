@@ -1,32 +1,17 @@
 <template>
   <div>
     <div id="video_box" class="center">
-      <div class="rounded video_overlay">
-        <div>
-          <img
-            src="@/assets/left.png"
-            class="video_overlay_icon"
-            @click="$router.go(-1)"
-          />
-          <p class="video_overlay_title">AI MINOR FYSIO APP</p>
-        </div>
-        <br />
-        <p class="video_overlay_text">
-          Logged in as {{ user !== undefined ? user : "none" }}
-        </p>
-        <br />
-        <p class="video_overlay_text">
-          Current Exercise: {{ exercise !== undefined ? exercise : "none" }}
-        </p>
+      <div class="rounded position-absolute bottom-0 w-auto px-2 py-2 text-left video_overlay">
+        
+        <h2 class="font-weight-bold fs-1 uppercase">
+          {{ exercise !== undefined ? exercise.title : "none" }}
+        </h2>
         <br />
         <p class="video_overlay_text">
           Current Pose:
           {{ this.ourModelOutPut !== undefined ? this.ourModelOutPut : "none" }}
         </p>
         <br />
-        <img src="@/assets/calendar.png" class="video_overlay_icon" />
-        <img src="@/assets/stopwatch.png" class="video_overlay_icon" />
-        <img src="@/assets/phone.png" class="video_overlay_icon" />
       </div>
       <canvas id="canvas" width="1280px" height="720px"></canvas>
     <video
@@ -48,14 +33,14 @@ import * as tensor from "@tensorflow/tfjs";
 
 export default {
   created() {
-    this.$store.dispatch("exercises/getExercise", this.$route.params.id);
+    this.$store.dispatch("exercises/getExercises");
   },
   computed: {
     user() {
       return this.$store.getters["authentication/get_user"];
     },
     exercise() {
-      return this.$route.params.id;
+      return this.$store.getters["exercises/get_exercise"](this.$route.params.id);
     },
   },
   data() {
