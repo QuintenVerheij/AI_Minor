@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="d-flex flex-row flex-nowrap scroller" >
-        <exercise-card class="mr-2" v-for="exercise in exercises" :exercise="exercise" v-bind:key="exercise.id"/>
+        <exercise-card class="mr-2" v-for="cExercise in cExercises" :ce="cExercise" v-bind:key="cExercise.id"/>
     </div>
 </div>
 </template>
@@ -13,7 +13,7 @@ export default {
     this.$store.dispatch('exercises/getExercises');
   },
   computed: {
-    exercises(){
+    cExercises(){
       return this.$store.getters['exercises/get_exercises'];
     }
   }

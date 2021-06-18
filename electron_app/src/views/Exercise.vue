@@ -9,13 +9,18 @@
           <p>{{exercise.text}}</p>
         </b-col>
       </b-row>
+      <b-row>
+        <b-col md=6>
+          <video :src="exercise.video_url"/>
+        </b-col>
+      </b-row>
       <b-btn @click="camera">Start</b-btn>
   </div>
 </template>
 <script>
 export default {
   created(){
-    this.$store.dispatch('exercises/getExercise', this.$route.params.id)
+    this.$store.dispatch('exercises/setExercise', this.$route.params.id)
   },
   computed: {
       exercise() {

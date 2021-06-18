@@ -12,6 +12,9 @@ export default {
         },
         statistics: {
             exercise: {extension: "api/client", method: "GET"}
+        },
+        client: {
+            extension: "api/client", method: "GET"
         }
     }
 }
