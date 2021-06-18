@@ -10,16 +10,19 @@ const debugLogin = ({commit}) => {
       age: 21
   });
    
-}   
+}
+
+const getClientData = (context) => {
+  return HTTP.get(context.rootGetters["api/GET_CLIENT_URL"]).then((response)=>{context.commit("SET_USER", response.data); console.log(response)});
+}
 
 const login = (context, payload) => {
     return HTTP.post(context.rootGetters["api/GET_LOGIN_EXTENSION"], payload).then((response)=>{
+      //TODO: Remove this log in production
       console.log(response);
       localStorage.token=response.data.token;
       localStorage.userId = response.data.userId;
-      HTTP.defaults.headers.common = {
-        "Authorization": `Token ${response.data.token}`,
-      };
+
       context.commit('SET_AUTHENTICATED', true);
       return true;
     }
@@ -67,5 +70,6 @@ export default {
   login,
   register,
   signOut,
-  checkAuthenticated
+  checkAuthenticated,
+  getClientData
 }
