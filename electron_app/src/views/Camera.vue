@@ -48,7 +48,7 @@ import * as tensor from "@tensorflow/tfjs";
 
 export default {
   created() {
-    this.$store.dispatch("exercises/getExercise", this.$route.params.id);
+    this.$store.dispatch("exercises/setExercise", this.$route.params.id);
   },
   computed: {
     user() {
