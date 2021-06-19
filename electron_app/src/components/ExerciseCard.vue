@@ -27,7 +27,7 @@ export default {
     methods: {
         goToExercise(){
             this.$router.push({name: 'Exercise', params: {
-                id: this.exercise.id
+                id: this.ce.exercise.id
             } })
         }
     }
