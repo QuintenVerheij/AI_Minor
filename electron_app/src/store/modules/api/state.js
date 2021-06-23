@@ -12,6 +12,10 @@ export default {
         },
         statistics: {
             exercise: {extension: "api/client", method: "GET"}
+        },
+        exercise: {
+            pose_names: {extension: "api/exercise/Poses", method: "GET"}, 
         }
+
     }
 }

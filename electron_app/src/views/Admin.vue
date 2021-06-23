@@ -46,7 +46,7 @@ export default {
     this.event_listener = window.addEventListener("keydown", (e) => {
       if (e.key == "p") {
         this.takePicture();
-        this.saveData();
+        // this.saveData();
       }
     });
   },
@@ -63,6 +63,7 @@ export default {
     this.loaded = true;
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
+    // this.ctx.scale(-1, 1);
     this.loop();
   },
   beforeUnmount() {
@@ -84,19 +85,19 @@ export default {
         })
       },
     async takePicture() {
-      if(this.name === ""){
-        this.makeToast("Er is geen naam voor deze pose ingevuld...", "Geen naam", "danger");
-        return
-      }
+      // // console.log(this.name);
+      // if(this.name == ""){
+      //   this.makeToast("Er is geen naam voor deze pose ingevuld...", "Geen naam", "danger");
+      //   return
+      // }
       let pose = await this.getPoses();
       this.saveData(pose);
     },
     saveData(pose) {
       pose.pose = this.name;
       this.$store.dispatch("therapist/saveData", pose).then((response)=>{
-        console.log(response);
+        // console.log(response);
         if(response.status==200){
-          
           this.makeToast(`Data voor ${this.name} is opgeslagen`,'Opgeslagen', 'success');
         }
       });
@@ -231,19 +232,19 @@ export default {
         .enumerateDevices()
         .then((devices) => {
           devices = devices.filter((v) => v.kind == "videoinput");
-          console.log("Found " + devices.length + " video devices");
+          // console.log("Found " + devices.length + " video devices");
           let lastDevice = devices[devices.length - 1];
           // devices= devices.filter( v => (v.label.indexOf("back")>0));
           let device = null;
           if (devices.length > 0) {
-            console.log("Taking a 'back' camera");
+            // console.log("Taking a 'back' camera");
             device = devices[0];
           } else {
-            console.log("Taking last camera");
+            // console.log("Taking last camera");
             device = lastDevice;
           }
           if (!device) {
-            console.log("No devices!");
+            // console.log("No devices!");
             return;
           }
           let constraints = {
@@ -254,7 +255,7 @@ export default {
               height: { ideal: window.innerHeight },
             },
           };
-          console.log(constraints);
+          // console.log(constraints);
           navigator.mediaDevices
             .getUserMedia(constraints)
             .then((stream) => {
@@ -264,7 +265,7 @@ export default {
                 this.video.srcObject = URL.createObjectURL(stream);
               }
               //info.innerHTML+= "<pre>DONE</pre>";
-              console.log("CAMERA LOADED; STREAM ATTACHED");
+              // console.log("CAMERA LOADED; STREAM ATTACHED");
               // this.$store.commit("camera/ATTACH_STREAM", this.$el);
               this.$store.commit("camera/SET_LOADED", true);
             })
@@ -297,7 +298,7 @@ export default {
 //       this.pose.target = this.target;
 //       this.pose.pose = this.name;
 //       this.$store.dispatch("therapist/saveData", this.pose).then((response)=>{
-//         console.log(response);
+//         // console.log(response);
 //         if(response.status==200){
           
 //           this.makeToast(`Data voor ${this.name} is opgeslagen`,'Opgeslagen', 'success');
@@ -305,7 +306,7 @@ export default {
 //       });
 //     },
 //     onModelLoaded() {
-//       console.log("PoseNet Model has Loaded");
+//       // console.log("PoseNet Model has Loaded");
 //       this.isModelLoaded = true;
 //     },
 //     gotPoses(results) {
@@ -369,19 +370,19 @@ export default {
 //         .enumerateDevices()
 //         .then((devices) => {
 //           devices = devices.filter((v) => v.kind == "videoinput");
-//           console.log("Found " + devices.length + " video devices");
+//           // console.log("Found " + devices.length + " video devices");
 //           let lastDevice = devices[devices.length - 1];
 //           // devices= devices.filter( v => (v.label.indexOf("back")>0));
 //           let device = null;
 //           if (devices.length > 0) {
-//             console.log("Taking a 'back' camera");
+//             // console.log("Taking a 'back' camera");
 //             device = devices[0];
 //           } else {
-//             console.log("Taking last camera");
+//             // console.log("Taking last camera");
 //             device = lastDevice;
 //           }
 //           if (!device) {
-//             console.log("No devices!");
+//             // console.log("No devices!");
 //             return;
 //           }
 //           let constraints = {
@@ -401,16 +402,16 @@ export default {
 //                 this.video.srcObject = URL.createObjectURL(stream);
 //               }
 //               //info.innerHTML+= "<pre>DONE</pre>";
-//               console.log("DONE");
+//               // console.log("DONE");
 //               this.$store.commit("attachStream", this.$el);
 //               this.$store.commit("setLoaded", true);
 //             })
 //             .catch((err) => {
-//               console.log(err.name + ": " + err.message);
+//               // console.log(err.name + ": " + err.message);
 //             });
 //         })
 //         .catch((err) => {
-//           console.log(err.name + ": " + err.message);
+//           // console.log(err.name + ": " + err.message);
 //         });
 //     },
 //   },

@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     login() {
-      console.log(process.env.NODE_ENV)
+      // console.log(process.env.NODE_ENV)
       this.loading = true;
       this.$store.dispatch('authentication/login',
         this.login_data
@@ -73,14 +73,14 @@ export default {
     //   })
     //     .then((response) => response.json())
     //     .then((data) => {
-    //       console.log(data);
+    //       // console.log(data);
     //       if (data.token !== undefined) {
     //         this.$store.commit("authentication/SET_AUTHENTICATED", true);
     //         localStorage.token = data.token;
     //         this.$router.push({ name: "Home" });
     //       } else {
     //         // if (data.errors !== undefined) {
-    //         console.log(data.message);
+    //         // console.log(data.message);
     //         this.show_errors(data.message);
     //         // }
     //       }

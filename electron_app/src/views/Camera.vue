@@ -18,11 +18,17 @@
         <p class="video_overlay_text">
           Current Exercise: {{ exercise !== undefined ? exercise : "none" }}
         </p>
+         <p class="video_overlay_text">
+          Current index: {{poseDetectedIndex}}
+        </p>
+        <p v-if="poseDetectedIndex < poseNames.length" class="video_overlay_text">
+          Current pose: {{poseNames[poseDetectedIndex] }}
+        </p>
         <br />
-        <p class="video_overlay_text">
+        <!-- <p class="video_overlay_text">
           Current Pose:
           {{ this.ourModelOutPut !== undefined ? this.ourModelOutPut : "none" }}
-        </p>
+        </p> -->
         <br />
         <img src="@/assets/calendar.png" class="video_overlay_icon" />
         <img src="@/assets/stopwatch.png" class="video_overlay_icon" />
@@ -48,15 +54,28 @@ import * as tensor from "@tensorflow/tfjs";
 
 export default {
   created() {
+     this.event_listener = window.addEventListener("keydown", (e) => {
+      if (e.key == "p") {
+        setTimeout(
+          this.takePicture, 10000
+        );
+        // this.saveData();
+      }
+    });
     this.$store.dispatch("exercises/getExercise", this.$route.params.id);
+    this.$store.dispatch("therapist/getPoseNames");
   },
   computed: {
     user() {
       return this.$store.getters["authentication/get_user"];
     },
     exercise() {
-      return this.$route.params.id;
+      let exercises = this.$store.getters["exercises/get_exercises"];
+      return exercises.find(el=>el.id == this.$route.params.id);
     },
+    poseNames() {
+      return this.$store.getters["therapist/get_pose_names"];
+    }
   },
   data() {
     return {
@@ -72,6 +91,9 @@ export default {
       ctx: {},
       interval: {},
       framecount: 0,
+      pose_saved: {},
+      poseDetectedIndex: 0,
+      poseIndex: 0
     };
   },
   async mounted () {
@@ -99,17 +121,17 @@ export default {
     //   }.bind(this),
     //   12
     // );
-    console.log(
-      "Fetching model from " +
-        "https://fysiomodelstorage.z6.web.core.windows.net/model.json"
-    );
+    // // console.log(
+    //   "Fetching model from " +
+    //     "https://fysiomodelstorage.z6.web.core.windows.net/model.json"
+    // );
     this.ourModel = await tensor.loadLayersModel(
       "https://fysiomodelstorage.z6.web.core.windows.net/model.json"
     );
     this.interval = setInterval(
-      this.recognizePose, 2000
+      this.recognizePose, 100
     );
-    console.log(this.ourModel.summary());
+    // console.log(this.ourModel.summary());
     this.loop();
   },
   beforeUnmount() {
@@ -120,6 +142,20 @@ export default {
     });
   },
   methods: {
+    async takePicture() {
+      
+      // let pose = await this.getPoses();
+       const prepped_data = await this.$store.dispatch(
+          "therapist/prepareData",
+          await this.getPoses()
+        );
+      this.pose_saved = prepped_data;
+      this.$bvToast.toast(`saved`, {
+          title: `Saved`,
+          variant: "success",
+          solid: true
+        })
+    },
     loop(){
       this.render();
       window.requestAnimationFrame(this.loop);
@@ -144,14 +180,36 @@ export default {
           "therapist/prepareData",
           await this.getPoses()
         );
-        console.log("data", prepped_data);
+        // console.log("data", prepped_data);
 
-        const output = this.ourModel.predict(tensor.tensor(prepped_data, [1,30]));
-        this.ourModelOutPut = output.dataSync();
+        tensor.scalar.tr
+        const output = await this.ourModel.predict(tensor.tensor(prepped_data, [1,30]));
+        // // console.log(output);
+        this.ourModelOutPut = (await output.array())[0];
+        // // console.log(this.ourModelOutPut);
+        this.poseDetectedIndex = this.ourModelOutPut.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+        // console.log(this.exercise);
+        console.log('detected: ' + this.poseNames[this.poseDetectedIndex], "  wanted: " + this.exercise.poses[this.poseIndex])
+        if(this.poseNames[this.poseDetectedIndex] === this.exercise.poses[this.poseIndex]){
+         this.makeToast(
+            "voltooid!",
+            this.exercise.poses[this.poseIndex],
+            'warning'
+          )
+         this.poseIndex++
+        }
+        if(this.poseIndex === this.exercise.poses.length){
+          this.makeToast(
+            "Exercise voltooid!",
+            'Voltooid',
+            'success'
+          );
+          this.poseIndex = 0;
+        }
     },
     // A function to draw ellipses over the detected keypoints
     drawKeypoints(poses) {
-      // console.log(this.poses)
+      // // console.log(this.poses)
       this.ctx.lineWidth = 1;
       // Loop through all the poses detected
       for (let i = 0; i < poses.length; i += 1) {
@@ -248,7 +306,7 @@ export default {
           partB: "left_ankle",
         },
       ]
-      // console.log(lines);
+      // // console.log(lines);
       this.ctx.lineWidth = 10;
       
       // Loop through all the skeletons detected
@@ -269,25 +327,32 @@ export default {
         })
       })
     },
+    makeToast(text,title,variant) {
+        this.$bvToast.toast(`${text}`, {
+          title: `${title}`,
+          variant: variant,
+          solid: true
+        })
+      },
     buildCapture: function () {
-      console.log(this.video);
+      // // console.log(this.video);
       navigator.mediaDevices
         .enumerateDevices()
         .then((devices) => {
           devices = devices.filter((v) => v.kind == "videoinput");
-          console.log("Found " + devices.length + " video devices");
+          // // console.log("Found " + devices.length + " video devices");
           let lastDevice = devices[devices.length - 1];
           // devices= devices.filter( v => (v.label.indexOf("back")>0));
           let device = null;
           if (devices.length > 0) {
-            console.log("Taking a 'back' camera");
+            // console.log("Taking a 'back' camera");
             device = devices[0];
           } else {
-            console.log("Taking last camera");
+            // console.log("Taking last camera");
             device = lastDevice;
           }
           if (!device) {
-            console.log("No devices!");
+            // console.log("No devices!");
             return;
           }
           let constraints = {
@@ -298,7 +363,7 @@ export default {
               height: { ideal: window.innerHeight },
             },
           };
-          console.log(constraints);
+          // // console.log(constraints);
           navigator.mediaDevices
             .getUserMedia(constraints)
             .then((stream) => {
@@ -308,7 +373,7 @@ export default {
                 this.video.srcObject = URL.createObjectURL(stream);
               }
               //info.innerHTML+= "<pre>DONE</pre>";
-              console.log("CAMERA LOADED; STREAM ATTACHED");
+              // console.log("CAMERA LOADED; STREAM ATTACHED");
               // this.$store.commit("camera/ATTACH_STREAM", this.$el);
               this.$store.commit("camera/SET_LOADED", true);
             })

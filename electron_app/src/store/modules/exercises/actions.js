@@ -6,6 +6,11 @@ const getExercises = ({commit}) => {
         id: '1',
         text: 'Lorum ipsum dolor set amit',
         image_url: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/waarom-je-elke-dag-5-minuten-moet-squatten-img900-1539533807.jpg', 
+        poses: [
+          "front_raise_-30",
+          "front_raise_60",
+          "squad"
+        ]
       },
       {
         title: 'exercise2',

@@ -46,7 +46,7 @@
 <script>
 export default {
   created() {
-    console.log(this.$store.getters["api/GET_REGISTER_ENDPOINT"]);
+    // console.log(this.$store.getters["api/GET_REGISTER_ENDPOINT"]);
   },
   data() {
     return {
@@ -82,12 +82,12 @@ export default {
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log(data)
+            // console.log(data)
             if (data.succeeded) {
               this.$router.push({name: 'Auth'});
             } else {
               if (data.errors !== undefined) {
-                console.log(data.errors);
+                // console.log(data.errors);
                 this.show_errors(data.errors);
               }
             }

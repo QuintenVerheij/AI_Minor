@@ -13,13 +13,14 @@ const debugLogin = ({commit}) => {
 }
 
 const getClientData = (context) => {
-  return HTTP.get(context.rootGetters["api/GET_CLIENT_URL"]).then((response)=>{context.commit("SET_USER", response.data); console.log(response)});
+  return HTTP.get(context.rootGetters["api/GET_CLIENT_URL"]).then((response)=>{context.commit("SET_USER", response.data); // console.log(response)});
+});
 }
 
 const login = (context, payload) => {
     return HTTP.post(context.rootGetters["api/GET_LOGIN_EXTENSION"], payload).then((response)=>{
       //TODO: Remove this log in production
-      console.log(response);
+      // console.log(response);
       localStorage.token=response.data.token;
       localStorage.userId = response.data.userId;
 
@@ -39,14 +40,13 @@ const getUserInfo = (context) => {
 }
 
 const register = (context, payload) => {
-  console.log(
-  'endpoint', context.rootGetters["api/GET_REGISTER_ENDPOINT"]);
-  return HTTP.post(context.rootGetters["api/GET_REGISTER_ENDPOINT"], payload).then((response)=>{
-    console.log(response)
+   
+  return HTTP.post(context.rootGetters["api/GET_REGISTER_ENDPOINT"], payload).then(()=>{
+    // console.log(response)
     return true;
   }
-).catch((e)=>{
-  console.log(e)
+).catch(()=>{
+  // console.log(e)
   return false;
 })
 }

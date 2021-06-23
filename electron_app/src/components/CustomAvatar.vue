@@ -36,10 +36,10 @@ export default {
     };
   },
   methods: {
-    handleUploading(a,b,c) {
-      console.log(a);
-      console.log(b);
-      console.log(c);
+    handleUploading() {
+      // console.log(a);
+      // console.log(b);
+      // console.log(c);
       this.message = "uploading...";
     },
     handleUploaded(response) {
