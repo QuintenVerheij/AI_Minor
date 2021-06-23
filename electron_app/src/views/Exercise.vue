@@ -1,12 +1,17 @@
 <template>
   <div>
-      <h1>{{exercise.title}}</h1>
+      <h1>{{ex.exercise.title}}</h1>
       <b-row>
         <b-col md=6>
-          <b-img :src="exercise.image_url"></b-img>
+          <b-img :src="ex.exercise.image_url"></b-img>
         </b-col>
         <b-col md=6>
-          <p>{{exercise.text}}</p>
+          <p>{{ex.exercise.text}}</p>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col md=6>
+          <video :src="ex.exercise.video_url"/>
         </b-col>
       </b-row>
       <b-btn @click="camera">Start</b-btn>
@@ -15,16 +20,21 @@
 <script>
 export default {
   created(){
-    this.$store.dispatch('exercises/getExercise', this.$route.params.id)
+    this.$store.dispatch('exercises/setExercise', this.$route.params.id)
   },
+  // data() {
+  //   return {
+  //     cExercise: this.$store.getters['exercises/get_exercise']
+  //   }
+  // },
   computed: {
-      exercise() {
+      ex: function() {
           return this.$store.getters['exercises/get_exercise'];
       }
   },
   methods: {
     camera() {
-      this.$router.replace({name:"Camera", params:{id:this.exercise.id}});
+      this.$router.replace({name:"Camera", params:{id:this.ex.exercise.id}});
     },
   },
 };

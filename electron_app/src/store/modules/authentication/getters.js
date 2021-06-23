@@ -2,12 +2,16 @@ const get_authenticated = (state) => {
     return state.authenticated;
 }
 
-//TODO: Get user from server and set it in store
 const get_user = (state) => {
     return state.user;
 }
 
+const get_roles = (state) => {
+    return state.roles
+}
+
 export default {
     get_authenticated,
-    get_user
+    get_user,
+    get_roles
 }

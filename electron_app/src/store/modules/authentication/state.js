@@ -5,5 +5,6 @@ export default {
         last_name: "Terlouw",
         gender: "male",
         age: 21
-    }
+    },
+    roles: []
 }

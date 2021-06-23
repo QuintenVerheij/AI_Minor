@@ -5,15 +5,17 @@
         <h1 class="box-title">Login Form</h1>
         <div class="box-form">
           <div class="form-field">
-            <input v-model="login_data.username" type="text" required />
+            <input v-model="login_data.username" v-on:keyup.enter="login" type="text" required />
             <span></span>
             <label>Username</label>
           </div>
+            <p style="color: red" v-if="show_username_is_empty_error">Username is required</p>
           <div class="form-field">
-            <input v-model="login_data.password" type="password" required />
+            <input v-model="login_data.password" v-on:keyup.enter="login" type="password" required />
             <span></span>
             <label>Password</label>
           </div>
+            <p style="color: red" v-if="show_password_is_empty_error">Password is required</p>
           <div v-if="show_error_message">
             <pre class="error-message">{{ this.error_message }}</pre>
           </div>
@@ -46,20 +48,39 @@ export default {
         password: "",
       },
       show_error_message: false,
+      show_username_is_empty_error: false,
+      show_password_is_empty_error: false,
       error_message: "",
     };
   },
   methods: {
     login() {
-      // console.log(process.env.NODE_ENV)
-      this.loading = true;
-      this.$store.dispatch('authentication/login',
-        this.login_data
-      ).then(()=>{
-        this.loading = false;
-      }).catch(()=> {
-        this.loading = false;
-      });
+      this.show_username_is_empty_error = false;
+      this.show_password_is_empty_error = false;
+      this.show_error_message = false;
+      if(this.login_data.username === "" || this.login_data.password === ""){
+        if(this.login_data.username === ""){
+          this.show_username_is_empty_error = true;
+        }
+        if(this.login_data.password === ""){
+          this.show_password_is_empty_error = true;
+        }
+      }else{
+        console.log(process.env.NODE_ENV)
+        this.loading = true;
+        this.$store.dispatch('authentication/login',
+          this.login_data
+        ).then(()=>{
+          this.loading = false;
+          this.$router.push({name: 'Home'})
+        }).catch((ex)=> {
+          this.loading = false;
+          this.show_error_message = true;
+          if(ex === 400){
+            this.error_message = "E-mail en password komen niet overeen"
+          }
+        });
+      }
     },
     // login: async function () {
     //   //   if(this.$store.dispatch('authentication/debugLogin')) {
@@ -142,6 +163,10 @@ body {
   position: relative;
   border-bottom: 2px solid #adadad;
   margin: 30px 0;
+}
+
+.box-form p {
+  line-height: 0.8;
 }
 
 .form-field input {
