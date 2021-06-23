@@ -85,7 +85,7 @@ export default {
         },
         {
           text: "Oefening Toevoegen",
-          route: "Add_Exercise",
+          route: "AddExercise",
           role: 'Therapist'
         },
         {

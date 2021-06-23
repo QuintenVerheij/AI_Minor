@@ -38,7 +38,7 @@ const login = (context, payload) => {
   }
   ).catch(() => {
     context.commit('SET_AUTHENTICATED', false);
-    return false;
+    throw 400
   })
 }
 

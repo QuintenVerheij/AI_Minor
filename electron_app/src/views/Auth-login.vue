@@ -57,6 +57,7 @@ export default {
     login() {
       this.show_username_is_empty_error = false;
       this.show_password_is_empty_error = false;
+      this.show_error_message = false;
       if(this.login_data.username === "" || this.login_data.password === ""){
         if(this.login_data.username === ""){
           this.show_username_is_empty_error = true;
@@ -72,8 +73,12 @@ export default {
         ).then(()=>{
           this.loading = false;
           this.$router.push({name: 'Home'})
-        }).catch(()=> {
+        }).catch((ex)=> {
           this.loading = false;
+          this.show_error_message = true;
+          if(ex === 400){
+            this.error_message = "E-mail en password komen niet overeen"
+          }
         });
       }
     },
