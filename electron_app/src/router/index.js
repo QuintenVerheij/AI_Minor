@@ -7,14 +7,6 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/home",
-    name: "Home",
-    component: Home,
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
     path: "/",
     name: "Auth",
     // route level code-splitting
@@ -23,9 +15,16 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Auth-login.vue"),
 
+    
+  },
+  {
+    path: "/home",
+    name: "Home",
+    component: Home,
     meta: {
       requiresAuth: true,
     },
+    children: []
   },
   {
     path: "/exercises",
@@ -40,18 +39,45 @@ const routes = [
       requiresAuth: true,
     },
   },
+  // DEPRECATED: Register now separated between client and therapist
+  // {
+  //   path: '/register',
+  //   name: 'Auth-register',
+  //   // route level code-splitting
+  //   // this generates a separate chunk (about.[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () =>
+  //     import(/* webpackChunkName: "about" */ "../views/Auth-register.vue"),
+
+  //   meta: {
+  //     // requiresAuth: true,
+  //   },
+  // },
   {
-    path: '/register',
-    name: 'Auth-register',
+    path: '/register-client',
+    name: 'Auth-register-client',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Auth-register.vue"),
+      import(/* webpackChunkName: "about" */ "../views/Auth-register-client.vue"),
 
-    meta: {
-      requiresAuth: true,
-    },
+    // meta: {
+    //   requiresAuth: true,
+    // },
+  },
+  {
+    path: '/register-therapist',
+    name: 'Auth-register-therapist',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Auth-register-therapist.vue"),
+
+    // meta: {
+    //   requiresAuth: true,
+    // },
   },
   {
     path: "/exercise/:id",
@@ -106,7 +132,7 @@ const routes = [
     },
   },
   {
-    path: "/camera",
+    path: "/camera/:id",
     name: "Camera",
     component: Camera,
     props: {
@@ -143,6 +169,19 @@ const routes = [
       requiresAuth: true,
     },
   },
+  {
+    path: "/add_exercise",
+    name: "AddExercise",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/AddExercise.vue"),
+
+    meta: {
+      requiresAuth: true,
+    },
+  },
 ];
 
 const router = new VueRouter({
@@ -155,7 +194,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (localStorage.getItem("token") == null) {
       next({
-        path: "/auth",
+        name: "Auth",
         params: { nextUrl: to.fullPath },
       });
     } else {

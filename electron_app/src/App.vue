@@ -10,6 +10,9 @@ export default {
   components: {
     NavigationDrawer
   },
+  created(){
+    this.$store.dispatch('authentication/checkAuthenticated');
+  },
   computed: {
     authenticated() {
       return this.$store.getters['authentication/get_authenticated'];
@@ -18,7 +21,7 @@ export default {
   watch: {
     authenticated(){
       if(!this.authenticated){
-        this.$router.replace({name: 'Auth-login'});
+        this.$router.replace({name: 'Auth'});
       }
     }
   }
@@ -27,7 +30,9 @@ export default {
 
 
 
-<style>
+<style lang="scss">
+
+// @import './assets/scss/custom.css';
 /* @import '../node_modules/bootstrap/dist/css/bootstrap.css';
 @import '../node_modules/bootstrap-vue/dist/bootstrap-vue.css'; */
 #app {
@@ -36,5 +41,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+body {
+  background-color: var(--white);
 }
 </style>

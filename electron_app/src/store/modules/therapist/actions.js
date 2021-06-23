@@ -1,45 +1,124 @@
 import { HTTP } from "@/plugins/axios";
+import { uploadMedia } from "@/plugins/firebase";
 
-const saveData = ({ commit }, payload) => {// eslint-disable-line
-  let data = mapData(payload);
-  (data.pose = "test"), (data.target = 1);
-  HTTP.post("data", data).then((response) => console.log(response));
+const saveData = ({ commit }, payload) => {   // eslint-disable-line
+  let data = stringValuesToIntegers(mapData(payload));
+
+  return HTTP.post("data", data).then((response) =>{
+    return response}).catch((response) => response);
 };
 
-function mapData(data) {
-  let pose = data[0].pose;
+const getPoseNames = (context) => {
+  return HTTP.get(context.rootGetters["api/GET_POSE_NAMES_URL"]).then((response)=>context.commit("SET_POSE_NAMES", response.data))
+}
+
+function stringValuesToIntegers(obj){
+  const res = {}
+  for (const key in obj) {
+    const parsed = parseInt(obj[key], 10);
+    res[key] = isNaN(parsed) ? obj[key] : parsed;
+  }
+  return res;
+}
+function mapData(poses) { 
+  // // console.log(poses);
+  let data = poses[0].keypoints;
+  // // console.log(data);
+  const nose = data.find((e) => e.name == "nose");
+  const leftEye = data.find((e) => e.name == "left_eye");
+  const rightEye = data.find((e) => e.name == "right_eye");
+  const leftShoulder = data.find((e) => e.name == "left_shoulder");
+  const rightShoulder = data.find((e) => e.name == "right_shoulder");
+  const leftElbow = data.find((e) => e.name == "left_elbow");
+  const rightElbow = data.find((e) => e.name == "right_elbow");
+  const leftWrist = data.find((e) => e.name == "left_wrist");
+  const rightWrist = data.find((e) => e.name == "right_wrist");
+  const leftHip = data.find((e) => e.name == "left_hip");
+  const rightHip = data.find((e) => e.name == "right_hip");
+  const leftKnee = data.find((e) => e.name == "left_knee");
+  const rightKnee = data.find((e) => e.name == "right_knee");
+  const leftAnkle = data.find((e) => e.name == "left_ankle");
+  const rightAnkle = data.find((e) => e.name == "right_ankle");
+
   return {
-    noseX: pose.nose.x,
-    noseY: pose.nose.y,
-    leftEyeX: pose.leftEye.x,
-    leftEyeY: pose.leftEye.y,
-    rightEyeX: pose.rightEye.x,
-    rightEyeY: pose.rightEye.y,
-    leftShoulderX: pose.leftShoulder.x,
-    leftShoulderY: pose.leftShoulder.y,
-    rightShoulderX: pose.rightShoulder.x,
-    rightShoulderY: pose.rightShoulder.y,
-    leftElbowX: pose.leftElbow.x,
-    leftElbowY: pose.leftElbow.y,
-    leftWristX: pose.leftWrist.x,
-    leftWristY: pose.leftWrist.y,
-    rightWristX: pose.rightWrist.x,
-    rightWristY: pose.rightWrist.y,
-    leftHipX: pose.leftHip.x,
-    leftHipY: pose.leftHip.y,
-    rightHipX: pose.rightHip.x,
-    rightHipY: pose.rightHip.y,
-    leftKneeX: pose.leftKnee.x,
-    leftKneeY: pose.leftKnee.y,
-    rightKneeX: pose.rightKnee.x,
-    rightKneeY: pose.rightKnee.y,
-    leftAnkleX: pose.leftAnkle.x,
-    leftAnkleY: pose.leftAnkle.y,
-    rightAnkleX: pose.rightAnkle.x,
-    rightAnkleY: pose.rightAnkle.y,
+    pose: poses.pose,
+    noseX: nose.x,
+    noseY: nose.y,
+    leftEyeX: leftEye.x,
+    leftEyeY: leftEye.y,
+    rightEyeX: rightEye.x,
+    rightEyeY: rightEye.y,
+    leftShoulderX: leftShoulder.x,
+    leftShoulderY: leftShoulder.y,
+    rightShoulderX: rightShoulder.x,
+    rightShoulderY: rightShoulder.y,
+    leftElbowX: leftElbow.x,
+    leftElbowY: leftElbow.y,
+    rightElbowX: rightElbow.x,
+    rightElbowY: rightElbow.y,
+    leftWristX: leftWrist.x,
+    leftWristY: leftWrist.y,
+    rightWristX: rightWrist.x,
+    rightWristY: rightWrist.y,
+    leftHipX: leftHip.x,
+    leftHipY: leftHip.y,
+    rightHipX: rightHip.x,
+    rightHipY: rightHip.y,
+    leftKneeX: leftKnee.x,
+    leftKneeY: leftKnee.y,
+    rightKneeX: rightKnee.x,
+    rightKneeY: rightKnee.y,
+    leftAnkleX: leftAnkle.x,
+    leftAnkleY: leftAnkle.y,
+    rightAnkleX: rightAnkle.x,
+    rightAnkleY: rightAnkle.y,
   };
 }
 
+function prepareData(context, data) { // eslint-disable-line
+  const d = stringValuesToIntegers(mapData(data));
+  delete d.target;
+  delete d.pose;
+  return scale(Object.values(d));
+}
+
+function scale(data) {
+  let scaled_data = []
+  data.forEach(el => {
+    scaled_data.push(el / 1280);
+  });
+
+  return scaled_data;
+}
+
+const createMedia = 
+  async ({ commit }, payload) => { // eslint-disable-line no-unused-vars
+  let file = payload.file;
+  let extension = file.name.split(".").pop();
+  let type = payload.type;
+  let url = await uploadMedia({
+    media: file,
+    extension: extension,
+    type: type,
+  });
+
+  let data = {
+    type: payload.type,
+    title: payload.title,
+    url: url,
+  };
+  let result = await HTTP.post("admin/media/", data, {
+    headers: {
+      Authorization: `Bearer ${localStorage.token}`,
+    },
+  });
+
+  return result;
+};
+
 export default {
   saveData,
+  prepareData,
+  createMedia,
+  getPoseNames
 };

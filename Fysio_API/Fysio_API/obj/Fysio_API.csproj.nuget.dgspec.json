@@ -1,26 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Programming\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj": {}
+    "C:\\Users\\QVerh\\Documents\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj": {}
   },
   "projects": {
-    "C:\\Programming\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj": {
+    "C:\\Users\\QVerh\\Documents\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Programming\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj",
+        "projectUniqueName": "C:\\Users\\QVerh\\Documents\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj",
         "projectName": "Fysio_API",
-        "projectPath": "C:\\Programming\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj",
-        "packagesPath": "C:\\Users\\maxva_dv8oke8\\.nuget\\packages\\",
-        "outputPath": "C:\\Programming\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\obj\\",
+        "projectPath": "C:\\Users\\QVerh\\Documents\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\Fysio_API.csproj",
+        "packagesPath": "C:\\Users\\QVerh\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\QVerh\\Documents\\GitHub\\AI_Minor\\Fysio_API\\Fysio_API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\maxva_dv8oke8\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\QVerh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -130,7 +128,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

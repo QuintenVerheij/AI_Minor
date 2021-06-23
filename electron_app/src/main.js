@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import 'es6-promise/auto'
-import { BootstrapVue } from 'bootstrap-vue'
+import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import App from './App.vue'
 import Vuex from 'vuex'
 import axios from 'axios'
@@ -13,6 +13,8 @@ Vue.prototype.$http = axios
 Vue.use(Vuex)
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
+Vue.use(BootstrapVueIcons)
+
 
 new Vue({
   el: '#app',

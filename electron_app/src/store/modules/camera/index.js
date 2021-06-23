@@ -9,7 +9,7 @@ import mutations from './mutations';
 Vue.use(Vuex);
 
 export default {
-  namespaced: true,
+  namespaced: true, 
   state,
   actions,
   mutations,

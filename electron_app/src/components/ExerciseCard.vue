@@ -1,13 +1,19 @@
 <template>
      <b-card
-    :title="exercise.title"
-    :img-src="exercise.image_url"
+     width="400"
+    :img-src="ce.exercise.image_url"
     img-alt="Image"
     img-top
+    :shadow="true"
     tag="article"
-    style="max-width: 20rem;"
-    class="mb-2"
+    style="min-width: 18rem; width: 18rem"
+    class="mb-2 custom-background border-0"
     >
+    <b-card-title>
+          <div class="d-flex flex-row font-weight-semi-bold">
+        {{ce.exercise.title}}
+         </div>
+    </b-card-title>
     <div class="d-flex flex-row-reverse">
         <b-button @click=goToExercise variant="primary">Oefenen</b-button>
     </div>
@@ -16,14 +22,21 @@
 <script>
 export default {
     props: {
-        exercise: Object
+        ce: Object
     },
     methods: {
         goToExercise(){
             this.$router.push({name: 'Exercise', params: {
-                id: this.exercise.id
+                id: this.ce.exercise.id
             } })
         }
     }
 }
 </script>
+<style scoped>
+.card-body {
+    background-color: white;
+    border: 1px solid #f4f4f4;
+    border-radius: 5px;
+}
+</style>
