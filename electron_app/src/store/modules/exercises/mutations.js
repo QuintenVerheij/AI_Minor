@@ -24,7 +24,13 @@ const SET_EXERCISES = (state, value) => {
 const SET_EXERCISE = (state, value) => {
     state.exercise = state.exercises.find(ex => ex.exercise.id == value);
 }
+
+const SET_LAST_WEEK_RESULT = (state,value) => {
+    state.lastweekresult = value;
+}
+
 export default {
     SET_EXERCISES,
-    SET_EXERCISE
+    SET_EXERCISE,
+    SET_LAST_WEEK_RESULT
 }

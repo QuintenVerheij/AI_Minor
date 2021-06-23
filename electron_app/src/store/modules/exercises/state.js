@@ -15,5 +15,6 @@ export default {
     //     'score': number,
     //     'finishingDate':datetime
     // }
-    exercise: {}
+    exercise: {},
+    lastweekresult: Object
 }

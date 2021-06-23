@@ -4,7 +4,6 @@ import { Bar } from "vue-chartjs";
 export default {
   extends: Bar,
   props: {
-    ce: Object,
     label: {
       type: String
     },
@@ -24,8 +23,6 @@ export default {
     }
   },
   mounted() {
-    this.finishdates = this.$props.ce.logs.map(el => el.finishDate)
-
     const {
       borderColor,
       pointBorderColor,
@@ -35,7 +32,7 @@ export default {
 
     this.renderChart(
       {
-        labels: ["MA","DI","WO","DO","VR","ZA","ZO"],
+        labels: ["MA","DI","WO","DO","VR","gisteren","vandaag"],
         datasets: [
           {
             label: 'test',

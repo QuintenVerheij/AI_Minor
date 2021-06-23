@@ -6,12 +6,11 @@
       </div>
     </div>
 
-    <div class="row mt-5" v-for="ce in exercises" :key="ce">
+    <div class="row mt-5" v-for="(value, name) in lastWeekResult" :key="name">
       <div class="col" >
-        <h2 class="text-center">{{ce.exercise.title}}</h2>
+        <h2 class="text-center">{{name}}</h2>
         <excercise-chart 
-          :ce="ce"
-          :chartData="weeklyRepetitionsCompleted"
+          :chartData="value"
           :options="chartOptions"
           :chartColors="positiveChartColors"
           label="Positive"
@@ -28,14 +27,22 @@ export default {
   components: {
     ExcerciseChart
   },
+  created() {
+    this.$store.dispatch('exercises/lastWeekResult')
+    this.$store.dispatch('authentication/getClientData')
+    this.$store.dispatch('exercises/getExercises');
+    this.$store.dispatch('authentication/getUserInfo');
+  },
   computed: {
     user_data(){
       return this.$store.getters["authentication/get_user/"]
     },
     exercises(){
-      return this.$store.getters['exercises/get_exercises'];
+      return this.$store.getters['exercises/get_exercises']
     },
-
+    lastWeekResult(){
+    return this.$store.getters['exercises/get_last_week_result']
+    }
   },
   data() {
     return {
@@ -51,11 +58,6 @@ export default {
         maintainAspectRatio: false
       }
     };
-  },
-    created(){
-    this.$store.dispatch('authentication/getClientData')
-    this.$store.dispatch('exercises/getExercises');
-    this.$store.dispatch('authentication/getUserInfo');
-    }
+  }
 };
 </script>

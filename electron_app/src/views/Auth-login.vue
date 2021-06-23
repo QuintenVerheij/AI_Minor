@@ -53,6 +53,9 @@ export default {
     login() {
       console.log(process.env.NODE_ENV)
       this.loading = true;
+      console.log('sdfsd')
+      this.$store.dispatch('exercises/lastWeekResult'),
+      console.log('hii')
       this.$store.dispatch('authentication/login',
         this.login_data
       ).then(()=>{

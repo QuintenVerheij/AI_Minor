@@ -36,6 +36,10 @@ const GET_LOGIN_EXTENSION = (state) => {
         return state.endpoints.auth.login.extension
 }
 
+const GET_PAST_WEEK_EXTENSION = (state) => {
+        return state.endpoints.client.pastweek.extension
+}
+
 export default {
-    GET_API_URL, GET_LOGIN_ENDPOINT, GET_REGISTER_ENDPOINT, GET_LOGIN_EXTENSION, GET_MODEL_URL, GET_EXERCISE_URL, GET_CLIENT_URL
+    GET_API_URL, GET_LOGIN_ENDPOINT, GET_REGISTER_ENDPOINT, GET_LOGIN_EXTENSION, GET_MODEL_URL, GET_EXERCISE_URL, GET_CLIENT_URL, GET_PAST_WEEK_EXTENSION
 }
