@@ -1,9 +1,10 @@
 <script>
-import { Line } from "vue-chartjs";
+import { Bar } from "vue-chartjs";
 
 export default {
-  extends: Line,
+  extends: Bar,
   props: {
+    ce: Object,
     label: {
       type: String
     },
@@ -17,9 +18,13 @@ export default {
       type: Object
     }
   },
+  data() {
+    return {
+      finishdates : {}
+    }
+  },
   mounted() {
-    const dates = this.chartData.map(d => d.date).reverse();
-    const totals = this.chartData.map(d => d.total).reverse();
+    this.finishdates = this.$props.ce.logs.map(el => el.finishDate)
 
     const {
       borderColor,
@@ -30,11 +35,11 @@ export default {
 
     this.renderChart(
       {
-        labels: dates,
+        labels: ["MA","DI","WO","DO","VR","ZA","ZO"],
         datasets: [
           {
-            label: this.label,
-            data: totals,
+            label: 'test',
+            data: [this.ce.logs.length],
             borderColor: borderColor,
             pointBorderColor: pointBorderColor,
             pointBackgroundColor: pointBackgroundColor,
