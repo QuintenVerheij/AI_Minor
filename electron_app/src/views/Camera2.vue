@@ -57,28 +57,28 @@ export default {
   methods: {
     async getPoses() {
       const poses = await this.detector.estimatePoses(this.video);
-      // console.log('poses: ',this.poses);
-      // console.log(this.detector);
+      // // console.log('poses: ',this.poses);
+      // // console.log(this.detector);
       this.poses = poses;
       this.drawCameraIntoCanvas();
-    //   console.log(this.poses[0]);
+    //   // console.log(this.poses[0]);
     },
     async buildCapture() {
       let devices = await navigator.mediaDevices.enumerateDevices();
       devices = devices.filter((v) => v.kind == "videoinput");
-      console.log("Found " + devices.length + " video devices");
+      // console.log("Found " + devices.length + " video devices");
       let lastDevice = devices[devices.length - 1];
       // devices= devices.filter( v => (v.label.indexOf("back")>0));
       let device = null;
       if (devices.length > 0) {
-        console.log("Taking a 'back' camera");
+        // console.log("Taking a 'back' camera");
         device = devices[0];
       } else {
-        console.log("Taking last camera");
+        // console.log("Taking last camera");
         device = lastDevice;
       }
       if (!device) {
-        console.log("No devices!");
+        // console.log("No devices!");
         return;
       }
       let constraints = {
@@ -97,7 +97,7 @@ export default {
         this.video.srcObject = URL.createObjectURL(stream);
       }
       //info.innerHTML+= "<pre>DONE</pre>";
-      console.log("DONE");
+      // console.log("DONE");
       //   this.$store.commit("attachStream", this.$el);
       //   this.$store.commit("setLoaded", true);
     },
@@ -113,7 +113,7 @@ export default {
     },
     // A function to draw ellipses over the detected keypoints
     drawKeypoints() {
-      // console.log(this.poses)
+      // // console.log(this.poses)
       this.ctx.lineWidth = 1;
       // Loop through all the poses detected
       for (let i = 0; i < this.poses.length; i += 1) {
@@ -210,7 +210,7 @@ export default {
           partB: "left_ankle",
         },
       ]
-      // console.log(lines);
+      // // console.log(lines);
       this.ctx.lineWidth = 10;
       
       // Loop through all the skeletons detected

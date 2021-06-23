@@ -8,6 +8,10 @@ const saveData = ({ commit }, payload) => {   // eslint-disable-line
     return response}).catch((response) => response);
 };
 
+const getPoseNames = (context) => {
+  return HTTP.get(context.rootGetters["api/GET_POSE_NAMES_URL"]).then((response)=>context.commit("SET_POSE_NAMES", response.data))
+}
+
 function stringValuesToIntegers(obj){
   const res = {}
   for (const key in obj) {
@@ -17,9 +21,9 @@ function stringValuesToIntegers(obj){
   return res;
 }
 function mapData(poses) { 
-  console.log(poses);
+  // // console.log(poses);
   let data = poses[0].keypoints;
-  console.log(data);
+  // // console.log(data);
   const nose = data.find((e) => e.name == "nose");
   const leftEye = data.find((e) => e.name == "left_eye");
   const rightEye = data.find((e) => e.name == "right_eye");
@@ -72,10 +76,19 @@ function mapData(poses) {
 }
 
 function prepareData(context, data) { // eslint-disable-line
-  const d = mapData(data);
+  const d = stringValuesToIntegers(mapData(data));
   delete d.target;
   delete d.pose;
-  return Object.values(d);
+  return scale(Object.values(d));
+}
+
+function scale(data) {
+  let scaled_data = []
+  data.forEach(el => {
+    scaled_data.push(el / 1280);
+  });
+
+  return scaled_data;
 }
 
 const createMedia = 
@@ -107,4 +120,5 @@ export default {
   saveData,
   prepareData,
   createMedia,
+  getPoseNames
 };

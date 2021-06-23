@@ -46,7 +46,7 @@
 <script>
 export default {
   created() {
-    console.log(this.$store.getters["api/GET_REGISTER_ENDPOINT"]);
+    // console.log(this.$store.getters["api/GET_REGISTER_ENDPOINT"]);
   },
   data() {
     return {
@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     register(){
-      console.log('register');
+      // console.log('register');
       this.$store.dispatch('authentication/register', this.register_data).then(()=>this.$router.go(-1));
     },
     show_errors: function(errors) {

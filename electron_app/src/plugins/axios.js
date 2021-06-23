@@ -7,7 +7,7 @@ export let HTTP = axios.create({
 
 HTTP.interceptors.request.use(function (config) {
   const token = localStorage.getItem('token');
-  console.log(token)
+  // console.log(token)
   config.headers.common['Authorization'] =  token ? `Bearer ${token}` : '';
   return config;
 });

@@ -168,7 +168,7 @@ export default {
       this.arrRecovered.push({ date, total: recovered });
       this.arrDeaths.push({ date, total: death });
 
-      //console.log(this.arrPositive)
+      //// console.log(this.arrPositive)
     });
   }
 };

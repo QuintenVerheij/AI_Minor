@@ -34,6 +34,7 @@ const GET_ROLE_ENDPOINT = (state, getters, rootState, rootGetters) => {
         }
 }
 
+const GET_POSE_NAMES_URL = (state, getters, rootState, rootGetters) => GET_API_URL(state, getters, rootState, rootGetters) + "/" + state.endpoints.exercise.pose_names.extension
 const GET_MODEL_URL = (state, getters, rootState, rootGetters) => GET_API_URL(state, getters, rootState, rootGetters) + "/" + state.endpoints.file.model.extension
 
 const GET_EXERCISE_URL = (state) => {
@@ -51,5 +52,5 @@ const GET_ROLE_EXTENSION = (state) => {
 }
 
 export default {
-    GET_API_URL, GET_LOGIN_ENDPOINT, GET_REGISTER_ENDPOINT, GET_LOGIN_EXTENSION, GET_MODEL_URL, GET_EXERCISE_URL, GET_CLIENT_URL, GET_ROLE_ENDPOINT, GET_ROLE_EXTENSION
+    GET_API_URL, GET_LOGIN_ENDPOINT, GET_REGISTER_ENDPOINT, GET_LOGIN_EXTENSION, GET_MODEL_URL, GET_CLIENT_URL, GET_POSE_NAMES_URL, GET_ROLE_EXTENSION
 }
