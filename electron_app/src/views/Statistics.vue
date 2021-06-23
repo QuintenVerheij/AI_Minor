@@ -147,8 +147,7 @@ export default {
   },
   async created() {
     const { data } = await axios.get("https://covidtracking.com/api/us/daily");
-  this.$store.dispatch('authentication/getClientData')
-
+    this.$store.dispatch('authentication/getClientData')
     //return HTTP.post(context.rootGetters["api/GET_LOGIN_EXTENSION"], payload).then((response)=>{
 
     data.forEach(d => {

@@ -1,7 +1,7 @@
 <template>
      <b-card
      width="400"
-    :img-src="exercise.image_url"
+    :img-src="ce.exercise.image_url"
     img-alt="Image"
     img-top
     :shadow="true"
@@ -11,7 +11,7 @@
     >
     <b-card-title>
           <div class="d-flex flex-row font-weight-semi-bold">
-        {{exercise.title}}
+        {{ce.exercise.title}}
          </div>
     </b-card-title>
     <div class="d-flex flex-row-reverse">
@@ -22,12 +22,12 @@
 <script>
 export default {
     props: {
-        exercise: Object
+        ce: Object
     },
     methods: {
         goToExercise(){
             this.$router.push({name: 'Exercise', params: {
-                id: this.exercise.id
+                id: this.ce.exercise.id
             } })
         }
     }

@@ -54,16 +54,7 @@ import * as tensor from "@tensorflow/tfjs";
 
 export default {
   created() {
-     this.event_listener = window.addEventListener("keydown", (e) => {
-      if (e.key == "p") {
-        setTimeout(
-          this.takePicture, 10000
-        );
-        // this.saveData();
-      }
-    });
-    this.$store.dispatch("exercises/getExercise", this.$route.params.id);
-    this.$store.dispatch("therapist/getPoseNames");
+    this.$store.dispatch("exercises/setExercise", this.$route.params.id);
   },
   computed: {
     user() {
