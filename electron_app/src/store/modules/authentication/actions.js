@@ -30,6 +30,10 @@ const login = (context, payload) => {
     localStorage.userId = response.data.userId;
 
     context.commit('SET_AUTHENTICATED', true);
+    HTTP.get(context.rootGetters["api/GET_ROLE_EXTENSION"]).then((res) => {
+      console.log(res);
+      context.commit('SET_ROLES', response.data.roles)
+    })
     return true;
   }
   ).catch(() => {

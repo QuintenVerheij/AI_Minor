@@ -24,6 +24,16 @@ const GET_REGISTER_ENDPOINT = (state, getters, rootState, rootGetters) => {
         }
 }
 
+const GET_ROLE_ENDPOINT = (state, getters, rootState, rootGetters) => {
+        return {
+                url: GET_API_URL(state, getters, rootState, rootGetters) + "/" + state.endpoints.auth.role.extension, 
+                method: state.endpoints.auth.role.method,
+                headers: {
+                        'accept': '*/*'
+                }
+        }
+}
+
 const GET_MODEL_URL = (state, getters, rootState, rootGetters) => GET_API_URL(state, getters, rootState, rootGetters) + "/" + state.endpoints.file.model.extension
 
 const GET_EXERCISE_URL = (state) => {
@@ -36,6 +46,10 @@ const GET_LOGIN_EXTENSION = (state) => {
         return state.endpoints.auth.login.extension
 }
 
+const GET_ROLE_EXTENSION = (state) => {
+        return state.endpoints.auth.role.extension
+}
+
 export default {
-    GET_API_URL, GET_LOGIN_ENDPOINT, GET_REGISTER_ENDPOINT, GET_LOGIN_EXTENSION, GET_MODEL_URL, GET_EXERCISE_URL, GET_CLIENT_URL
+    GET_API_URL, GET_LOGIN_ENDPOINT, GET_REGISTER_ENDPOINT, GET_LOGIN_EXTENSION, GET_MODEL_URL, GET_EXERCISE_URL, GET_CLIENT_URL, GET_ROLE_ENDPOINT, GET_ROLE_EXTENSION
 }

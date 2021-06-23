@@ -5,7 +5,8 @@ export default {
     endpoints: {
         auth: {
             login: {extension: "auth/login", method: "POST"},
-            register: {extension: "auth/register", method: "POST"}
+            register: {extension: "auth/register", method: "POST"},
+            role: {extension: "auth/role", method:"GET"}
         },
         file:{
             model: {extension: "File/Model", method: "GET"}
@@ -16,5 +17,6 @@ export default {
         client: {
             extension: "api/client", method: "GET"
         }
+
     }
 }
