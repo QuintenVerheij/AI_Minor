@@ -32,7 +32,7 @@ const login = (context, payload) => {
     context.commit('SET_AUTHENTICATED', true);
     HTTP.get(context.rootGetters["api/GET_ROLE_EXTENSION"]).then((res) => {
       console.log(res);
-      context.commit('SET_ROLES', response.data.roles)
+      context.commit('SET_ROLES', res.data.role)
     })
     return true;
   }

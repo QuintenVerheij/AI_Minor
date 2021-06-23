@@ -29,7 +29,6 @@
           :active="checkActive(item)"
           :disabled="checkActive(item)"
           @click="$router.push({ name: item.route })"
-          
           >
           <div class="ml-4">
             {{item.text}}
@@ -53,11 +52,17 @@ export default {
   computed: {
     user() {
       return this.$store.getters['authentication/get_user']
+    },
+    role() {
+      return this.$store.getters["authentication/get_roles"]
+    },
+    navItems(){
+      return this.navItems_internal.filter(item => item.role == "all" || this.role.includes(item.role))
     }
   },
   data() {
     return {
-      navItems: [
+      navItems_internal: [
         {
           text: "Overzicht",
           route: "Home",
@@ -79,9 +84,14 @@ export default {
           role: 'all'
         },
         {
+          text: "Oefening Toevoegen",
+          route: "Add_Exercise",
+          role: 'Therapist'
+        },
+        {
           text: "Admin",
           route: "Admin",
-          role: 'admin'
+          role: 'all'
         },
       ],
     };
@@ -93,20 +103,6 @@ export default {
       signOut(){
           this.$store.dispatch('authentication/signOut');
       },
-      checkRole(role){
-        if(role === 'all'){
-          return true;
-        }
-        if(this.role === 'admin' || this.role === role){
-          return true;
-        }
-        if(this.role === 'therapist'){
-          if(role === 'therapist') {
-            return true
-          }
-        }
-        return false;
-      }
   }
 };
 </script>

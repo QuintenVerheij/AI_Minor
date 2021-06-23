@@ -161,7 +161,7 @@ body {
 }
 
 .box-form p {
-  line-height: 50%;
+  line-height: 0.8;
 }
 
 .form-field input {
