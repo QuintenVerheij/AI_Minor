@@ -8,16 +8,16 @@
       animated
       variant="success"
     ></b-progress>
-    <b-row>
-      <b-col cols="3" class="bg-dark p-0 mx-3">
-        <div class="w-100 h-100">
+    <b-row class="bg-custom">
+      <b-col cols="3" class="bg-dark p-0 d">
+          <h3 class="text-white py-4">{{formatName(exercise.title)}}</h3>
           <div
             class="w-100 py-3 px-3"
             v-for="(pose, index) in exercisePoses"
             v-bind:class="{ 'bg-custom': index == poseIndex }"
             v-bind:key="index"  
           >
-            <h4 class="text-white  text-left">
+            <h5 class="text-white  text-left">
               <b-icon
                 v-if="index < poseIndex"
                 class="mr-2"
@@ -25,9 +25,9 @@
                 variant="success"
               ></b-icon
               >{{ formatName(pose) }}
-            </h4>
+            </h5>
           </div>
-        </div>
+       
       </b-col>
       <b-col class="pl-0">
         <div>
@@ -199,7 +199,7 @@ export default {
       // // console.log(output);
       this.ourModelOutPut = (await output.array())[0];
       // // console.log(this.ourModelOutPut);
-      console.log(this.poseNames[this.poseDetectedIndex], " score: ", this.ourModelOutPut[this.poseDetectedIndex]);
+      // console.log(this.poseNames[this.poseDetectedIndex], " score: ", this.ourModelOutPut[this.poseDetectedIndex]);
       this.poseDetectedIndex = this.ourModelOutPut.reduce(
         (iMax, x, i, arr) => (x > arr[iMax] ? i : iMax),
         0
@@ -406,9 +406,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
+
 ul {
   list-style-type: none;
   padding: 0;
