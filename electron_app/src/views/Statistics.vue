@@ -10,7 +10,6 @@
       <div class="col" >
         <h2 class="text-center">{{name}} {{value}}</h2>
         <excercise-chart 
-          :chartData="value"
           :options="chartOptions"
           :chartColors="positiveChartColors"
           label="Positive"
@@ -41,7 +40,7 @@ export default {
       return this.$store.getters['exercises/get_exercises']
     },
     lastWeekResult(){
-    return this.$store.getters['exercises/get_last_week_result']
+      return this.$store.getters['exercises/get_last_week_result']
     }
   },
   data() {
