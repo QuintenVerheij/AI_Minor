@@ -49,21 +49,20 @@ const getUserInfo = (context) => {
 }
 
 const register = (context, payload) => {
-  console.log(
-    'endpoint', context.rootGetters["api/GET_REGISTER_ENDPOINT"]);
-  return HTTP.post(context.rootGetters["api/GET_REGISTER_ENDPOINT"], payload).then((response) => {
+  return HTTP.post(context.rootGetters["api/GET_REGISTER_EXTENSION"], payload).then((response) => {
     console.log(response)
     return true;
   }
   ).catch((e) => {
-    console.log(e)
-    return false;
+    console.log(e.response)
+    throw e.response
   })
 }
 
 const signOut = ({ commit }) => {
   if (localStorage.token) {
     localStorage.removeItem('token');
+    sessionStorage.clear();
     commit('SET_AUTHENTICATED', false);
   }
 }
