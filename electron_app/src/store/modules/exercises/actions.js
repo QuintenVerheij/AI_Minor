@@ -37,7 +37,7 @@ const setExercise = (context, id) => {
 }
 
 const getPoseNames = (context) => {
-  HTTP.get(context.rootGetters["api/GET_POSE_NAME_EXTENSION"]).then((response) => {
+  HTTP.get(context.rootGetters["api/GET_POSE_NAMES_EXTENSION"]).then((response) => {
     console.log(response)
     context.commit('SET_POSE_NAMES', response.data)
   }

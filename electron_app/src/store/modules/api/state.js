@@ -19,6 +19,9 @@ export default {
         },
         exercise: {
             pose_names: {extension: "api/exercise/Poses", method: "GET"}, 
+        },
+        therapist: {
+            upload_file: {extension: "api/therapist/uploadFile", method:"POST"},
         }
 
     }
