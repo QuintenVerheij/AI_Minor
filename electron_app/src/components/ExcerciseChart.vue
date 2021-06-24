@@ -30,10 +30,10 @@ export default {
         );
       }
       return {
-        labels: [days[6], days[5], days[4], days[3], days[2], days[1], days[0]],
+        labels: ["Vandaag", "Gisteren", days[4], days[3], days[2], days[1], days[0]],
         datasets: [
           {
-            label: "test",
+            label: "Voltooide Exercises",
             data: this.dataSet,
 
             pointBackgroundColor: this.chartColors.pointBackgroundColor,
@@ -42,12 +42,6 @@ export default {
         ],
       };
     },
-  },
-
-  data() {
-    return {
-      finishdates: {},
-    };
   },
   mounted() {
     this.renderChart(this.chartData, this.options);
