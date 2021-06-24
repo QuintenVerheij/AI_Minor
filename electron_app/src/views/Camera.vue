@@ -9,7 +9,7 @@
       variant="success"
     ></b-progress>
     <b-row>
-      <b-col cols="3" class="bg-dark p-0">
+      <b-col cols="3" class="bg-dark p-0 mx-3">
         <div class="w-100 h-100">
           <div
             class="w-100 py-3 px-3"
@@ -24,7 +24,7 @@
                 icon="check-circle"
                 variant="success"
               ></b-icon
-              >{{ pose }}
+              >{{ formatName(pose) }}
             </h4>
           </div>
         </div>
@@ -43,7 +43,20 @@
           ></video>
         </div>
       </b-col>
+      <div v-show="devTools" class="position-absolute top-0 w-40 end-0 bg-gray-transparent p-4 ">
+       <div class="w-100 pt-3" v-for="(output, index) in ourModelOutPut" v-bind:key="index">
+    <div class="text-left text-white">{{formatName(poseNames[index])}}</div>
+    <b-progress
+      :value="output"
+      :max="1"
+      show-progress
+      animated
+      variant="success"
+    ></b-progress>
+    </div>
+      </div>
     </b-row>
+   
   </b-container>
  </b-overlay>
 </template>
@@ -56,7 +69,14 @@ import * as tensor from "@tensorflow/tfjs";
 
 export default {
   created() {
-    this.$store.dispatch("exercises/setExercise", this.$route.params.id);
+    this.$store.dispatch('exercises/getExercises');
+    this.$store.dispatch('therapist/getPoseNames');
+    this.keyInputListener = this.event_listener = window.addEventListener("keydown", (e) => {
+      if (e.key == "d") {
+        this.toggleDevTools();
+        // this.saveData();
+      }
+    });
   },
   computed: {
     user() {
@@ -64,7 +84,11 @@ export default {
     },
     exercise() {
       let exercises = this.$store.getters["exercises/get_exercises"];
-      return exercises.find((el) => el.id == this.$route.params.id);
+      let index = exercises.findIndex((el) => el.exercise.id == this.$route.params.id);
+      if(index > -1){
+        return exercises[index].exercise;
+      }
+      return {}
     },
     poseNames() {
       return this.$store.getters["therapist/get_pose_names"];
@@ -75,7 +99,7 @@ export default {
   },
   data() {
     return {
-      // LOCAL STATE GOES HERE
+      looping: true,
       posenet: {},
       ourModel: {},
       ourModelOutPut: "",
@@ -90,6 +114,8 @@ export default {
       pose_saved: {},
       poseDetectedIndex: 0,
       poseIndex: 0,
+      devTools: false,
+      keyInputListener: {}
     };
   },
   async mounted() {
@@ -105,37 +131,27 @@ export default {
     this.loaded = true;
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
-    // translate context to center of canvas
     this.ctx.translate(this.canvas.width, 0);
-
-    // flip context horizontally
     this.ctx.scale(-1, 1);
-
-    // this.updateLoop = setInterval(
-    //   function() {
-    //     this.getPoses();
-    //   }.bind(this),
-    //   12
-    // );
-    // // console.log(
-    //   "Fetching model from " +
-    //     "https://fysiomodelstorage.z6.web.core.windows.net/model.json"
-    // );
     this.ourModel = await tensor.loadLayersModel(
       "https://fysiomodelstorage.z6.web.core.windows.net/model.json"
     );
     this.interval = setInterval(this.recognizePose, 100);
-    // console.log(this.ourModel.summary());
     this.loop();
   },
-  beforeUnmount() {
+  beforeDestroy() {
+    this.looping = false;
     this.video.srcObject.getTracks().forEach(function(track) {
       track.stop();
       this.video = null;
       clearInterval(this.interval);
     });
+    window.removeEventListener(this.keyInputListener);
   },
   methods: {
+    toggleDevTools() {
+      this.devTools = !this.devTools;
+    },
     async takePicture() {
       // let pose = await this.getPoses();
       const prepped_data = await this.$store.dispatch(
@@ -151,7 +167,9 @@ export default {
     },
     loop() {
       this.render();
-      window.requestAnimationFrame(this.loop);
+      if(this.looping){
+        window.requestAnimationFrame(this.loop);
+      }
     },
     renderEstimation(poses) {
       this.drawKeypoints(poses);
@@ -181,18 +199,19 @@ export default {
       // // console.log(output);
       this.ourModelOutPut = (await output.array())[0];
       // // console.log(this.ourModelOutPut);
+      console.log(this.poseNames[this.poseDetectedIndex], " score: ", this.ourModelOutPut[this.poseDetectedIndex]);
       this.poseDetectedIndex = this.ourModelOutPut.reduce(
         (iMax, x, i, arr) => (x > arr[iMax] ? i : iMax),
         0
       );
       // console.log(this.exercise);
-      console.log(
-        "detected: " + this.poseNames[this.poseDetectedIndex],
-        "  wanted: " + this.exercise.poses[this.poseIndex]
-      );
+      // console.log(
+      //   "detected: " + this.poseNames[this.poseDetectedIndex],
+      //   "  wanted: " + this.exercise.poses[this.poseIndex]
+      // );
       if (
         this.poseNames[this.poseDetectedIndex] ===
-        this.exercise.poses[this.poseIndex]
+        this.exercise.poses[this.poseIndex] && this.ourModelOutPut[this.poseDetectedIndex] > 0.5
       ) {
         this.makeToast(
           "voltooid!",
@@ -218,8 +237,8 @@ export default {
           // Only draw an ellipse is the pose probability is bigger than 0.2
           if (keypoint.score > 0.2) {
             this.ctx.beginPath();
-            this.ctx.arc(keypoint.x, keypoint.y, 10, 0, 2 * Math.PI);
-            this.ctx.fillStyle = "#FF3333";
+            this.ctx.arc(keypoint.x, keypoint.y, 5, 0, 2 * Math.PI);
+            this.ctx.fillStyle = "#e43f6f";
             this.ctx.fill();
             this.ctx.stroke();
             this.ctx.closePath();
@@ -300,7 +319,7 @@ export default {
         },
       ];
       // // console.log(lines);
-      this.ctx.lineWidth = 10;
+      this.ctx.lineWidth = 5;
 
       // Loop through all the skeletons detected
       poses.forEach((pose) => {
@@ -309,7 +328,8 @@ export default {
           const partA = keypoints.find((kp) => kp.name == line.partA);
           const partB = keypoints.find((kp) => kp.name == line.partB);
 
-          if (partA.score > 0.4 && partB.score > 0.4) {
+          if (partA.score > 0.3 && partB.score > 0.3) {
+            this.ctx.strokeStyle ="#e43f6f";
             this.ctx.beginPath();
             this.ctx.moveTo(partA.x, partA.y);
             this.ctx.lineTo(partB.x, partB.y);
@@ -325,6 +345,9 @@ export default {
         variant: variant,
         solid: true,
       });
+    },
+    formatName(name){
+      return name.replaceAll('_', ' ').toUpperCase();
     },
     buildCapture: function() {
       // // console.log(this.video);
@@ -404,7 +427,12 @@ a {
   width: fit-content;
   object-fit: cover;
 }
-
+.end-0 {
+  right:0;
+}
+.w-40 {
+  width: 40%;
+}
 .video_overlay {
   position: absolute;
   float: left;
@@ -416,6 +444,10 @@ a {
   box-shadow: 1px 2px rgba(60, 60, 60, 0.9);
   z-index: 100;
   background-color: rgba(192, 192, 192, 0.3);
+}
+
+.bg-gray-transparent {
+   background-color: rgba(0, 0, 0, 0.5);
 }
 /*     */
 .rounded {

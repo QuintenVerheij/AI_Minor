@@ -9,7 +9,8 @@ const SET_EXERCISES = (state, value) => {
                 'id': ce.exercise.exerciseId,
                 'text': ce.exercise.description,
                 'image_url': ce.exercise.photoLink,
-                'video_url': ce.exercise.videoLink
+                'video_url': ce.exercise.videoLink,
+                'poses': ce.exercise.poses
             },
             'weeklyRepetitions': ce.weeklyRepetitions,
             'weeklyRepetitionsCompleted': ce.weeklyRepetitionsCompleted,
