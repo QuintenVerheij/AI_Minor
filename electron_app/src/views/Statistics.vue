@@ -8,7 +8,7 @@
 
     <div class="row mt-5" v-for="(value, name) in lastWeekResult" :key="name">
       <div class="col" >
-        <h2 class="text-center">{{name}}</h2>
+        <h2 class="text-center">{{name}} {{value}}</h2>
         <excercise-chart 
           :chartData="value"
           :options="chartOptions"
