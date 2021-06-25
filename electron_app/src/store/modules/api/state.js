@@ -15,7 +15,7 @@ export default {
             exercise: {extension: "api/client", method: "GET"}
         },
         client: {
-            extension: "api/client", method: "GET"
+            extension: "api/client", method: "GET",
             pastweek : {extension: "api/client/getPastWeekResults", method: "GET"}
         },
         exercise: {
