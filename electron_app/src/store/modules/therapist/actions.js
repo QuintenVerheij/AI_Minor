@@ -10,7 +10,8 @@ const saveData = ({ commit }, payload) => {   // eslint-disable-line
 };
 
 const getPoseNames = (context) => {
-  return HTTP.get(context.rootGetters["api/GET_POSE_NAMES_URL"]).then((response) => context.commit("SET_POSE_NAMES", response.data))
+  console.log('getting pose names')
+  return HTTP.get(context.rootGetters["api/GET_POSE_NAMES_EXTENSION"]).then((response) => context.commit("SET_POSE_NAMES", response.data))
 }
 
 function stringValuesToIntegers(obj) {

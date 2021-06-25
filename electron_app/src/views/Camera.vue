@@ -71,7 +71,7 @@ export default {
   created() {
     this.$store.dispatch('exercises/getExercises');
     this.$store.dispatch('therapist/getPoseNames');
-    this.keyInputListener = this.event_listener = window.addEventListener("keydown", (e) => {
+    this.keyInputListener = window.addEventListener("keydown", (e) => {
       if (e.key == "d") {
         this.toggleDevTools();
         // this.saveData();
