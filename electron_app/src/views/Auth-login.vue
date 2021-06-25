@@ -27,10 +27,10 @@
           <div class="field-signup">
             Not a member? <br>
             <a href="register-client">
-                <button type="button" class="button-client my-auto mx-auto">Signup as Client</button>
+                <button type="button" class="button-client my-auto mx-auto">Sign up as Client</button>
             </a>
             <a href="register-therapist">
-                <button type="button" class="button-therapist my-auto mx-auto">Signup as Therapist</button>
+                <button type="button" class="button-therapist my-auto mx-auto">Sign up as Therapist</button>
             </a>
           </div>
       </div>
@@ -77,7 +77,7 @@ export default {
           this.loading = false;
           this.show_error_message = true;
           if(ex === 400){
-            this.error_message = "E-mail en password komen niet overeen"
+            this.error_message = "Username en password komen niet overeen"
           }
         });
       }
@@ -232,7 +232,7 @@ body {
 
 .button-client,
 .button-therapist {
-  width: 40%;
+  width: 45%;
   height: 40px;
   border: 1px solid;
   background: #e43f6f;

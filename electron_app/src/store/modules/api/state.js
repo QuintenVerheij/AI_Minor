@@ -15,11 +15,16 @@ export default {
             exercise: {extension: "api/client", method: "GET"}
         },
         client: {
-            extension: "api/client", method: "GET"
+            extension: "api/client", method: "GET",
+            pastweek : {extension: "api/client/getPastWeekResults", method: "GET"}
         },
         exercise: {
-            pose_names: {extension: "api/exercise/Poses", method: "GET"}, 
-        }
+            pose_names: {extension: "api/exercise/Poses", method: "GET"},
+            add: {extension: "api/exercise/add", method: "POST"}, 
+        },
+        therapist: {
+            upload_file: {extension: "api/therapist/uploadFile", method:"POST"},
+        },
 
     }
 }

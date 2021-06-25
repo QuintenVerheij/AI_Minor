@@ -3,50 +3,87 @@
     <div>
       <div class="box-center">
         <h1 class="box-title">Signup Form</h1>
-        <div class="box-form">
-          <div class="form-field">
-            <input v-model="register_data.username" type="text" required />
+        <br/>
+        <b-form class="box-form" @submit="register">
+          <b-form-group class="form-field" label="Username" label-for="username-input">
+            <b-form-input id="username-input" v-model="register_data.username" type="text" required />
             <span></span>
-            <label>Username</label>
-          </div>
-          <div class="form-field">
-            <input v-model="register_data.email" type="text" required />
+          </b-form-group>
+          <b-form-group class="form-field" label="E-mail" label-for="email-input">
+            <b-form-input id="email-input" v-model="register_data.email" type="email" required />
             <span></span>
-            <label>Email</label>
-          </div>
-          <div class="form-field">
-            <input v-model="register_data.phoneNumber" type="text" required />
+          </b-form-group>
+          <b-form-group class="form-field" label="Phone number" label-for="phone-input">
+            <b-form-input id="phone-input" v-model="register_data.phoneNumber" type="text" required />
             <span></span>
-            <label>Phonenumber</label>
-          </div>
-          <div class="form-field">
-            <input v-model="register_data.password" type="password" required />
+          </b-form-group>
+          <b-form-group class="form-field" label="Password" label-for="password-input">
+            <b-form-input id="password-input" v-model="register_data.password" type="password" required />
             <span></span>
-            <label>Password</label>
-          </div>
-          <div class="form-field">
-            <input v-model="password_confirm" type="password" required />
+          </b-form-group>
+          <b-form-invalid-feedback :state=validatePassword>
+            <p v-for="info in password_validation_info" v-bind:key="info">{{info}}</p>
+          </b-form-invalid-feedback>
+          <b-form-group class="form-field" label="Confirm password" label-for="password-confirm-input">
+            <b-form-input id="password-confirm-input" v-model="password_confirm" type="password" required />
             <span></span>
-            <label>Confirm Password</label>
-          </div>
+          </b-form-group>
+          <b-form-invalid-feedback :state=validatePasswordsMatch>
+            Passwords do not match
+          </b-form-invalid-feedback>
           <div v-if="show_error_message">
             <pre class="error-message">{{ this.error_message }}</pre>
           </div>
+          <br/>
           <div class="field-login">
-            <button v-on:click="register" class="button-login">Sign up</button>
+            <b-button type="submit" class="button-login">Sign up</b-button>
           </div>
+          <p v-if="register_succesful">Registratie compleet. Naar inlogpagina...</p>
           <div class="field-signup">
             Already have account? <a href="login">Login</a>
           </div>
-        </div>
+        </b-form>
       </div>
     </div>
   </body>
 </template>
 <script>
 export default {
-  created() {
-    // console.log(this.$store.getters["api/GET_REGISTER_ENDPOINT"]);
+  computed: {
+    password_validation_info(){
+      var res = []
+      if (!this.validatePasswordLength){
+        res.push("Password must be at least 8 characters long")
+      }
+      if (!this.validatePasswordDigit){
+        res.push("Password must contain at least 1 digit (0-9)")
+      }
+      if (!this.validatePasswordUpper){
+        res.push("Password must contain at least 1 uppercase letter (A-Z)")
+      }
+      if (!this.validatePasswordNonAlpha){
+        res.push("Password must contain at least 1 non-alphanumeric character (@, !, etc.)")
+      }
+      return res
+    },
+    validatePassword(){
+      return this.validatePasswordLength && this.validatePasswordDigit && this.validatePasswordUpper && this.validatePasswordNonAlpha
+    },
+    validatePasswordLength(){
+      return this.register_data.password.length >= 8 
+    },
+    validatePasswordDigit(){
+      return /\d/.test(this.register_data.password)
+    },
+    validatePasswordUpper(){
+      return /[A-Z]/.test(this.register_data.password)
+    },
+    validatePasswordNonAlpha(){
+      return /[^a-zA-Z0-9]/.test(this.register_data.password)
+    },
+    validatePasswordsMatch() {
+      return this.register_data.password === this.password_confirm
+    }
   },
   data() {
     return {
@@ -59,6 +96,7 @@ export default {
         role: "Client",
       },
       password_confirm: "",
+      register_succesful: false,
       show_error_message: false,
       error_message: "",
       register_response: {
@@ -68,14 +106,28 @@ export default {
     };
   },
   methods: {
-    register(){
+    register(event) {
+      event.preventDefault()
       // console.log('register');
-      this.$store.dispatch('authentication/register', this.register_data).then(()=>this.$router.go(-1));
+        this.$store
+          .dispatch("authentication/register", this.register_data)
+          .then((success) => {
+            if (success) {
+              this.register_succesful = true;
+              setTimeout(() => {
+                this.$router.push({name: "Auth"});
+              }, 2000);
+            }
+          })
+          .catch((error) => this.show_errors(error));
     },
-    show_errors: function(errors) {
-        this.error_message = errors.reduce((acc, curr) => acc + "\n" + curr.description, "")
-        this.show_error_message = true;
-    }
+    show_errors: function (error) {
+      this.error_message = error.data.errors.reduce(
+        (aggr, curr) => aggr + "\n" + curr.description,
+        ""
+      );
+      this.show_error_message = true;
+    },
   },
 };
 </script>
@@ -116,14 +168,20 @@ body {
   box-sizing: border-box;
 }
 
+.invalid-feedback {
+  margin-bottom: 20px;
+}
+
 .box-form .form-field {
   position: relative;
   border-bottom: 2px solid #adadad;
-  margin: 30px 0;
+  margin-top: 35px;
+  margin-bottom: 10px;
 }
 
 .form-field input {
   width: 100%;
+  margin-top: 5px;
   padding: 0 5px;
   height: 40px;
   font-size: 16px;
@@ -134,10 +192,8 @@ body {
 
 .form-field label {
   position: absolute;
-  top: 50%;
-  left: 5px;
+  top: -50%;
   color: #adadad;
-  transform: translateY(-50%);
   font-size: 16px;
   pointer-events: none;
   transition: 0.5s;
@@ -156,7 +212,7 @@ body {
 
 .form-field input:focus ~ label,
 .form-field input:valid ~ label {
-  top: -5px;
+  top: -10px;
   color: #081f5e;
   font-size: 16px;
 }
@@ -206,6 +262,6 @@ body {
 }
 
 .error-message {
-    color: red;
+  color: red;
 }
 </style>

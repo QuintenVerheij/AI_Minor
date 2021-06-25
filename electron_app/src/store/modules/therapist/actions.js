@@ -4,15 +4,16 @@ import { uploadMedia } from "@/plugins/firebase";
 const saveData = ({ commit }, payload) => {   // eslint-disable-line
   let data = stringValuesToIntegers(mapData(payload));
 
-  return HTTP.post("data", data).then((response) =>{
-    return response}).catch((response) => response);
+  return HTTP.post("data", data).then((response) => {
+    return response
+  }).catch((response) => response);
 };
 
 const getPoseNames = (context) => {
-  return HTTP.get(context.rootGetters["api/GET_POSE_NAMES_URL"]).then((response)=>context.commit("SET_POSE_NAMES", response.data))
+  return HTTP.get(context.rootGetters["api/GET_POSE_NAMES_URL"]).then((response) => context.commit("SET_POSE_NAMES", response.data))
 }
 
-function stringValuesToIntegers(obj){
+function stringValuesToIntegers(obj) {
   const res = {}
   for (const key in obj) {
     const parsed = parseInt(obj[key], 10);
@@ -20,7 +21,7 @@ function stringValuesToIntegers(obj){
   }
   return res;
 }
-function mapData(poses) { 
+function mapData(poses) {
   // // console.log(poses);
   let data = poses[0].keypoints;
   // // console.log(data);
@@ -91,30 +92,32 @@ function scale(data) {
   return scaled_data;
 }
 
-const createMedia = 
-  async ({ commit }, payload) => { // eslint-disable-line no-unused-vars
-  let file = payload.file;
-  let extension = file.name.split(".").pop();
-  let type = payload.type;
-  let url = await uploadMedia({
-    media: file,
-    extension: extension,
-    type: type,
-  });
+const createMedia =
+  async (context, payload) => { // eslint-disable-line no-unused-vars
+    let file = payload.file;
+    let extension = file.name.split(".").pop();
+    let type = payload.type;
+    let url = await uploadMedia({
+      media: file,
+      extension: extension,
+      type: type,
+    });
+    console.log(url)
 
-  let data = {
-    type: payload.type,
-    title: payload.title,
-    url: url,
+    // let data = {
+    //   type: payload.type,
+    //   title: payload.title,
+    //   url: url,
+    // };
+
+    HTTP.post(context.rootGetters["api/GET_FILE_UPLOAD_EXTENSION"], {url: url}).then((response) => {
+      console.log(response)
+    }).catch((error) => {
+      console.log(error)
+      return error
+    });
+    return url
   };
-  let result = await HTTP.post("admin/media/", data, {
-    headers: {
-      Authorization: `Bearer ${localStorage.token}`,
-    },
-  });
-
-  return result;
-};
 
 export default {
   saveData,

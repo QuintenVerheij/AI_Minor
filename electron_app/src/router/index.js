@@ -171,12 +171,12 @@ const routes = [
   },
   {
     path: "/add_exercise",
-    name: "AddExercise",
+    name: "Add-exercise",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AddExercise.vue"),
+      import(/* webpackChunkName: "about" */ "../views/Add-exercise.vue"),
 
     meta: {
       requiresAuth: true,
