@@ -119,9 +119,19 @@ const createMedia =
     return url
   };
 
+const getTherapist = async (context) => {
+  HTTP.get(context.rootGetters["api/GET_THERAPIST_EXTENSION"]).then((response) => {
+    console.log(response)
+    context.commit("SET_THERAPIST", response.data)
+  }).catch((error) => {
+    console.log(error)
+  })
+}
+
 export default {
   saveData,
   prepareData,
   createMedia,
-  getPoseNames
+  getPoseNames,
+  getTherapist
 };

@@ -23,6 +23,8 @@ export default {
             add: {extension: "api/exercise/add", method: "POST"}, 
         },
         therapist: {
+            extension: "api/therapist", method: "GET",
+            assign_exercise: {extension: "api/therapist/assignexc", method: "POST"},
             upload_file: {extension: "api/therapist/uploadFile", method:"POST"},
         },
 

@@ -63,6 +63,7 @@ const signOut = ({ commit }) => {
   if (localStorage.token) {
     localStorage.removeItem('token');
     sessionStorage.clear();
+    commit('SET_ROLES', []);
     commit('SET_AUTHENTICATED', false);
   }
 }

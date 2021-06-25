@@ -2579,6 +2579,11 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
+batch-processor@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/batch-processor/-/batch-processor-1.0.0.tgz#75c95c32b748e0850d10c2b168f6bdbe9891ace8"
+  integrity sha1-dclcMrdI4IUNEMKxaPa9vpiRrOg=
+
 batch@0.6.1:
   version "0.6.1"
   resolved "https://registry.npm.taobao.org/batch/download/batch-0.6.1.tgz"
@@ -4530,6 +4535,13 @@ electron@^11.0.0:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
     extract-zip "^1.0.3"
+
+element-resize-detector@^1.2.2:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/element-resize-detector/-/element-resize-detector-1.2.3.tgz#5078d9b99398fe4c589f8c8df94ff99e5d413ff3"
+  integrity sha512-+dhNzUgLpq9ol5tyhoG7YLoXL3ssjfFW+0gpszXPwRU6NjGr1fVHMEAF8fVzIiRJq57Nre0RFeIjJwI8Nh2NmQ==
+  dependencies:
+    batch-processor "1.0.0"
 
 elliptic@^6.5.3:
   version "6.5.4"
@@ -6965,6 +6977,13 @@ lazy-val@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npm.taobao.org/lazy-val/download/lazy-val-1.0.4.tgz"
   integrity sha1-iCY2pyRcLP5uCk47psXWihN+XGU=
+
+less-loader@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/less-loader/-/less-loader-10.0.0.tgz#2c21a204a29a46cba7de4e7d3659efa1e303c7d1"
+  integrity sha512-JjioAkw9qyavL0BzMPUOHJa0a20fh+ipq/MNZH4OkU8qERsCMeZIWRE0FDBIx2O+cFguvY01vHh/lmBA9LyWDg==
+  dependencies:
+    klona "^2.0.4"
 
 levn@^0.3.0, levn@~0.3.0:
   version "0.3.0"
@@ -10940,6 +10959,13 @@ vue-loader@^15.9.2:
     loader-utils "^1.1.0"
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
+
+vue-renderless-carousel@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/vue-renderless-carousel/-/vue-renderless-carousel-1.3.1.tgz#d4c807285250bc7acc753c851f8d1a7694d0f9dc"
+  integrity sha512-BZgkHw0s4dYSkVJwsnVtgHfh1tayx6I7HIpdkmQfJluWlAC4pG808YMIwscd+ab5gaJbVokSyQhEjoYhCHcwAA==
+  dependencies:
+    element-resize-detector "^1.2.2"
 
 vue-router@^3.2.0:
   version "3.5.1"

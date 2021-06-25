@@ -10,11 +10,17 @@ import ExerciseCard from './ExerciseCard.vue';
 export default {
   components: { ExerciseCard },
     created(){
-    this.$store.dispatch('exercises/getExercises');
+    this.roles = this.$store.getters["authentication/get_roles"]
+    if(this.roles.includes("Client")){this.$store.dispatch('exercises/getExercises');}
+  },
+  data() {
+      return {
+      roles: []
+    }
   },
   computed: {
     cExercises(){
-      return this.$store.getters['exercises/get_exercises'];
+      return this.roles.includes("Client") ?  this.$store.getters['exercises/get_exercises'] : null;
     }
   }
 }

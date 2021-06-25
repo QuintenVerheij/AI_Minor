@@ -50,6 +50,12 @@ const GET_FILE_UPLOAD_EXTENSION = (state) => {
 const GET_EXERCISE_ADD_EXTENSION = (state) => {
         return state.endpoints.exercise.add.extension
 }
+const GET_THERAPIST_EXTENSION = (state) => {
+        return state.endpoints.therapist.extension
+}
+const GET_ASSIGN_EXERCISE_EXTENSION = (state) => {
+        return state.endpoints.therapist.assign_exercise.extension
+}
 export default {
     GET_API_URL, 
     GET_LOGIN_ENDPOINT, 
@@ -63,5 +69,7 @@ export default {
     GET_EXERCISE_URL,
     GET_FILE_UPLOAD_EXTENSION,
     GET_EXERCISE_ADD_EXTENSION,
-    GET_PAST_WEEK_EXTENSION
+    GET_PAST_WEEK_EXTENSION,
+    GET_THERAPIST_EXTENSION,
+    GET_ASSIGN_EXERCISE_EXTENSION
 }
