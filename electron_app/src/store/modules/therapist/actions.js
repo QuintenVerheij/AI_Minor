@@ -102,6 +102,7 @@ const createMedia =
       extension: extension,
       type: type,
     });
+    console.log(url)
 
     // let data = {
     //   type: payload.type,
@@ -111,11 +112,11 @@ const createMedia =
 
     HTTP.post(context.rootGetters["api/GET_FILE_UPLOAD_EXTENSION"], {url: url}).then((response) => {
       console.log(response)
-      return response
     }).catch((error) => {
       console.log(error)
       return error
     });
+    return url
   };
 
 export default {

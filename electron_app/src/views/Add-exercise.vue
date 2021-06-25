@@ -6,11 +6,11 @@
         <br/>
         <b-form class="box-form" @submit="onSubmit">
           <b-form-group class="form-field" label="Exercise naam" label-for="name-input">
-            <b-form-input id="name-input" type="text" required />
+            <b-form-input id="name-input" type="text" v-model="exercise_out.name" required />
             <span></span>
           </b-form-group>
           <b-form-group class="form-field" label="Exercise Beschrijving" label-for="description-input">
-            <b-form-textarea id="desciption-input" type="text" required />
+            <b-form-textarea id="desciption-input" type="text" v-model="exercise_out.description" required />
             <span></span>
           </b-form-group>
           <b-form-group class="form-field" label="Exercise Voorbeeldfoto" label-for="photo-input">
@@ -87,10 +87,13 @@ export default {
     },
   },
   methods: {
-    onSubmit(event){
+    async onSubmit(event){
       event.preventDefault();
-      console.log(this.$store.dispatch("therapist/createMedia", {file: this.photo_file , type:"images"}))
-      console.log(this.$store.dispatch("therapist/createMedia", {file: this.video_file , type:"videos"}))
+      this.exercise_out.poses = this.exercise_out.poses.filter((value) => {return value != null && value != ""})
+      this.exercise_out.photoLink = await this.$store.dispatch("therapist/createMedia", {file: this.photo_file , type:"images"})
+      this.exercise_out.videoLink = await this.$store.dispatch("therapist/createMedia", {file: this.video_file , type:"videos"})
+      console.log(this.exercise_out)
+      await this.$store.dispatch("exercises/addExercise", this.exercise_out)
     },
     addPose(){
       this.exercise_out.poses.push(null)

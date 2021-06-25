@@ -42,6 +42,9 @@ const GET_ROLE_EXTENSION = (state) => {
 const GET_FILE_UPLOAD_EXTENSION = (state) => {
         return state.endpoints.therapist.upload_file.extension
 }
+const GET_EXERCISE_ADD_EXTENSION = (state) => {
+        return state.endpoints.exercise.add.extension
+}
 export default {
     GET_API_URL, 
     GET_LOGIN_ENDPOINT, 
@@ -53,5 +56,6 @@ export default {
     GET_ROLE_EXTENSION, 
     GET_ROLE_ENDPOINT, 
     GET_EXERCISE_URL,
-    GET_FILE_UPLOAD_EXTENSION
+    GET_FILE_UPLOAD_EXTENSION,
+    GET_EXERCISE_ADD_EXTENSION
 }

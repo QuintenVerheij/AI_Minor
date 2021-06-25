@@ -46,10 +46,20 @@ const getPoseNames = (context) => {
   });
 }
 
+const addExercise = (context, payload) => {
+  HTTP.post(context.rootGetters["api/GET_EXERCISE_ADD_EXTENSION"], payload).then((response) => {
+    console.log(response)
+
+  }).catch((error) => {
+    console.log(error)
+  })
+}
+
 
 
 export default {
   getExercises,
   setExercise,
-  getPoseNames
+  getPoseNames,
+  addExercise
 }

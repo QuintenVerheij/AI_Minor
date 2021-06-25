@@ -18,7 +18,8 @@ export default {
             extension: "api/client", method: "GET"
         },
         exercise: {
-            pose_names: {extension: "api/exercise/Poses", method: "GET"}, 
+            pose_names: {extension: "api/exercise/Poses", method: "GET"},
+            add: {extension: "api/exercise/add", method: "POST"}, 
         },
         therapist: {
             upload_file: {extension: "api/therapist/uploadFile", method:"POST"},
