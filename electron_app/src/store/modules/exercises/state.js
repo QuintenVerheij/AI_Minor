@@ -16,5 +16,6 @@ export default {
     //     'finishingDate':datetime
     // }
     exercise: {},
-    posenames: []
+    posenames: [],
+    lastweekresult: {}
 }

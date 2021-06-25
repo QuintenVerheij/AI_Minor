@@ -16,6 +16,7 @@ export default {
         },
         client: {
             extension: "api/client", method: "GET"
+            pastweek : {extension: "api/client/getPastWeekResults", method: "GET"}
         },
         exercise: {
             pose_names: {extension: "api/exercise/Poses", method: "GET"},
@@ -23,7 +24,7 @@ export default {
         },
         therapist: {
             upload_file: {extension: "api/therapist/uploadFile", method:"POST"},
-        }
+        },
 
     }
 }

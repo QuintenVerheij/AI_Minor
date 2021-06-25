@@ -30,8 +30,16 @@ const getExercises =  (context) => {
     ).catch((error) => {
       console.log(error)
     });
-}   
-
+}
+const lastWeekResult =  (context) => {  
+  HTTP.get(context.rootGetters["api/GET_PAST_WEEK_EXTENSION"]).then((response) => {
+    console.log(response.data)
+    context.commit('SET_LAST_WEEK_RESULT', response.data);    
+}
+).catch((error) => {
+  console.log(error)
+});
+}
 const setExercise = (context, id) => {
     context.commit('SET_EXERCISE', id);
 }
@@ -61,5 +69,6 @@ export default {
   getExercises,
   setExercise,
   getPoseNames,
-  addExercise
+  addExercise,
+  lastWeekResult
 }

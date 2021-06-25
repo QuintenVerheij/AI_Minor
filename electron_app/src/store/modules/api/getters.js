@@ -36,6 +36,11 @@ const GET_REGISTER_EXTENSION = (state) => {
 const GET_LOGIN_EXTENSION = (state) => {
         return state.endpoints.auth.login.extension
 }
+
+const GET_PAST_WEEK_EXTENSION = (state) => {
+        return state.endpoints.client.pastweek.extension
+}
+
 const GET_ROLE_EXTENSION = (state) => {
         return state.endpoints.auth.role.extension
 }
@@ -57,5 +62,6 @@ export default {
     GET_ROLE_ENDPOINT, 
     GET_EXERCISE_URL,
     GET_FILE_UPLOAD_EXTENSION,
-    GET_EXERCISE_ADD_EXTENSION
+    GET_EXERCISE_ADD_EXTENSION,
+    GET_PAST_WEEK_EXTENSION
 }
