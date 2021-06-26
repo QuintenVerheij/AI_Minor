@@ -14,21 +14,20 @@
               afgerond
             </b-col>
             <b-col sm="2">
-              <b-button v-b-modal.delete-warn-modal variant="danger">
+              <b-button v-b-modal="modalId(ce.clientExerciseId)" variant="danger">
                 <b-icon icon="trash" />
               </b-button>
-              <b-modal id="delete-warn-modal" title="Waarschuwing!">
+              <b-modal :id="'modal' + ce.clientExerciseId" title="Waarschuwing!">
                 <p class="my-4">
                   Weet u zeker dat u {{ ce.exercise.name }} wilt verwijderen van
                   {{ client.userName }}?
-                </p>
-                <p class="my-4">
                   {{ client.userName }} zal alle voortgang in de oefening
                   kwijtraken
+                  <br/>
+                  (Klik buiten dit venster om te annuleren)
                 </p>
                 <template #modal-footer>
                   <b-row>
-                    <b-button>Annuleren</b-button>
                     <b-button
                       variant="danger"
                       @click="removeClientExercise(ce.clientExerciseId)"
@@ -245,6 +244,9 @@ export default {
         ].clients.find((client) => client.id == this.client.id);
       });
     },
+    modalId(i) {
+      return 'modal' + i;
+    }
   },
 };
 </script>
