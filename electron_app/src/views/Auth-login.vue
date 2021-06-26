@@ -20,8 +20,9 @@
             <pre class="error-message">{{ this.error_message }}</pre>
           </div>
           <div class="field-login">
-            <button class="button-login my-auto mx-auto" v-on:click="login">
-              Login
+            <button class="button-login my-auto mx-auto text-center" v-on:click="login">
+                <div v-if="!logging_in">Login</div>
+                <pulse-loader v-else :color="'#FFFFFF'"></pulse-loader>
             </button>
           </div>
           <div class="field-signup">
@@ -39,10 +40,14 @@
   </body>
 </template>
 <script>
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 export default {
+  components:{
+    PulseLoader 
+  },
   data() {
     return {
-      loading: false,
+      logging_in: false,
       login_data: {
         username: "",
         password: "",
@@ -55,6 +60,7 @@ export default {
   },
   methods: {
     login() {
+      this.logging_in = true;
       this.show_username_is_empty_error = false;
       this.show_password_is_empty_error = false;
       this.show_error_message = false;
@@ -65,48 +71,24 @@ export default {
         if(this.login_data.password === ""){
           this.show_password_is_empty_error = true;
         }
+        this.logging_in = false;
       }else{
         console.log(process.env.NODE_ENV)
-        this.loading = true;
         this.$store.dispatch('authentication/login',
           this.login_data
         ).then(()=>{
-          this.loading = false;
           this.$router.push({name: 'Home'})
         }).catch((ex)=> {
-          this.loading = false;
           this.show_error_message = true;
-          if(ex === 400){
-            this.error_message = "Username en password komen niet overeen"
+          console.log(ex.response)
+          if(ex.response.status === 400){
+            this.error_message = ex.response.data.message
           }
+        }).finally(() =>{
+          this.logging_in = false;
         });
       }
     },
-    // login: async function () {
-    //   //   if(this.$store.dispatch('authentication/debugLogin')) {
-    //   //     this.$router.push({name: 'Home'});
-    //   this.show_error_message = false;
-    //   const API_INFO = this.$store.getters["api/GET_LOGIN_ENDPOINT"];
-    //   fetch(API_INFO.url, {
-    //     method: API_INFO.method,
-    //     headers: API_INFO.headers,
-    //     body: JSON.stringify(this.login_data),
-    //   })
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       // console.log(data);
-    //       if (data.token !== undefined) {
-    //         this.$store.commit("authentication/SET_AUTHENTICATED", true);
-    //         localStorage.token = data.token;
-    //         this.$router.push({ name: "Home" });
-    //       } else {
-    //         // if (data.errors !== undefined) {
-    //         // console.log(data.message);
-    //         this.show_errors(data.message);
-    //         // }
-    //       }
-    //     });
-    // },
     show_errors: function (errors) {
       if (typeof errors == "string") {
         this.error_message = errors;

@@ -14,6 +14,8 @@ const getPoseNames = (context) => {
   return HTTP.get(context.rootGetters["api/GET_POSE_NAMES_EXTENSION"]).then((response) => context.commit("SET_POSE_NAMES", response.data))
 }
 
+ 
+
 function stringValuesToIntegers(obj) {
   const res = {}
   for (const key in obj) {
@@ -120,9 +122,48 @@ const createMedia =
     return url
   };
 
+const getTherapist = async (context) => {
+  await HTTP.get(context.rootGetters["api/GET_THERAPIST_EXTENSION"]).then((response) => {
+    console.log(response)
+    context.commit("SET_THERAPIST", response.data)
+  }).catch((error) => {
+    console.log(error)
+  })
+}
+
+const getPastWeekResultsForClient = async (context, clientId) => {
+  await HTTP.get(context.rootGetters["api/GET_LAST_WEEK_RESULT_FOR_CLIENT_EXTENSION"] + `/${clientId}`).then((response) => {
+    console.log(response)
+    context.commit("SET_CLIENT_RESULTS", response.data)
+  }).catch((error) => {
+    console.log(error)
+  });
+}
+
+const assignExercise = async (context, payload) => {
+  await HTTP.post(context.rootGetters["api/GET_ASSIGN_EXERCISE_EXTENSION"], payload).then((response) => {
+    console.log(response)
+    return response
+  }).catch((error) => {
+    console.log(error)
+  })
+}
+
+const removeClientExercise = async (context, clientExerciseId) => {
+  await HTTP.delete(context.rootGetters["api/GET_REMOVE_CLIENT_EXERCISE_EXTENSION"] + `/${clientExerciseId}`).then(async (response) => {
+    console.log(response)
+  }).catch((error) => {
+    console.log(error)
+  });
+}
+
 export default {
   saveData,
   prepareData,
   createMedia,
-  getPoseNames
+  getPoseNames,
+  getTherapist,
+  getPastWeekResultsForClient,
+  assignExercise,
+  removeClientExercise,
 };
