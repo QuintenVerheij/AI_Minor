@@ -22,24 +22,23 @@ const getClientData = (context) => {
   });
 }
 
-const login = (context, payload) => {
-  return HTTP.post(context.rootGetters["api/GET_LOGIN_EXTENSION"], payload).then((response) => {
-    //TODO: Remove this log in production
-    console.log(response);
-    localStorage.token = response.data.token;
-    localStorage.userId = response.data.userId;
-
+const login =  async function(context, payload) {
+  var login_res = await HTTP.post(context.rootGetters["api/GET_LOGIN_EXTENSION"], payload)
+  //TODO: Remove this log in production
+  if(login_res.status === 200){
+    console.log(login_res);
+    localStorage.token = login_res.data.token;
+    localStorage.userId = login_res.data.userId;
+  
     context.commit('SET_AUTHENTICATED', true);
-    HTTP.get(context.rootGetters["api/GET_ROLE_EXTENSION"]).then((res) => {
-      console.log(res);
-      context.commit('SET_ROLES', res.data.role)
-    })
+    var res = await HTTP.get(context.rootGetters["api/GET_ROLE_EXTENSION"])
+    console.log(res);
+    context.commit('SET_ROLES', res.data.role)
     return true;
-  }
-  ).catch(() => {
+  }else{
     context.commit('SET_AUTHENTICATED', false);
     throw 400
-  })
+  }
 }
 
 const getUserInfo = (context) => {
@@ -49,21 +48,21 @@ const getUserInfo = (context) => {
 }
 
 const register = (context, payload) => {
-  console.log(
-    'endpoint', context.rootGetters["api/GET_REGISTER_ENDPOINT"]);
-  return HTTP.post(context.rootGetters["api/GET_REGISTER_ENDPOINT"], payload).then((response) => {
+  return HTTP.post(context.rootGetters["api/GET_REGISTER_EXTENSION"], payload).then((response) => {
     console.log(response)
     return true;
   }
   ).catch((e) => {
-    console.log(e)
-    return false;
+    console.log(e.response)
+    throw e.response
   })
 }
 
 const signOut = ({ commit }) => {
   if (localStorage.token) {
     localStorage.removeItem('token');
+    sessionStorage.clear();
+    commit('SET_ROLES', []);
     commit('SET_AUTHENTICATED', false);
   }
 }

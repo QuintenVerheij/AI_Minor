@@ -12,6 +12,8 @@
     <b-card-title>
           <div class="d-flex flex-row font-weight-semi-bold">
         {{ce.exercise.title}}
+        {{ce.weeklyRepetitionsCompleted }} / {{ce.weeklyRepetitions}}
+        {{ce.logs.finishDate}}
          </div>
     </b-card-title>
     <div class="d-flex flex-row-reverse">
@@ -21,6 +23,7 @@
 </template>
 <script>
 export default {
+    name:'exercise-card',
     props: {
         ce: Object
     },

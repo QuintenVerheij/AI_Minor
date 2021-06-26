@@ -4,15 +4,19 @@ import { uploadMedia } from "@/plugins/firebase";
 const saveData = ({ commit }, payload) => {   // eslint-disable-line
   let data = stringValuesToIntegers(mapData(payload));
 
-  return HTTP.post("data", data).then((response) =>{
-    return response}).catch((response) => response);
+  return HTTP.post("data", data).then((response) => {
+    return response
+  }).catch((response) => response);
 };
 
 const getPoseNames = (context) => {
-  return HTTP.get(context.rootGetters["api/GET_POSE_NAMES_URL"]).then((response)=>context.commit("SET_POSE_NAMES", response.data))
+  console.log('getting pose names')
+  return HTTP.get(context.rootGetters["api/GET_POSE_NAMES_EXTENSION"]).then((response) => context.commit("SET_POSE_NAMES", response.data))
 }
 
-function stringValuesToIntegers(obj){
+ 
+
+function stringValuesToIntegers(obj) {
   const res = {}
   for (const key in obj) {
     const parsed = parseInt(obj[key], 10);
@@ -20,7 +24,7 @@ function stringValuesToIntegers(obj){
   }
   return res;
 }
-function mapData(poses) { 
+function mapData(poses) {
   // // console.log(poses);
   let data = poses[0].keypoints;
   // // console.log(data);
@@ -91,34 +95,75 @@ function scale(data) {
   return scaled_data;
 }
 
-const createMedia = 
-  async ({ commit }, payload) => { // eslint-disable-line no-unused-vars
-  let file = payload.file;
-  let extension = file.name.split(".").pop();
-  let type = payload.type;
-  let url = await uploadMedia({
-    media: file,
-    extension: extension,
-    type: type,
-  });
+const createMedia =
+  async (context, payload) => { // eslint-disable-line no-unused-vars
+    let file = payload.file;
+    let extension = file.name.split(".").pop();
+    let type = payload.type;
+    let url = await uploadMedia({
+      media: file,
+      extension: extension,
+      type: type,
+    });
+    console.log(url)
 
-  let data = {
-    type: payload.type,
-    title: payload.title,
-    url: url,
+    // let data = {
+    //   type: payload.type,
+    //   title: payload.title,
+    //   url: url,
+    // };
+
+    HTTP.post(context.rootGetters["api/GET_FILE_UPLOAD_EXTENSION"], {url: url}).then((response) => {
+      console.log(response)
+    }).catch((error) => {
+      console.log(error)
+      return error
+    });
+    return url
   };
-  let result = await HTTP.post("admin/media/", data, {
-    headers: {
-      Authorization: `Bearer ${localStorage.token}`,
-    },
-  });
 
-  return result;
-};
+const getTherapist = async (context) => {
+  await HTTP.get(context.rootGetters["api/GET_THERAPIST_EXTENSION"]).then((response) => {
+    console.log(response)
+    context.commit("SET_THERAPIST", response.data)
+  }).catch((error) => {
+    console.log(error)
+  })
+}
+
+const getPastWeekResultsForClient = async (context, clientId) => {
+  await HTTP.get(context.rootGetters["api/GET_LAST_WEEK_RESULT_FOR_CLIENT_EXTENSION"] + `/${clientId}`).then((response) => {
+    console.log(response)
+    context.commit("SET_CLIENT_RESULTS", response.data)
+  }).catch((error) => {
+    console.log(error)
+  });
+}
+
+const assignExercise = async (context, payload) => {
+  await HTTP.post(context.rootGetters["api/GET_ASSIGN_EXERCISE_EXTENSION"], payload).then((response) => {
+    console.log(response)
+    return response
+  }).catch((error) => {
+    console.log(error)
+  })
+}
+
+const removeClientExercise = async (context, clientExerciseId) => {
+  await HTTP.delete(context.rootGetters["api/GET_REMOVE_CLIENT_EXERCISE_EXTENSION"] + `/${clientExerciseId}`).then(async (response) => {
+    console.log(response)
+  }).catch((error) => {
+    console.log(error)
+  });
+}
 
 export default {
   saveData,
   prepareData,
   createMedia,
-  getPoseNames
+  getPoseNames,
+  getTherapist,
+  getPastWeekResultsForClient,
+  assignExercise,
+  removeClientExercise,
 };

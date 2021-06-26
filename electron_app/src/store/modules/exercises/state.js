@@ -15,5 +15,8 @@ export default {
     //     'score': number,
     //     'finishingDate':datetime
     // }
-    exercise: {}
+    exercise: {},
+    exercises_all: [],
+    posenames: [],
+    lastweekresult: {}
 }

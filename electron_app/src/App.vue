@@ -46,4 +46,12 @@ export default {
 body {
   background-color: var(--white);
 }
+
+.bg-custom {
+  background-color: var(--dark-2);
+}
+
+.bg-blue {
+  background-color: var(--blue);  
+}
 </style>

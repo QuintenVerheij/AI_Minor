@@ -1,49 +1,70 @@
 <template>
-  <div>
-    <div id="video_box" class="center">
-      <div class="rounded video_overlay">
+<div>
+ <b-overlay :show="!loaded" rounded="sm">
+  <b-container fluid>
+    <b-progress
+      :value="poseIndex"
+      :max="exercisePoses.length"
+      show-progress
+      animated
+      variant="success"
+    ></b-progress>
+    <b-row class="bg-custom">
+      <b-col cols="3" class="bg-dark p-0 d">
+          <h3 class="text-white py-4">{{formatName(exercise.title)}}</h3>
+          <h1 class="text-white py-4">{{completed_reps}} / {{cExercise.reps}}</h1>
+          <h3 class="text-white py-4">herhalingen compleet</h3>
+          <div
+            class="w-100 py-3 px-3"
+            v-for="(pose, index) in exercisePoses"
+            v-bind:class="{ 'bg-custom': index == poseIndex }"
+            v-bind:key="index"  
+          >
+            <h5 class="text-white  text-left">
+              <b-icon
+                v-if="index < poseIndex"
+                class="mr-2"
+                icon="check-circle"
+                variant="success"
+              ></b-icon
+              >{{ formatName(pose) }}
+            </h5>
+          </div>
+       
+      </b-col>
+      <b-col class="pl-0">
         <div>
-          <img
-            src="@/assets/left.png"
-            class="video_overlay_icon"
-            @click="$router.go(-1)"
-          />
-          <p class="video_overlay_title">AI MINOR FYSIO APP</p>
+          <div class="d-inline-block">
+            <canvas id="canvas" width="1280px" height="720px"></canvas>
+          </div>
+          <video
+            id="video"
+            width="1280px"
+            height="720px"
+            autoplay
+            style="display: none"
+          ></video>
         </div>
-        <br />
-        <p class="video_overlay_text">
-          Logged in as {{ user !== undefined ? user : "none" }}
-        </p>
-        <br />
-        <p class="video_overlay_text">
-          Current Exercise: {{ exercise !== undefined ? exercise : "none" }}
-        </p>
-         <p class="video_overlay_text">
-          Current index: {{poseDetectedIndex}}
-        </p>
-        <p v-if="poseDetectedIndex < poseNames.length" class="video_overlay_text">
-          Current pose: {{poseNames[poseDetectedIndex] }}
-        </p>
-        <br />
-        <!-- <p class="video_overlay_text">
-          Current Pose:
-          {{ this.ourModelOutPut !== undefined ? this.ourModelOutPut : "none" }}
-        </p> -->
-        <br />
-        <img src="@/assets/calendar.png" class="video_overlay_icon" />
-        <img src="@/assets/stopwatch.png" class="video_overlay_icon" />
-        <img src="@/assets/phone.png" class="video_overlay_icon" />
-      </div>
-      <canvas id="canvas" width="1280px" height="720px"></canvas>
-    <video
-      id="video"
-      width="1280px"
-      height="720px"
-      autoplay
-      style="display: none"
-    ></video>
+      </b-col>
+      <div v-show="devTools" class="position-absolute top-0 w-40 end-0 bg-gray-transparent p-4 ">
+       <div class="w-100 pt-3" v-for="(output, index) in ourModelOutPut" v-bind:key="index">
+    <div class="text-left text-white">{{formatName(poseNames[index])}}</div>
+    <b-progress
+      :value="output"
+      :max="1"
+      show-progress
+      animated
+      variant="success"
+    ></b-progress>
     </div>
-  </div>
+      </div>
+    </b-row>
+  </b-container>
+ </b-overlay>
+ <b-row v-if=repsComplete style="justify-content:center">
+   <b-button > Terug naar Home </b-button>
+ </b-row>
+ </div>
 </template>
 
 <script>
@@ -54,23 +75,48 @@ import * as tensor from "@tensorflow/tfjs";
 
 export default {
   created() {
-    this.$store.dispatch("exercises/setExercise", this.$route.params.id);
+    this.$store.dispatch('exercises/getExercises');
+    this.$store.dispatch('therapist/getPoseNames');
+    this.keyInputListener = window.addEventListener("keydown", (e) => {
+      if (e.key == "d") {
+        this.toggleDevTools();
+        // this.saveData();
+      }
+    });
   },
   computed: {
+    repsComplete() {
+      return this.completed_reps >= this.cExercise.reps
+    },
     user() {
       return this.$store.getters["authentication/get_user"];
     },
     exercise() {
+      return this.cExercise.exercise
+    },
+    cExercise() {
       let exercises = this.$store.getters["exercises/get_exercises"];
-      return exercises.find(el=>el.id == this.$route.params.id);
+      let index = exercises.findIndex((el) => el.exercise.id == this.$route.params.id)
+      if(index > -1){
+        return exercises[index];
+      }
+      return {}
+    },
+    exerciseReps(){
+      return this.cExercise.reps
     },
     poseNames() {
       return this.$store.getters["therapist/get_pose_names"];
-    }
+    },
+    exercisePoses() {
+      return this.exercise.poses;
+    },
   },
   data() {
     return {
-      // LOCAL STATE GOES HERE
+      completed_reps : 0,
+      data_sent: false,
+      looping: true,
       posenet: {},
       ourModel: {},
       ourModelOutPut: "",
@@ -84,119 +130,129 @@ export default {
       framecount: 0,
       pose_saved: {},
       poseDetectedIndex: 0,
-      poseIndex: 0
+      poseIndex: 0,
+      devTools: false,
+      keyInputListener: {}
     };
   },
-  async mounted () {
+  async mounted() {
     const detectorConfig = {
       modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING,
     };
     this.video = document.getElementById("video");
-    await this.buildCapture();
-    this.detector = await poseDetection.createDetector(
+    this.buildCapture();
+    this.video.addEventListener('loadeddata', async () => {
+      console.log("video ready")
+      this.detector = await poseDetection.createDetector(
       poseDetection.SupportedModels.MoveNet,
       detectorConfig
     );
     this.loaded = true;
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
-    // translate context to center of canvas
     this.ctx.translate(this.canvas.width, 0);
-
-    // flip context horizontally
     this.ctx.scale(-1, 1);
-    
-    // this.updateLoop = setInterval(
-    //   function() {
-    //     this.getPoses();
-    //   }.bind(this),
-    //   12
-    // );
-    // // console.log(
-    //   "Fetching model from " +
-    //     "https://fysiomodelstorage.z6.web.core.windows.net/model.json"
-    // );
     this.ourModel = await tensor.loadLayersModel(
       "https://fysiomodelstorage.z6.web.core.windows.net/model.json"
     );
-    this.interval = setInterval(
-      this.recognizePose, 100
-    );
-    // console.log(this.ourModel.summary());
+    this.interval = setInterval(this.recognizePose, 100);
     this.loop();
+    })
+    
   },
-  beforeUnmount() {
-    this.video.srcObject.getTracks().forEach(function (track) {
+  beforeDestroy() {
+    clearInterval(this.interval);
+    this.looping = false;
+    this.video.srcObject.getTracks().forEach(function(track) {
       track.stop();
       this.video = null;
-      clearInterval(this.interval)
+      
     });
+    window.removeEventListener(this.keyInputListener);
   },
   methods: {
+    toggleDevTools() {
+      this.devTools = !this.devTools;
+    },
     async takePicture() {
-      
       // let pose = await this.getPoses();
-       const prepped_data = await this.$store.dispatch(
-          "therapist/prepareData",
-          await this.getPoses()
-        );
+      const prepped_data = await this.$store.dispatch(
+        "therapist/prepareData",
+        await this.getPoses()
+      );
       this.pose_saved = prepped_data;
       this.$bvToast.toast(`saved`, {
-          title: `Saved`,
-          variant: "success",
-          solid: true
-        })
+        title: `Saved`,
+        variant: "success",
+        solid: true,
+      });
     },
-    loop(){
+    loop() {
       this.render();
-      window.requestAnimationFrame(this.loop);
+      if(this.looping){
+        window.requestAnimationFrame(this.loop);
+      }
     },
-    renderEstimation(poses){
+    renderEstimation(poses) {
       this.drawKeypoints(poses);
       this.drawSkeleton(poses);
     },
     async render() {
       this.ctx.drawImage(this.video, 0, 0, 1280, 720);
-      this.renderEstimation(await this.getPoses()); 
+      this.renderEstimation(await this.getPoses());
     },
-    onModelLoaded () {
+    onModelLoaded() {
       this.isModelLoaded = true;
     },
-    async getPoses () {
-     return await this.detector.estimatePoses(this.video);
-      
+    async getPoses() {
+      return await this.detector.estimatePoses(this.video);
     },
     async recognizePose() {
       const prepped_data = await this.$store.dispatch(
-          "therapist/prepareData",
-          await this.getPoses()
-        );
-        // console.log("data", prepped_data);
+        "therapist/prepareData",
+        await this.getPoses()
+      );
+      // console.log("data", prepped_data);
 
-        tensor.scalar.tr
-        const output = await this.ourModel.predict(tensor.tensor(prepped_data, [1,30]));
-        // // console.log(output);
-        this.ourModelOutPut = (await output.array())[0];
-        // // console.log(this.ourModelOutPut);
-        this.poseDetectedIndex = this.ourModelOutPut.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
-        // console.log(this.exercise);
-        console.log('detected: ' + this.poseNames[this.poseDetectedIndex], "  wanted: " + this.exercise.poses[this.poseIndex])
-        if(this.poseNames[this.poseDetectedIndex] === this.exercise.poses[this.poseIndex]){
-         this.makeToast(
-            "voltooid!",
-            this.exercise.poses[this.poseIndex],
-            'warning'
-          )
-         this.poseIndex++
+      // tensor.scalar.tr;
+      const output = await this.ourModel.predict(
+        tensor.tensor(prepped_data, [1, 30])
+      );
+      // // console.log(output);
+      this.ourModelOutPut = (await output.array())[0];
+      // // console.log(this.ourModelOutPut);
+      // console.log(this.poseNames[this.poseDetectedIndex], " score: ", this.ourModelOutPut[this.poseDetectedIndex]);
+      this.poseDetectedIndex = this.ourModelOutPut.reduce(
+        (iMax, x, i, arr) => (x > arr[iMax] ? i : iMax),
+        0
+      );
+      // console.log(this.exercise);
+      // console.log(
+      //   "detected: " + this.poseNames[this.poseDetectedIndex],
+      //   "  wanted: " + this.exercise.poses[this.poseIndex]
+      // );
+      if (
+        this.poseNames[this.poseDetectedIndex] === this.exercise.poses[this.poseIndex] && 
+        this.ourModelOutPut[this.poseDetectedIndex] > 0.5
+      ) {
+        this.makeToast(
+          "voltooid!",
+          this.exercise.poses[this.poseIndex],
+          "warning"
+        );
+        this.poseIndex++;
+      }
+      if (this.poseIndex === this.exercise.poses.length) {
+        this.makeToast("Herhaling voltooid!", "Voltooid", "success");
+        this.completed_reps += 1;
+        this.poseIndex = 0;
+        if(this.repsComplete && !this.data_sent){
+          this.data_sent=true
+          this.makeToast("Oefening voltooid", "Voltooid", "success");
+          this.makeToast("Resultaten opslaan...", "Voltooid", "success")
+          this.$store.dispatch("exercises/finishRep", this.cExercise.id)
         }
-        if(this.poseIndex === this.exercise.poses.length){
-          this.makeToast(
-            "Exercise voltooid!",
-            'Voltooid',
-            'success'
-          );
-          this.poseIndex = 0;
-        }
+      }
     },
     // A function to draw ellipses over the detected keypoints
     drawKeypoints(poses) {
@@ -210,14 +266,8 @@ export default {
           // Only draw an ellipse is the pose probability is bigger than 0.2
           if (keypoint.score > 0.2) {
             this.ctx.beginPath();
-            this.ctx.arc(
-              keypoint.x,
-              keypoint.y,
-              10,
-              0,
-              2 * Math.PI
-            );
-            this.ctx.fillStyle = "#FF3333";
+            this.ctx.arc(keypoint.x, keypoint.y, 5, 0, 2 * Math.PI);
+            this.ctx.fillStyle = "#e43f6f";
             this.ctx.fill();
             this.ctx.stroke();
             this.ctx.closePath();
@@ -228,26 +278,26 @@ export default {
     // A function to draw the skeletons
     drawSkeleton(poses) {
       const lines = [
-        {
-          partA: "nose",
-          partB: "left_eye",
-        },
-        {
-          partA: "nose",
-          partB: "right_eye",
-        },
-        {
-          partA: "left_ear",
-          partB: "left_eye",
-        },
-        {
-          partA: "right_ear",
-          partB: "right_eye",
-        },
-        {
-          partA: "right_ear",
-          partB: "right_eye",
-        },
+        // {
+        //   partA: "nose",
+        //   partB: "left_eye",
+        // },
+        // {
+        //   partA: "nose",
+        //   partB: "right_eye",
+        // },
+        // {
+        //   partA: "left_ear",
+        //   partB: "left_eye",
+        // },
+        // {
+        //   partA: "right_ear",
+        //   partB: "right_eye",
+        // },
+        // {
+        //   partA: "right_ear",
+        //   partB: "right_eye",
+        // },
         {
           partA: "left_shoulder",
           partB: "left_elbow",
@@ -292,40 +342,43 @@ export default {
           partA: "left_hip",
           partB: "left_knee",
         },
-         {
+        {
           partA: "left_hip",
           partB: "left_ankle",
         },
-      ]
+      ];
       // // console.log(lines);
-      this.ctx.lineWidth = 10;
-      
-      // Loop through all the skeletons detected
-      poses.forEach((pose)=>{
-        const keypoints = pose.keypoints;
-        lines.forEach((line)=>{
+      this.ctx.lineWidth = 5;
 
-          const partA = keypoints.find((kp)=>kp.name == line.partA);
-          const partB = keypoints.find((kp)=>kp.name == line.partB);
-          
-          if(partA.score > 0.4 && partB.score > 0.4 ){
+      // Loop through all the skeletons detected
+      poses.forEach((pose) => {
+        const keypoints = pose.keypoints;
+        lines.forEach((line) => {
+          const partA = keypoints.find((kp) => kp.name == line.partA);
+          const partB = keypoints.find((kp) => kp.name == line.partB);
+
+          if (partA.score > 0.3 && partB.score > 0.3) {
+            this.ctx.strokeStyle ="#e43f6f";
             this.ctx.beginPath();
             this.ctx.moveTo(partA.x, partA.y);
             this.ctx.lineTo(partB.x, partB.y);
             this.ctx.stroke();
             this.ctx.closePath();
           }
-        })
-      })
+        });
+      });
     },
-    makeToast(text,title,variant) {
-        this.$bvToast.toast(`${text}`, {
-          title: `${title}`,
-          variant: variant,
-          solid: true
-        })
-      },
-    buildCapture: function () {
+    makeToast(text, title, variant) {
+      this.$bvToast.toast(`${text}`, {
+        title: `${title}`,
+        variant: variant,
+        solid: true,
+      });
+    },
+    formatName(name){
+      return name.replaceAll('_', ' ').toUpperCase();
+    },
+    buildCapture: function() {
       // // console.log(this.video);
       navigator.mediaDevices
         .enumerateDevices()
@@ -363,6 +416,7 @@ export default {
               } catch (error) {
                 this.video.srcObject = URL.createObjectURL(stream);
               }
+              this.video.load()
               //info.innerHTML+= "<pre>DONE</pre>";
               // console.log("CAMERA LOADED; STREAM ATTACHED");
               // this.$store.commit("camera/ATTACH_STREAM", this.$el);
@@ -382,9 +436,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
+
 ul {
   list-style-type: none;
   padding: 0;
@@ -403,24 +455,29 @@ a {
   width: fit-content;
   object-fit: cover;
 }
-
+.end-0 {
+  right:0;
+}
+.w-40 {
+  width: 40%;
+}
 .video_overlay {
   position: absolute;
   float: left;
   min-height: 20px;
   min-width: 40px;
-  padding: 5px;
+  /* padding: 5px; */
   margin: 5px;
   border: solid black 1px;
   box-shadow: 1px 2px rgba(60, 60, 60, 0.9);
   z-index: 100;
   background-color: rgba(192, 192, 192, 0.3);
 }
-.center {
-  margin: auto;
-  width: 80%;
-  padding-top: 5px;
+
+.bg-gray-transparent {
+   background-color: rgba(0, 0, 0, 0.5);
 }
+/*     */
 .rounded {
   border-radius: 25px;
 }

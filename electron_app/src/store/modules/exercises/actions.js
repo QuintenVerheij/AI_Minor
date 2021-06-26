@@ -30,15 +30,62 @@ const getExercises =  (context) => {
     ).catch((error) => {
       console.log(error)
     });
-}   
-
-const setExercise = (context, id) => {
+}
+const lastWeekResult =  (context) => {  
+  HTTP.get(context.rootGetters["api/GET_PAST_WEEK_EXTENSION"]).then((response) => {
+    console.log(response.data)
+    context.commit('SET_LAST_WEEK_RESULT', response.data);    
+}
+).catch((error) => {
+  console.log(error)
+});
+}
+const setExerciseId = (context, id) => {
     context.commit('SET_EXERCISE', id);
 }
 
+const getPoseNames = (context) => {
+  HTTP.get(context.rootGetters["api/GET_POSE_NAMES_EXTENSION"]).then((response) => {
+    console.log(response)
+    context.commit('SET_POSE_NAMES', response.data)
+  }
+  ).catch((error) => {
+    console.log(error)
+  });
+}
 
+const addExercise = (context, payload) => {
+  HTTP.post(context.rootGetters["api/GET_EXERCISE_ADD_EXTENSION"], payload).then((response) => {
+    console.log(response)
+
+  }).catch((error) => {
+    console.log(error)
+  })
+}
+
+const getAllExercises = (context) => {
+  HTTP.get(context.rootGetters["api/GET_ALL_EXERCISES_EXTENSION"]).then((response) => {
+    console.log(response)
+    context.commit("SET_ALL_EXERCISES", response.data)
+  }).catch((error) => {
+    console.log(error)
+  })
+}
+
+const finishRep = (context, clientExerciseId) => {
+  HTTP.post(context.rootGetters["api/GET_FINISH_REP_EXTENSION"] + `/${clientExerciseId}`).then((response) => {
+    console.log(response)
+  }).catch((error) => {
+    console.log(error)
+  })
+}
 
 export default {
   getExercises,
-  setExercise
+  setExerciseId,
+  getPoseNames,
+  addExercise,
+  lastWeekResult,
+  getAllExercises,
+  finishRep
 }

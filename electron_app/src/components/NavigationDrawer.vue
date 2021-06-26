@@ -71,7 +71,7 @@ export default {
         {
           text: "Oefeningen",
           route: "Exercises",
-          role: 'all'
+          role: 'Client'
         },
         {
           text: "Statistieken",
@@ -85,7 +85,7 @@ export default {
         },
         {
           text: "Oefening Toevoegen",
-          route: "AddExercise",
+          route: "Add-exercise",
           role: 'Therapist'
         },
         {
