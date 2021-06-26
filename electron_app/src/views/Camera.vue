@@ -123,8 +123,10 @@ export default {
       modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING,
     };
     this.video = document.getElementById("video");
-    await this.buildCapture();
-    this.detector = await poseDetection.createDetector(
+    this.buildCapture();
+    this.video.addEventListener('loadeddata', async () => {
+      console.log("video ready")
+      this.detector = await poseDetection.createDetector(
       poseDetection.SupportedModels.MoveNet,
       detectorConfig
     );
@@ -138,13 +140,16 @@ export default {
     );
     this.interval = setInterval(this.recognizePose, 100);
     this.loop();
+    })
+    
   },
   beforeDestroy() {
+    clearInterval(this.interval);
     this.looping = false;
     this.video.srcObject.getTracks().forEach(function(track) {
       track.stop();
       this.video = null;
-      clearInterval(this.interval);
+      
     });
     window.removeEventListener(this.keyInputListener);
   },
@@ -192,7 +197,7 @@ export default {
       );
       // console.log("data", prepped_data);
 
-      tensor.scalar.tr;
+      // tensor.scalar.tr;
       const output = await this.ourModel.predict(
         tensor.tensor(prepped_data, [1, 30])
       );
@@ -210,8 +215,8 @@ export default {
       //   "  wanted: " + this.exercise.poses[this.poseIndex]
       // );
       if (
-        this.poseNames[this.poseDetectedIndex] ===
-        this.exercise.poses[this.poseIndex] && this.ourModelOutPut[this.poseDetectedIndex] > 0.5
+        this.poseNames[this.poseDetectedIndex] === this.exercise.poses[this.poseIndex] && 
+        this.ourModelOutPut[this.poseDetectedIndex] > 0.5
       ) {
         this.makeToast(
           "voltooid!",
@@ -387,6 +392,7 @@ export default {
               } catch (error) {
                 this.video.srcObject = URL.createObjectURL(stream);
               }
+              this.video.load()
               //info.innerHTML+= "<pre>DONE</pre>";
               // console.log("CAMERA LOADED; STREAM ATTACHED");
               // this.$store.commit("camera/ATTACH_STREAM", this.$el);
