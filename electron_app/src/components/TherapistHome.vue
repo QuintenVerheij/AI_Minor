@@ -56,7 +56,7 @@
           <b-container>
             <b-card
               width="500"
-              :img-src="therapist.file"
+              :img-src="therapist.profileImage"
               img-alt="Image"
               img-top
               :shadow="true"

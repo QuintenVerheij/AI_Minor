@@ -8,6 +8,7 @@
 <script>
 import ExerciseCard from './ExerciseCard.vue';
 export default {
+  name: 'home-exercise-list',
   components: { ExerciseCard },
     created(){
     this.roles = this.$store.getters["authentication/get_roles"]

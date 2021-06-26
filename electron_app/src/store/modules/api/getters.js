@@ -65,6 +65,9 @@ const GET_ALL_EXERCISES_EXTENSION = state => {
 const GET_REMOVE_CLIENT_EXERCISE_EXTENSION = state => {
         return state.endpoints.therapist.remove_client_exercise.extension
 }
+const GET_FINISH_REP_EXTENSION = state => {
+        return state.endpoints.client.finish_rep.extension
+}
 export default {
     GET_API_URL, 
     GET_LOGIN_ENDPOINT, 
@@ -83,5 +86,6 @@ export default {
     GET_ASSIGN_EXERCISE_EXTENSION,
     GET_LAST_WEEK_RESULT_FOR_CLIENT_EXTENSION,
     GET_ALL_EXERCISES_EXTENSION,
-    GET_REMOVE_CLIENT_EXERCISE_EXTENSION
+    GET_REMOVE_CLIENT_EXERCISE_EXTENSION,
+    GET_FINISH_REP_EXTENSION
 }

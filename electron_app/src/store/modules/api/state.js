@@ -17,6 +17,7 @@ export default {
         client: {
             extension: "api/client", method: "GET",
             pastweek : {extension: "api/client/getPastWeekResults", method: "GET"},
+            finish_rep: {extension: "/api/client/finishRep", method: "POST"},
             
         },
         exercise: {

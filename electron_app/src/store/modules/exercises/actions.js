@@ -40,7 +40,7 @@ const lastWeekResult =  (context) => {
   console.log(error)
 });
 }
-const setExercise = (context, id) => {
+const setExerciseId = (context, id) => {
     context.commit('SET_EXERCISE', id);
 }
 
@@ -72,12 +72,20 @@ const getAllExercises = (context) => {
   })
 }
 
+const finishRep = (context, clientExerciseId) => {
+  HTTP.post(context.rootGetters["api/GET_FINISH_REP_EXTENSION"] + `/${clientExerciseId}`).then((response) => {
+    console.log(response)
+  }).catch((error) => {
+    console.log(error)
+  })
+}
 
 export default {
   getExercises,
-  setExercise,
+  setExerciseId,
   getPoseNames,
   addExercise,
   lastWeekResult,
-  getAllExercises
+  getAllExercises,
+  finishRep
 }
