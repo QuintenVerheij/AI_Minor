@@ -34,9 +34,14 @@ const SET_LAST_WEEK_RESULT = (state,value) => {
 const SET_POSE_NAMES = (state, value) => {
     state.posenames = value
 }
+
+const SET_ALL_EXERCISES = (state, value) => {
+    state.exercises_all = value
+}
 export default {
     SET_EXERCISES,
     SET_EXERCISE,
     SET_POSE_NAMES,
-    SET_LAST_WEEK_RESULT
+    SET_LAST_WEEK_RESULT,
+    SET_ALL_EXERCISES
 }

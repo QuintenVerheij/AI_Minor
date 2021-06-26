@@ -63,6 +63,14 @@ const addExercise = (context, payload) => {
   })
 }
 
+const getAllExercises = (context) => {
+  HTTP.get(context.rootGetters["api/GET_ALL_EXERCISES_EXTENSION"]).then((response) => {
+    console.log(response)
+    context.commit("SET_ALL_EXERCISES", response.data)
+  }).catch((error) => {
+    console.log(error)
+  })
+}
 
 
 export default {
@@ -70,5 +78,6 @@ export default {
   setExercise,
   getPoseNames,
   addExercise,
-  lastWeekResult
+  lastWeekResult,
+  getAllExercises
 }

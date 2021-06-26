@@ -21,13 +21,15 @@ export default {
         },
         exercise: {
             pose_names: {extension: "api/exercise/Poses", method: "GET"},
-            add: {extension: "api/exercise/add", method: "POST"}, 
+            add: {extension: "api/exercise/add", method: "POST"},
+            get_all : {extension: "api/exercise", method: "GET"}
         },
         therapist: {
             extension: "api/therapist", method: "GET",
             assign_exercise: {extension: "api/therapist/assignexc", method: "POST"},
             upload_file: {extension: "api/therapist/uploadFile", method:"POST"},
-            pastweek_from_client: {extension: "api/client/getPastWeekResults", method: "GET"}
+            pastweek_from_client: {extension: "api/client/getPastWeekResults", method: "GET"},
+            remove_client_exercise: {extension: "/api/therapist", method:"DELETE"},
         },
 
     }

@@ -20,8 +20,8 @@
             <pre class="error-message">{{ this.error_message }}</pre>
           </div>
           <div class="field-login">
-            <button  class="button-login my-auto mx-auto text-center" v-on:click="login">
-                <div class="text-center vw-full" v-if="!logging_in" >Login</div>
+            <button class="button-login my-auto mx-auto text-center" v-on:click="login">
+                <div v-if="!logging_in">Login</div>
                 <pulse-loader v-else :color="'#FFFFFF'"></pulse-loader>
             </button>
           </div>

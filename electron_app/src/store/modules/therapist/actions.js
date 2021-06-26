@@ -122,7 +122,7 @@ const createMedia =
   };
 
 const getTherapist = async (context) => {
-  HTTP.get(context.rootGetters["api/GET_THERAPIST_EXTENSION"]).then((response) => {
+  await HTTP.get(context.rootGetters["api/GET_THERAPIST_EXTENSION"]).then((response) => {
     console.log(response)
     context.commit("SET_THERAPIST", response.data)
   }).catch((error) => {
@@ -138,6 +138,24 @@ const getPastWeekResultsForClient = async (context, clientId) => {
   });
 }
 
+const assignExercise = async (context, payload) => {
+  await HTTP.post(context.rootGetters["api/GET_ASSIGN_EXERCISE_EXTENSION"], payload).then((response) => {
+    console.log(response)
+    return response
+  }).catch((error) => {
+    console.log(error)
+  })
+}
+
+const removeClientExercise = async (context, clientExerciseId) => {
+  await HTTP.delete(context.rootGetters["api/GET_REMOVE_CLIENT_EXERCISE_EXTENSION"] + `/${clientExerciseId}`).then(async (response) => {
+    console.log(response)
+    await getTherapist(context)
+  }).catch((error) => {
+    console.log(error)
+  });
+}
+
 export default {
   saveData,
   prepareData,
@@ -145,4 +163,6 @@ export default {
   getPoseNames,
   getTherapist,
   getPastWeekResultsForClient,
+  assignExercise,
+  removeClientExercise,
 };

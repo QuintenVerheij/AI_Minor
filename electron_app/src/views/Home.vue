@@ -14,7 +14,7 @@
     </b-container>
     </div>
     <div v-if="roles.includes('Therapist')">
-      <therapist-home :therapist="therapist"/>
+      <therapist-home/>
     </div>
   </div>
 </template>

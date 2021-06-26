@@ -1,8 +1,7 @@
 <template>
   <body>
-    <b-container>
-      <b-row>
-        <b-col sm="8">
+      <b-row class="mx-1">
+        <b-col sm="9">
           <b-list-group class="client-list">
             <b-list-group-item class="font-weight-semi-bold">
               <b-row>
@@ -12,6 +11,7 @@
               </b-row>
             </b-list-group-item>
             <b-list-group-item
+              button
               class="text-dark client-list-item"
               :class="{ active: activeIndex === index }"
               v-for="(client, index) in therapist.clients"
@@ -24,11 +24,12 @@
                 <b-col sm="4">{{ client.phoneNumber }}</b-col>
               </b-row>
               <div v-if="activeIndex === index">
+                <hr/>
                 <b-row style="height: fit-content">
-                  <b-col sm="8">
+                  <b-col sm="5">
                     <arrow-carousel>
                       <rl-carousel-slide
-                        v-for="(value, name) in lastWeekResult"
+                        v-for="(value, name) in activeClientPastWeekResult"
                         :key="name"
                       >
                         <div>
@@ -43,12 +44,15 @@
                       </rl-carousel-slide>
                     </arrow-carousel>
                   </b-col>
+                  <b-col sm="7">
+                    <assign-exercise :clientProp="client" style="z-index:101;"/>
+                  </b-col>
                 </b-row>
               </div>
             </b-list-group-item>
           </b-list-group>
         </b-col>
-        <b-col sm="4">
+        <b-col sm="3">
           <b-container>
             <b-card
               width="500"
@@ -74,16 +78,18 @@
           </b-container>
         </b-col>
       </b-row>
-    </b-container>
   </body>
 </template>
 <script>
 import ExcerciseChart from "../components/ExcerciseChart.vue";
 import {RlCarouselSlide } from 'vue-renderless-carousel'
 import ArrowCarousel from '../components/ArrowCarousel.vue'
+import AssignExercise from './AssignExercise.vue';
 export default {
-  components: { ExcerciseChart, ArrowCarousel, RlCarouselSlide },
-  
+  components: { ExcerciseChart, ArrowCarousel, RlCarouselSlide, AssignExercise },
+  created() {
+    this.$store.dispatch("exercises/getAllExercises")
+  },
   data() {
     return {
       slide: 0,
@@ -113,8 +119,10 @@ export default {
   },
   methods: {
     async setActive(clientId, index) {
-      this.activeIndex = index;
-      await this.$store.dispatch("therapist/getPastWeekResultsForClient", clientId)
+      if(this.activeIndex != index){
+        this.activeIndex = index;
+        this.activeClientPastWeekResult = await this.$store.dispatch("therapist/getPastWeekResultsForClient", clientId)
+      }
     },
   },
 };
