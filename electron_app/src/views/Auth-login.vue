@@ -20,9 +20,11 @@
             <pre class="error-message">{{ this.error_message }}</pre>
           </div>
           <div class="field-login">
-            <button class="button-login my-auto mx-auto" v-on:click="login">
-              Login
+            <button  class="button-login my-auto mx-auto" v-on:click="login">
+              <p v-if="!logging_in">Login</p>
+              <pulse-loader v-else :color="'#FFFFFF'"></pulse-loader>
             </button>
+            
           </div>
           <div class="field-signup">
             Not a member? <br>
@@ -39,9 +41,14 @@
   </body>
 </template>
 <script>
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 export default {
+  components:{
+    PulseLoader 
+  },
   data() {
     return {
+      logging_in: false,
       loading: false,
       login_data: {
         username: "",
@@ -55,6 +62,7 @@ export default {
   },
   methods: {
     login() {
+      this.logging_in = true;
       this.show_username_is_empty_error = false;
       this.show_password_is_empty_error = false;
       this.show_error_message = false;
@@ -65,6 +73,7 @@ export default {
         if(this.login_data.password === ""){
           this.show_password_is_empty_error = true;
         }
+        this.logging_in = false;
       }else{
         console.log(process.env.NODE_ENV)
         this.loading = true;
@@ -79,6 +88,8 @@ export default {
           if(ex === 400){
             this.error_message = "Username en password komen niet overeen"
           }
+        }).finally(() =>{
+          this.logging_in = false;
         });
       }
     },

@@ -13,6 +13,8 @@ const getPoseNames = (context) => {
   return HTTP.get(context.rootGetters["api/GET_POSE_NAMES_URL"]).then((response) => context.commit("SET_POSE_NAMES", response.data))
 }
 
+ 
+
 function stringValuesToIntegers(obj) {
   const res = {}
   for (const key in obj) {
@@ -128,10 +130,19 @@ const getTherapist = async (context) => {
   })
 }
 
+const getPastWeekResultsForClient = async (context, clientId) => {
+  HTTP.get(context.rootGetters["api/GET_LAST_WEEK_RESULT_FOR_CLIENT_EXTENSION"] + `/${clientId}`).then((response) => {
+    console.log(response)
+  }).catch((error) => {
+    console.log(error)
+  });
+}
+
 export default {
   saveData,
   prepareData,
   createMedia,
   getPoseNames,
-  getTherapist
+  getTherapist,
+  getPastWeekResultsForClient,
 };

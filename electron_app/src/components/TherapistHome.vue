@@ -16,7 +16,7 @@
               :class="{ active: activeIndex === index }"
               v-for="(client, index) in therapist.clients"
               v-bind:key="client.id"
-              @click="setActive(client, index)"
+              @click="setActive(client.id, index)"
             >
               <b-row>
                 <b-col sm="3">{{ client.userName }}</b-col>
@@ -83,9 +83,7 @@ import {RlCarouselSlide } from 'vue-renderless-carousel'
 import ArrowCarousel from '../components/ArrowCarousel.vue'
 export default {
   components: { ExcerciseChart, ArrowCarousel, RlCarouselSlide },
-  props: {
-    therapist: Object,
-  },
+  
   data() {
     return {
       slide: 0,
@@ -100,16 +98,23 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
       },
+      activeClientPastWeekResult: {
+
+      }
     };
   },
   computed: {
     lastWeekResult() {
       return this.$store.getters["exercises/get_last_week_result"];
     },
+    therapist() {
+      return this.$store.getters["therapist/get_therapist"]
+    }
   },
   methods: {
-    setActive(client, index) {
+    async setActive(clientId, index) {
       this.activeIndex = index;
+      await this.$store.dispatch("therapist/getPastWeekResultsForClient", clientId)
     },
   },
 };

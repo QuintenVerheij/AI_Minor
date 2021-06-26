@@ -56,6 +56,9 @@ const GET_THERAPIST_EXTENSION = (state) => {
 const GET_ASSIGN_EXERCISE_EXTENSION = (state) => {
         return state.endpoints.therapist.assign_exercise.extension
 }
+const GET_LAST_WEEK_RESULT_FOR_CLIENT_EXTENSION = state => {
+        return state.endpoints.therapist.pastweek_from_client.extension
+}
 export default {
     GET_API_URL, 
     GET_LOGIN_ENDPOINT, 
@@ -71,5 +74,6 @@ export default {
     GET_EXERCISE_ADD_EXTENSION,
     GET_PAST_WEEK_EXTENSION,
     GET_THERAPIST_EXTENSION,
-    GET_ASSIGN_EXERCISE_EXTENSION
+    GET_ASSIGN_EXERCISE_EXTENSION,
+    GET_LAST_WEEK_RESULT_FOR_CLIENT_EXTENSION
 }
