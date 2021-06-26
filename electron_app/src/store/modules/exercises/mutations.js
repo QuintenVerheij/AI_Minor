@@ -4,6 +4,7 @@ const SET_EXERCISES = (state, value) => {
         clientExercises.push({
             'id': ce.clientExerciseId,
             'logs': ce.clientExerciseLogs,
+            'reps': ce.reps,
             'exercise': {
                 'title': ce.exercise.name,
                 'id': ce.exercise.exerciseId,

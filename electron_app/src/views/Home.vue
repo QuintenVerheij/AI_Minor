@@ -2,14 +2,14 @@
   <div class="home">
     <div v-if="roles.includes('Client')">
     <b-container fluid class="home text-left">
-      <h2>Voortgang voor vandaag</h2>
-      <b-row>
+      <h2>Oefeningen voor vandaag</h2>
+      <!-- <b-row>
         <b-col md="4" v-for="exercise in exercises" v-bind:key="exercise.id">
           <exercise-card :exercise="exercise" />
         </b-col>
       </b-row>
 
-      <h2 class="font-weight-bold mt-3">Oefeningen voor vandaag</h2>
+      <h2 class="font-weight-bold mt-3">Oefeningen voor vandaag</h2> -->
       <home-exercise-list class="mt-2" />
     </b-container>
     </div>

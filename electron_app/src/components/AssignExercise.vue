@@ -14,16 +14,21 @@
               afgerond
             </b-col>
             <b-col sm="2">
-              <b-button v-b-modal="modalId(ce.clientExerciseId)" variant="danger">
+              <b-button
+                v-b-modal="modalId(ce.clientExerciseId)"
+                variant="danger"
+              >
                 <b-icon icon="trash" />
               </b-button>
-              <b-modal :id="'modal' + ce.clientExerciseId" title="Waarschuwing!">
+              <b-modal
+                :id="'modal' + ce.clientExerciseId"
+                title="Waarschuwing!"
+              >
                 <p class="my-4">
-                  Weet u zeker dat u {{ ce.exercise.name }} wilt verwijderen van
-                  {{ client.userName }}?
-                  {{ client.userName }} zal alle voortgang in de oefening
-                  kwijtraken
-                  <br/>
+                  Weet u zeker dat u {{ ce.exercise.name }} wilt verwijderen
+                  van {{ client.userName }}? {{ client.userName }} zal alle
+                  voortgang in de oefening kwijtraken
+                  <br />
                   (Klik buiten dit venster om te annuleren)
                 </p>
                 <template #modal-footer>
@@ -118,6 +123,22 @@
                       min="1"
                     ></b-form-input>
                   </b-col>
+                  <b-col sm="9">
+                    Aantal herhalingen per oefening
+                    <b-form-invalid-feedback :state="validateReps"
+                      >Oefening moet minimaal 1 keer per uitvoeren herhaald
+                      worden</b-form-invalid-feedback
+                    >
+                  </b-col>
+
+                  <b-col sm="3">
+                    <b-form-input
+                      type="number"
+                      v-model="reps"
+                      required
+                      min="1"
+                    ></b-form-input>
+                  </b-col>
                 </b-row>
                 <b-row>
                   <b-col sm="6">
@@ -139,9 +160,11 @@
                   <b-button type="submit" variant="primary">
                     <div v-if="!submitting">Oefening toewijzen</div>
                     <pulse-loader v-else :color="'#FFFFFF'"></pulse-loader>
-                    
                   </b-button>
-                  <b-form-invalid-feedback :state=duplicateNamesOk>Een gebruiker kan maar 1 oefening met dezelfde naam tegelijk uitvoeren</b-form-invalid-feedback>
+                  <b-form-invalid-feedback :state="duplicateNamesOk"
+                    >Een gebruiker kan maar 1 oefening met dezelfde naam
+                    tegelijk uitvoeren</b-form-invalid-feedback
+                  >
                 </div>
               </b-form>
             </b-card>
@@ -165,6 +188,9 @@ export default {
     clientProp: Object,
   },
   computed: {
+    validateReps() {
+      return this.reps > 0;
+    },
     validateWeeklyRepetitions() {
       return this.weeklyRepetitions > 0;
     },
@@ -194,6 +220,7 @@ export default {
       query: "",
       activeIndex: undefined,
       weeklyRepetitions: 1,
+      reps: 1,
       finishingDate: undefined,
     };
   },
@@ -223,6 +250,7 @@ export default {
       var payload = {
         clientId: this.client.id,
         exerciseId: exercise.exerciseId,
+        reps: this.reps,
         weeklyRepetitions: this.weeklyRepetitions,
         finishingDate: this.finishingDate,
       };
@@ -245,8 +273,8 @@ export default {
       });
     },
     modalId(i) {
-      return 'modal' + i;
-    }
+      return "modal" + i;
+    },
   },
 };
 </script>

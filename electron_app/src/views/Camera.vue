@@ -1,4 +1,5 @@
 <template>
+<div>
  <b-overlay :show="!loaded" rounded="sm">
   <b-container fluid>
     <b-progress
@@ -11,6 +12,8 @@
     <b-row class="bg-custom">
       <b-col cols="3" class="bg-dark p-0 d">
           <h3 class="text-white py-4">{{formatName(exercise.title)}}</h3>
+          <h1 class="text-white py-4">{{completed_reps}} / {{cExercise.reps}}</h1>
+          <h3 class="text-white py-4">herhalingen compleet</h3>
           <div
             class="w-100 py-3 px-3"
             v-for="(pose, index) in exercisePoses"
@@ -56,9 +59,12 @@
     </div>
       </div>
     </b-row>
-   
   </b-container>
  </b-overlay>
+ <b-row v-if=repsComplete style="justify-content:center">
+   <b-button > Terug naar Home </b-button>
+ </b-row>
+ </div>
 </template>
 
 <script>
@@ -79,16 +85,25 @@ export default {
     });
   },
   computed: {
+    repsComplete() {
+      return this.completed_reps >= this.cExercise.reps
+    },
     user() {
       return this.$store.getters["authentication/get_user"];
     },
     exercise() {
+      return this.cExercise.exercise
+    },
+    cExercise() {
       let exercises = this.$store.getters["exercises/get_exercises"];
-      let index = exercises.findIndex((el) => el.exercise.id == this.$route.params.id);
+      let index = exercises.findIndex((el) => el.exercise.id == this.$route.params.id)
       if(index > -1){
-        return exercises[index].exercise;
+        return exercises[index];
       }
       return {}
+    },
+    exerciseReps(){
+      return this.cExercise.reps
     },
     poseNames() {
       return this.$store.getters["therapist/get_pose_names"];
@@ -99,6 +114,8 @@ export default {
   },
   data() {
     return {
+      completed_reps : 0,
+      data_sent: false,
       looping: true,
       posenet: {},
       ourModel: {},
@@ -123,8 +140,10 @@ export default {
       modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING,
     };
     this.video = document.getElementById("video");
-    await this.buildCapture();
-    this.detector = await poseDetection.createDetector(
+    this.buildCapture();
+    this.video.addEventListener('loadeddata', async () => {
+      console.log("video ready")
+      this.detector = await poseDetection.createDetector(
       poseDetection.SupportedModels.MoveNet,
       detectorConfig
     );
@@ -138,13 +157,16 @@ export default {
     );
     this.interval = setInterval(this.recognizePose, 100);
     this.loop();
+    })
+    
   },
   beforeDestroy() {
+    clearInterval(this.interval);
     this.looping = false;
     this.video.srcObject.getTracks().forEach(function(track) {
       track.stop();
       this.video = null;
-      clearInterval(this.interval);
+      
     });
     window.removeEventListener(this.keyInputListener);
   },
@@ -192,7 +214,7 @@ export default {
       );
       // console.log("data", prepped_data);
 
-      tensor.scalar.tr;
+      // tensor.scalar.tr;
       const output = await this.ourModel.predict(
         tensor.tensor(prepped_data, [1, 30])
       );
@@ -210,8 +232,8 @@ export default {
       //   "  wanted: " + this.exercise.poses[this.poseIndex]
       // );
       if (
-        this.poseNames[this.poseDetectedIndex] ===
-        this.exercise.poses[this.poseIndex] && this.ourModelOutPut[this.poseDetectedIndex] > 0.5
+        this.poseNames[this.poseDetectedIndex] === this.exercise.poses[this.poseIndex] && 
+        this.ourModelOutPut[this.poseDetectedIndex] > 0.5
       ) {
         this.makeToast(
           "voltooid!",
@@ -221,8 +243,15 @@ export default {
         this.poseIndex++;
       }
       if (this.poseIndex === this.exercise.poses.length) {
-        this.makeToast("Exercise voltooid!", "Voltooid", "success");
+        this.makeToast("Herhaling voltooid!", "Voltooid", "success");
+        this.completed_reps += 1;
         this.poseIndex = 0;
+        if(this.repsComplete && !this.data_sent){
+          this.data_sent=true
+          this.makeToast("Oefening voltooid", "Voltooid", "success");
+          this.makeToast("Resultaten opslaan...", "Voltooid", "success")
+          this.$store.dispatch("exercises/finishRep", this.cExercise.id)
+        }
       }
     },
     // A function to draw ellipses over the detected keypoints
@@ -387,6 +416,7 @@ export default {
               } catch (error) {
                 this.video.srcObject = URL.createObjectURL(stream);
               }
+              this.video.load()
               //info.innerHTML+= "<pre>DONE</pre>";
               // console.log("CAMERA LOADED; STREAM ATTACHED");
               // this.$store.commit("camera/ATTACH_STREAM", this.$el);

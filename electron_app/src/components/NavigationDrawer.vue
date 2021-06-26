@@ -71,7 +71,7 @@ export default {
         {
           text: "Oefeningen",
           route: "Exercises",
-          role: 'all'
+          role: 'Client'
         },
         {
           text: "Statistieken",
