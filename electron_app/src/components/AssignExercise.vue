@@ -29,7 +29,11 @@
                 <template #modal-footer>
                   <b-row>
                     <b-button>Annuleren</b-button>
-                    <b-button variant="danger" @click="removeClientExercise(ce.clientExerciseId)">Oefening verwijderen</b-button>
+                    <b-button
+                      variant="danger"
+                      @click="removeClientExercise(ce.clientExerciseId)"
+                      >Oefening verwijderen</b-button
+                    >
                   </b-row>
                 </template>
               </b-modal>
@@ -136,7 +140,9 @@
                   <b-button type="submit" variant="primary">
                     <div v-if="!submitting">Oefening toewijzen</div>
                     <pulse-loader v-else :color="'#FFFFFF'"></pulse-loader>
+                    
                   </b-button>
+                  <b-form-invalid-feedback :state=duplicateNamesOk>Een gebruiker kan maar 1 oefening met dezelfde naam tegelijk uitvoeren</b-form-invalid-feedback>
                 </div>
               </b-form>
             </b-card>
@@ -182,6 +188,7 @@ export default {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     return {
+      duplicateNamesOk: true,
       client: this.clientProp,
       minDate: today,
       submitting: false,
@@ -196,11 +203,21 @@ export default {
       this.activeIndex = index;
     },
     submit(exercise) {
+      this.duplicateNamesOk = true;
       if (this.validateWeeklyRepetitions && this.validatefinishingDate) {
         this.submitting = true;
-        this.assign(exercise).then(() => {
+        if (
+          this.client.clientExercises
+            .map((ce) => ce.exercise.name)
+            .includes(exercise.name)
+        ) {
+          this.duplicateNamesOk = false;
           this.submitting = false;
-        });
+        } else {
+          this.assign(exercise).then(() => {
+            this.submitting = false;
+          });
+        }
       }
     },
     async assign(exercise) {

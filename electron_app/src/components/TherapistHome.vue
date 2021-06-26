@@ -104,9 +104,6 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
       },
-      activeClientPastWeekResult: {
-
-      }
     };
   },
   computed: {
@@ -115,13 +112,16 @@ export default {
     },
     therapist() {
       return this.$store.getters["therapist/get_therapist"]
+    },
+    activeClientPastWeekResult() {
+      return this.$store.getters["therapist/get_client_results"];
     }
   },
   methods: {
     async setActive(clientId, index) {
       if(this.activeIndex != index){
         this.activeIndex = index;
-        this.activeClientPastWeekResult = await this.$store.dispatch("therapist/getPastWeekResultsForClient", clientId)
+        await this.$store.dispatch("therapist/getPastWeekResultsForClient", clientId)
       }
     },
   },

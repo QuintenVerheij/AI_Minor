@@ -131,8 +131,9 @@ const getTherapist = async (context) => {
 }
 
 const getPastWeekResultsForClient = async (context, clientId) => {
-  HTTP.get(context.rootGetters["api/GET_LAST_WEEK_RESULT_FOR_CLIENT_EXTENSION"] + `/${clientId}`).then((response) => {
+  await HTTP.get(context.rootGetters["api/GET_LAST_WEEK_RESULT_FOR_CLIENT_EXTENSION"] + `/${clientId}`).then((response) => {
     console.log(response)
+    context.commit("SET_CLIENT_RESULTS", response.data)
   }).catch((error) => {
     console.log(error)
   });
@@ -150,7 +151,6 @@ const assignExercise = async (context, payload) => {
 const removeClientExercise = async (context, clientExerciseId) => {
   await HTTP.delete(context.rootGetters["api/GET_REMOVE_CLIENT_EXERCISE_EXTENSION"] + `/${clientExerciseId}`).then(async (response) => {
     console.log(response)
-    await getTherapist(context)
   }).catch((error) => {
     console.log(error)
   });
