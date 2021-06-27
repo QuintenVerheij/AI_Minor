@@ -232,8 +232,7 @@ export default {
       //   "  wanted: " + this.exercise.poses[this.poseIndex]
       // );
       if (
-        this.poseNames[this.poseDetectedIndex] === this.exercise.poses[this.poseIndex] && 
-        this.ourModelOutPut[this.poseDetectedIndex] > 0.5
+        this.poseNames[this.poseDetectedIndex] === this.exercise.poses[this.poseIndex]
       ) {
         this.makeToast(
           "voltooid!",
