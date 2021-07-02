@@ -2,7 +2,7 @@ import axios from 'axios';
 import Vue from 'vue';
 
 export let HTTP = axios.create({
-  baseURL: 'https://fysioapi2.azurewebsites.net/'
+  baseURL: 'https://fysio.azurewebsites.net/'
 })
 
 HTTP.interceptors.request.use(function (config) {
